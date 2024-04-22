@@ -18,8 +18,18 @@
 #include "main.h"
 
 enum tile_TypeID {
-    // TODO add tile types ...
-    // e.g. TILE_FOO,
+    TILE_VOID,
+
+    TILE_GROUND,
+    TILE_HIGH_GROUND,
+
+    TILE_PLATFORM,
+    TILE_FALL_PLATFORM,
+    TILE_HOLE,
+
+    TILE_WOOD,
+    TILE_ROCK,
+    TILE_WATER,
 
     TILE_INVALID
 };

@@ -26,7 +26,7 @@
 #define LEVEL_SIZE (LEVEL_W * LEVEL_H)
 
 // Tile size: 3 = 8x8, 4 = 16x16, 5 = 32x32
-#define LEVEL_TILE_SIZE (3)
+#define LEVEL_TILE_SIZE (4)
 
 typedef u8 level_EntityID;
 #define LEVEL_ENTITY_LIMIT (255)

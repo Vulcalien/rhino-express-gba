@@ -1,4 +1,4 @@
-/* Copyright 2023 Vulcalien
+/* Copyright 2024 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,34 @@
 #include "tile.h"
 
 const struct tile_Type tile_type_list[TILE_TYPES] = {
-    // TODO add tile types ...
-    // e.g. [TILE_FOO] = { ... }
+    [TILE_VOID] = {
+        .is_solid = false
+    },
+
+    [TILE_GROUND] = {
+        .is_solid = false
+    },
+    [TILE_HIGH_GROUND] = {
+        .is_solid = true
+    },
+
+    [TILE_PLATFORM] = {
+        .is_solid = false
+    },
+    [TILE_FALL_PLATFORM] = {
+        .is_solid = false
+    },
+    [TILE_HOLE] = {
+        .is_solid = false
+    },
+
+    [TILE_WOOD] = {
+        .is_solid = true
+    },
+    [TILE_ROCK] = {
+        .is_solid = true
+    },
+    [TILE_WATER] = {
+        .is_solid = true
+    }
 };

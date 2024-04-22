@@ -19,6 +19,16 @@
 
 enum entity_TypeID {
     ENTITY_PLAYER,
+    ENTITY_MAILBOX,
+
+    ENTITY_DECOR_GRASS,
+    ENTITY_DECOR_HOUSE,
+
+    ENTITY_PARTICLE_BLOCK,
+    ENTITY_PARTICLE_WALK,
+    ENTITY_PARTICLE_FOG,
+    ENTITY_PARTICLE_LETTER,
+    ENTITY_PARTICLE_FALLING_PLATFORM,
 
     ENTITY_INVALID
 };
@@ -114,4 +124,14 @@ inline bool entity_touches(struct entity_Data *data1,
 
 // Entity types
 extern const struct entity_Type
-    entity_player;
+    entity_player,
+    entity_mailbox,
+
+    entity_decor_grass,
+    entity_decor_house,
+
+    entity_particle_block,
+    entity_particle_walk,
+    entity_particle_fog,
+    entity_particle_letter,
+    entity_particle_falling_platform;

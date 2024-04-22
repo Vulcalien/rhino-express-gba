@@ -14,7 +14,7 @@ SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
 
-SRC_SUBDIRS := scene entity
+SRC_SUBDIRS := scene entity entity/decor entity/particle
 
 RES_DIR      := res
 RES_OUT_DIRS := src/res
