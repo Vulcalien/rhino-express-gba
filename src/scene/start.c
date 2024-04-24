@@ -15,16 +15,27 @@
  */
 #include "scene.h"
 
+#include "level.h"
+#include "random.h"
+
+static struct Level level;
+
 static void start_init(void *data) {
-    // TODO ...
+    level_init(&level);
+
+    for(u32 y = 3; y < 8; y++)
+        for(u32 x = 5; x < 10; x++)
+            level_set_tile(&level, x, y, TILE_GROUND);
+    level_set_tile(&level, 7, 5, TILE_VOID);
+    level_set_tile(&level, 9, 7, TILE_VOID);
 }
 
 static void start_tick(void) {
-    // TODO ...
+    level_tick(&level);
 }
 
 static void start_draw(void) {
-    // TODO ...
+    level_draw(&level);
 }
 
 const struct Scene scene_start = {

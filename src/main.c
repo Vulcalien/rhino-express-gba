@@ -42,7 +42,7 @@ static void vblank(void) {
 
 int AgbMain(void) {
     screen_init();
-    SCENE_SET(&scene_start);
+    scene_set(&scene_start, true, NULL);
 
     interrupt_init();
     sound_init();
