@@ -6,8 +6,8 @@
             "input": "res/tileset.png",
             "output": "src/res/tileset.c",
 
-            "tile_width": 2,
-            "tile_height": 2,
+            "tile_width": 1,
+            "tile_height": 1,
 
             "palette": "res/palette.png",
             "bpp": 4,
