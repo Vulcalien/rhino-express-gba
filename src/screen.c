@@ -18,6 +18,7 @@
 #include "background.h"
 #include "sprite.h"
 #include "palette.h"
+#include "util.h"
 
 #define DISPLAY_CONTROL *((vu16 *) 0x04000000)
 #define DISPLAY_STATUS  *((vu16 *) 0x04000004)
@@ -62,6 +63,9 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
     }
 };
 
+#include "res/tileset.c"
+#include "res/palette.c"
+
 void screen_init(void) {
     DISPLAY_CONTROL = 0 << 0  | // Video mode
                       1 << 6  | // OBJ character mapping (1 = linear)
@@ -76,7 +80,12 @@ void screen_init(void) {
     for(u32 i = 0; i < BACKGROUND_COUNT; i++)
         background_config(&bg_configs[i], i);
 
-    // TODO ...
+    // load tileset
+    memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset) / 2);
+
+    // load palette
+    memcpy16(PALETTE_BG,  palette, sizeof(palette) / 2);
+    memcpy16(PALETTE_OBJ, palette, sizeof(palette) / 2);
 
     // hide all sprites
     for(u32 i = 0; i < SPRITE_COUNT; i++)

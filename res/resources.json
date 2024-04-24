@@ -1,3 +1,29 @@
 {
+    "tilesets": [
+        {
+            "name": "tileset",
 
+            "input": "res/tileset.png",
+            "output": "src/res/tileset.c",
+
+            "tile_width": 2,
+            "tile_height": 2,
+
+            "palette": "res/palette.png",
+            "bpp": 4,
+
+            "static": true
+        }
+    ],
+
+    "palettes": [
+        {
+            "name": "palette",
+
+            "input": "res/palette.png",
+            "output": "src/res/palette.c",
+
+            "static": true
+        }
+    ]
 }
