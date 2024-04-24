@@ -28,6 +28,14 @@ static void start_init(void *data) {
             level_set_tile(&level, x, y, TILE_GROUND);
     level_set_tile(&level, 7, 5, TILE_VOID);
     level_set_tile(&level, 9, 7, TILE_VOID);
+
+    level_set_tile(&level, 8, 7, TILE_PLATFORM);
+    level_set_tile(&level, 7, 7, TILE_FALL_PLATFORM);
+    level_set_tile(&level, 6, 8, TILE_HOLE);
+
+    level_set_tile(&level, 6, 3, TILE_WOOD);
+    level_set_tile(&level, 7, 4, TILE_ROCK);
+    level_set_tile(&level, 8, 4, TILE_WATER);
 }
 
 static void start_tick(void) {

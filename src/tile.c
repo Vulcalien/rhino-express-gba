@@ -87,10 +87,76 @@ static void draw_outer_borders(struct Level *level, i32 xt, i32 yt) {
 DRAW_FUNC(ground_draw) {
     vu16 *low = GET_LOW(level, xt, yt);
 
-    low[0] = TILE(8, 0, 0);
-    low[1] = TILE(8, 0, 0);
+    low[0]  = TILE(8, 0, 0);
+    low[1]  = TILE(8, 0, 0);
     low[32] = TILE(8, 0, 0);
     low[33] = TILE(8, 0, 0);
+
+    draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(platform_draw) {
+    vu16 *low = GET_LOW(level, xt, yt);
+
+    low[0]  = TILE(3, 0, 0);
+    low[1]  = TILE(3, 1, 0);
+    low[32] = TILE(3, 2, 0);
+    low[33] = TILE(3, 3, 0);
+
+    draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(fall_platform_draw) {
+    vu16 *low = GET_LOW(level, xt, yt);
+
+    low[0]  = TILE(4, 0, 0);
+    low[1]  = TILE(4, 1, 0);
+    low[32] = TILE(4, 2, 0);
+    low[33] = TILE(4, 3, 0);
+
+    draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(hole_draw) {
+    vu16 *low = GET_LOW(level, xt, yt);
+
+    low[0]  = TILE(5, 0, 0);
+    low[1]  = TILE(5, 1, 0);
+    low[32] = TILE(5, 2, 0);
+    low[33] = TILE(5, 3, 0);
+
+    draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(wood_draw) {
+    vu16 *low = GET_LOW(level, xt, yt);
+
+    low[0]  = TILE(32, 0, 0);
+    low[1]  = TILE(33, 0, 0);
+    low[32] = TILE(40, 0, 0);
+    low[33] = TILE(41, 0, 0);
+
+    draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(rock_draw) {
+    vu16 *low = GET_LOW(level, xt, yt);
+
+    low[0]  = TILE(34, 0, 1);
+    low[1]  = TILE(35, 0, 1);
+    low[32] = TILE(42, 0, 1);
+    low[33] = TILE(43, 0, 1);
+
+    draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(water_draw) {
+    vu16 *low = GET_LOW(level, xt, yt);
+
+    low[0]  = TILE(36, 0, 1);
+    low[1]  = TILE(37, 0, 1);
+    low[32] = TILE(44, 0, 1);
+    low[33] = TILE(45, 0, 1);
 
     draw_outer_borders(level, xt, yt);
 }
@@ -112,22 +178,34 @@ const struct tile_Type tile_type_list[TILE_TYPES] = {
     },
 
     [TILE_PLATFORM] = {
-        .is_solid = false
+        .is_solid = false,
+
+        .draw = platform_draw
     },
     [TILE_FALL_PLATFORM] = {
-        .is_solid = false
+        .is_solid = false,
+
+        .draw = fall_platform_draw
     },
     [TILE_HOLE] = {
-        .is_solid = false
+        .is_solid = false,
+
+        .draw = hole_draw
     },
 
     [TILE_WOOD] = {
-        .is_solid = true
+        .is_solid = true,
+
+        .draw = wood_draw
     },
     [TILE_ROCK] = {
-        .is_solid = true
+        .is_solid = true,
+
+        .draw = rock_draw
     },
     [TILE_WATER] = {
-        .is_solid = true
+        .is_solid = true,
+
+        .draw = water_draw
     }
 };
