@@ -38,6 +38,8 @@ enum tile_TypeID {
 struct Level;
 struct tile_Type {
     bool is_solid;
+
+    void (*draw)(struct Level *level, i32 xt, i32 yt);
 };
 
 extern const struct tile_Type tile_type_list[TILE_TYPES];

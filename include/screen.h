@@ -22,4 +22,9 @@
 
 #define VCOUNT *((vu16 *) 0x04000006)
 
+#define BG0_TILEMAP ((vu16 *) 0x06000000)
+#define BG1_TILEMAP ((vu16 *) 0x06001000)
+#define BG2_TILEMAP ((vu16 *) 0x06002000)
+#define BG3_TILEMAP ((vu16 *) 0x06003000)
+
 extern void screen_init(void);

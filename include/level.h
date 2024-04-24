@@ -21,8 +21,8 @@
 #include "entity.h"
 
 // Level size (in tiles)
-#define LEVEL_W (30)
-#define LEVEL_H (20)
+#define LEVEL_W (15)
+#define LEVEL_H (10)
 #define LEVEL_SIZE (LEVEL_W * LEVEL_H)
 
 // Tile size: 3 = 8x8, 4 = 16x16, 5 = 32x32

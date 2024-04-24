@@ -98,7 +98,17 @@ void level_tick(struct Level *level) {
 }
 
 static inline void draw_tiles(struct Level *level) {
-    // ...
+    for(u32 y = 0; y < LEVEL_H; y++) {
+        for(u32 x = 0; x < LEVEL_W; x++) {
+            const struct tile_Type *type = tile_get_type(
+                level_get_tile(level, x, y)
+            );
+            if(!type || !type->draw)
+                continue;
+
+            type->draw(level, x, y);
+        }
+    }
 }
 
 static inline void draw_entities(struct Level *level) {

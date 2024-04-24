@@ -45,21 +45,21 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
     {
         .priority = 1,
         .tileset  = 0,
-        .tilemap  = 0
+        .tilemap  = 2
     },
 
     // BG2
     {
         .priority = 2,
-        .tileset  = 0,
-        .tilemap  = 0
+        .tileset  = 3,
+        .tilemap  = 4
     },
 
     // BG3
     {
         .priority = 3,
-        .tileset  = 0,
-        .tilemap  = 0
+        .tileset  = 3,
+        .tilemap  = 6
     }
 };
 
@@ -72,8 +72,8 @@ void screen_init(void) {
                       1 << 7  | // Forced blank
                       0 << 8  | // Enable BG 0
                       0 << 9  | // Enable BG 1
-                      0 << 10 | // Enable BG 2
-                      0 << 11 | // Enable BG 3
+                      1 << 10 | // Enable BG 2
+                      1 << 11 | // Enable BG 3
                       1 << 12;  // Enable OBJs
 
     // configure backgrounds
