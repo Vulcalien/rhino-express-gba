@@ -10,7 +10,8 @@
             "tile_height": 1,
 
             "palette": "res/palette.png",
-            "bpp": 4,
+            "transparent": "#ff00ff",
+            "bpp": 8,
 
             "static": true
         }

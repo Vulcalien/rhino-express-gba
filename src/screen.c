@@ -38,28 +38,36 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
     {
         .priority = 0,
         .tileset  = 0,
-        .tilemap  = 0
+        .tilemap  = 0,
+
+        .color_mode = 1
     },
 
     // BG1
     {
         .priority = 1,
         .tileset  = 0,
-        .tilemap  = 2
+        .tilemap  = 2,
+
+        .color_mode = 1
     },
 
     // BG2
     {
         .priority = 2,
         .tileset  = 3,
-        .tilemap  = 4
+        .tilemap  = 4,
+
+        .color_mode = 1
     },
 
     // BG3
     {
         .priority = 3,
         .tileset  = 3,
-        .tilemap  = 6
+        .tilemap  = 6,
+
+        .color_mode = 1
     }
 };
 
