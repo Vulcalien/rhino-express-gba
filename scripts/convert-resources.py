@@ -29,6 +29,7 @@
             "tile_height": 4,
 
             "palette": "my/input/palette.png",
+            "transparent": "#ff00ff",
             "bpp": 4,
 
             "static": true
@@ -117,27 +118,33 @@ args = parser.parse_args()
 # Functions
 
 def tileset_args(element):
-    tile_width  = int(element['tile_width'])
-    tile_height = int(element['tile_height'])
+    args = ''
 
-    palette = str(element['palette'])
-    bpp     = int(element['bpp'])
+    args += ' --tile-width "%d"'  % int(element['tile_width'])
+    args += ' --tile-height "%d"' % int(element['tile_height'])
 
-    return "--tile-width %d --tile-height %d --palette %s --bpp %d" % (
-        tile_width, tile_height, palette, bpp
-    )
+    args += ' --palette "%s"' % str(element['palette'])
+    args += ' --bpp "%d"'     % int(element['bpp'])
+
+    if 'transparent' in element:
+        args += ' --transparent "%s"' % str(element['transparent'])
+
+    return args
+
+def palette_args(element):
+    return '--bpp 16'
 
 def image_args(element):
+    args = ''
+
     bpp = int(element['bpp'])
+    args += ' --bpp %d' % bpp
 
     if bpp in (4, 8):
         palette = str(element['palette'])
-    else:
-        palette = None
+        args += ' --palette %s' % palette
 
-    return "--bpp %d %s" % (
-        bpp, (('--palette %s' % palette) if palette else '')
-    )
+    return args
 
 FILE_TYPES = {
     'tilesets': {
@@ -146,8 +153,8 @@ FILE_TYPES = {
     },
 
     'palettes': {
-        'script': '%s/res/palette-to-array.py',
-        'args_function': None
+        'script': '%s/res/image-to-array.py',
+        'args_function': palette_args
     },
 
     'images': {
@@ -188,25 +195,33 @@ def convert(element, file_type):
     print(cmd)
     os.system(cmd)
 
-def parse_file(f):
-    content = None
+def parse_json(f):
+    try:
+        return json.load(f)
+    except json.JSONDecodeError as e:
+        print('Error: invalid JSON:', e)
 
-    ext = os.path.splitext(f.name)[1]
-    if ext == '.json':
+def parse_toml(f):
+    if toml_support:
         try:
-            content = json.load(f)
-        except json.JSONDecodeError as e:
-            print('Error: invalid JSON:', e)
-    elif ext == '.toml':
-        if toml_support:
-            try:
-                content = tomllib.load(f)
-            except tomllib.TOMLDecodeError as e:
-                print('Error: invalid TOML:', e)
-        else:
-            print('Error: TOML is not supported by this version of ' +
-                  'Python')
+            return tomllib.load(f)
+        except tomllib.TOMLDecodeError as e:
+            print('Error: invalid TOML:', e)
     else:
+        print('Error: TOML is not supported by this version of Python')
+
+def parse_file(f):
+    parsers = {
+        '.json': parse_json,
+        '.toml': parse_toml
+    }
+
+    content = None
+    ext = os.path.splitext(f.name)[1]
+
+    try:
+        content = parsers[ext](f)
+    except KeyError:
         print('Error: unknown extension:', ext)
 
     return content

@@ -19,6 +19,8 @@ import sys, argparse
 from sys import exit
 from PIL import Image
 
+from utils import load_palette, DataWriter
+
 # Setup argparse
 parser = argparse.ArgumentParser(
     description='Convert an image file into a GBA image array'
@@ -51,31 +53,14 @@ args = parser.parse_args()
 # Open image
 img = Image.open(args.input).convert('RGB')
 
-# Map the colors by reading the palette image
+# Read the palette file
 if args.bpp in [4, 8]:
-    color_map = {}
-
-    palette_img = Image.open(args.palette).convert('RGB')
-    for y in range(palette_img.height):
-        for x in range(palette_img.width):
-            pix = palette_img.getpixel( (x, y) )
-
-            if pix not in color_map:
-                i = (x + y * palette_img.width) % (2 ** args.bpp)
-                color_map[pix] = i
+    color_map = load_palette(args.palette, args.bpp)
 
 # Scan the image and write output
-f = args.output
+writer = DataWriter(args.output, 'u16' if args.bpp == 16 else 'u8')
 
-f.write(
-    '{static} const {type} {name}[{width} * {height}] = {{\n'.format(
-        static=('static' if args.static else ''),
-        type=('u16' if args.bpp == 16 else 'u8'),
-        name=args.name,
-        width=img.width,
-        height=img.height
-    )
-)
+writer.begin(args.name, args.static, img.width * img.height)
 
 ## 16 bpp
 if args.bpp == 16:
@@ -89,11 +74,7 @@ if args.bpp == 16:
             b = pix[2] >> 3
 
             col = (b << 10) | (g << 5) | r
-
-            f.write('0x' + hex(col)[2:].zfill(4) + ',')
-            if x % 8 == 7:
-                f.write('\n')
-        f.write('\n')
+            writer.write(col)
 
 ## 8 bpp
 elif args.bpp == 8:
@@ -106,13 +87,10 @@ elif args.bpp == 8:
                 col = hex(col)[2:].zfill(6)
                 exit('Error: color not present in the palette: #' + col)
 
-            f.write('0x' + hex(color_map[pix])[2:].zfill(2) + ',')
-            if x % 8 == 7:
-                f.write('\n')
-        f.write('\n')
+            writer.write(color_map[pix])
 
 ## 4 bpp
 elif args.bpp == 4:
     pass # TODO
 
-f.write('};\n')
+writer.end()
