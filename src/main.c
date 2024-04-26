@@ -22,11 +22,15 @@
 #include "performance.h"
 #include "scene.h"
 
+u32 tick_count = 0;
+
 static inline void tick(void) {
     input_tick();
     scene->tick();
 
     performance_tick();
+
+    tick_count++;
 }
 
 static inline void draw(void) {

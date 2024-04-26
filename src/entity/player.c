@@ -18,6 +18,7 @@
 #include "level.h"
 #include "sprite.h"
 #include "input.h"
+#include "math.h"
 
 struct player_Data {
     i8 xm;
@@ -40,23 +41,42 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
     // TODO ...
 }
 
+static inline u32 calculate_inverse_y_scale(u32 arg) {
+    arg *= MATH_PI / 32;
+    u32 val = math_max(math_sin(arg), 0) * 43 / 0x4000;
+    return 256 - val;
+}
+
 IWRAM_SECTION
 static u32 player_draw(struct Level *level, struct entity_Data *data,
                        u32 used_sprites) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
+    // 8-bit fixed point decimal (1 = 256)
+    u32 inverse_y_scale = calculate_inverse_y_scale(tick_count);
+
     struct Sprite sprite = {
-        .x = data->x - 8,
-        .y = data->y - 8,
+        .x = data->x - 16,
+        .y = data->y - (256 * 16) / inverse_y_scale,
 
         .size = 1,
         .flip = player_data->sprite_flip,
 
         .tile = 0,
+        .color_mode = 1,
 
-        .color_mode = 1
+        .affine_transformation = 1,
+        .affine_parameter = 0,
+        .double_size = 1
     };
     sprite_set(&sprite, used_sprites++);
+
+    // set OBJ parameter
+    vu16 *parameters = &OAM[3];
+    parameters[0]  = 256;
+    parameters[4]  = 0;
+    parameters[8]  = 0;
+    parameters[12] = inverse_y_scale;
 
     return 1;
 }
