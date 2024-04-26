@@ -72,6 +72,7 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
 };
 
 #include "res/tileset.c"
+#include "res/sprites.c"
 #include "res/palette.c"
 
 void screen_init(void) {
@@ -90,6 +91,7 @@ void screen_init(void) {
 
     // load tileset
     memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset) / 2);
+    memcpy16(OBJ_TILESET,  (vu16 *) sprites, sizeof(tileset) / 2);
 
     // load palette
     memcpy16(PALETTE_BG,  palette, sizeof(palette) / 2);

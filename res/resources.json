@@ -14,6 +14,22 @@
             "bpp": 8,
 
             "static": true
+        },
+
+        {
+            "name": "sprites",
+
+            "input": "res/sprites.png",
+            "output": "src/res/sprites.c",
+
+            "tile_width": 2,
+            "tile_height": 2,
+
+            "palette": "res/palette.png",
+            "transparent": "#ff00ff",
+            "bpp": 8,
+
+            "static": true
         }
     ],
 
