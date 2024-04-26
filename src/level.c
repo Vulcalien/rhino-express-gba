@@ -15,6 +15,7 @@
  */
 #include "level.h"
 
+#include "sprite.h"
 #include "entity.h"
 
 static inline void insert_solid_entity(struct Level *level,
@@ -112,7 +113,20 @@ static inline void draw_tiles(struct Level *level) {
 }
 
 static inline void draw_entities(struct Level *level) {
-    // ...
+    u32 used_sprites = 0;
+    for(level_EntityID id = 0; id < LEVEL_ENTITY_LIMIT; id++) {
+        struct entity_Data *data = &level->entities[id];
+        const struct entity_Type *type = entity_get_type(data);
+        if(!type)
+            continue;
+
+        used_sprites += type->draw(level, data, used_sprites);
+        if(used_sprites >= SPRITE_COUNT)
+            break;
+    }
+
+    for(u32 i = used_sprites; i < SPRITE_COUNT; i++)
+        sprite_hide(i);
 }
 
 IWRAM_SECTION
