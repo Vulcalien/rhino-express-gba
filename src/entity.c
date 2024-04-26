@@ -28,7 +28,6 @@ const struct entity_Type * const entity_type_list[ENTITY_TYPES] = {
     [ENTITY_PARTICLE_BLOCK] = &entity_particle_block,
     [ENTITY_PARTICLE_WALK] = &entity_particle_walk,
     [ENTITY_PARTICLE_FOG] = &entity_particle_fog,
-    [ENTITY_PARTICLE_LETTER] = &entity_particle_letter,
     [ENTITY_PARTICLE_FALLING_PLATFORM] = &entity_particle_falling_platform
 };
 

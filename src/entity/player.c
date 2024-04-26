@@ -48,6 +48,18 @@ static inline u32 calculate_inverse_y_scale(u32 arg) {
 }
 
 IWRAM_SECTION
+static inline draw_letters(struct Level *level, i32 x, i32 y,
+                           u32 used_sprites) {
+    struct Sprite sprite = {
+        .tile = 52,
+        .color_mode = 1
+    };
+
+    // TODO ...
+    return 0;
+}
+
+IWRAM_SECTION
 static u32 player_draw(struct Level *level, struct entity_Data *data,
                        u32 used_sprites) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
@@ -78,7 +90,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     parameters[8]  = 0;
     parameters[12] = inverse_y_scale;
 
-    return 1;
+    return 1 + draw_letters(level, data->x, data->y, used_sprites);
 }
 
 const struct entity_Type entity_player = {

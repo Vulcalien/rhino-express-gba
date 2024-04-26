@@ -27,7 +27,6 @@ enum entity_TypeID {
     ENTITY_PARTICLE_BLOCK,
     ENTITY_PARTICLE_WALK,
     ENTITY_PARTICLE_FOG,
-    ENTITY_PARTICLE_LETTER,
     ENTITY_PARTICLE_FALLING_PLATFORM,
 
     ENTITY_INVALID
@@ -133,5 +132,4 @@ extern const struct entity_Type
     entity_particle_block,
     entity_particle_walk,
     entity_particle_fog,
-    entity_particle_letter,
     entity_particle_falling_platform;
