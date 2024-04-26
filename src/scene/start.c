@@ -36,6 +36,8 @@ static void start_init(void *data) {
     level_set_tile(&level, 6, 3, TILE_WOOD);
     level_set_tile(&level, 7, 4, TILE_ROCK);
     level_set_tile(&level, 8, 4, TILE_WATER);
+
+    level_add_player(&level, 6, 7);
 }
 
 static void start_tick(void) {

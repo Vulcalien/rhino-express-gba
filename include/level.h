@@ -79,3 +79,5 @@ extern void level_add_entity(struct Level *level,
                              level_EntityID id);
 
 // ===== ===== =====
+
+extern bool level_add_player(struct Level *level, u32 xt, u32 yt);
