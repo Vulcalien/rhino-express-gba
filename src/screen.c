@@ -40,7 +40,7 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
         .tileset  = 0,
         .tilemap  = 0,
 
-        .color_mode = 1
+        .colors = 1
     },
 
     // BG1
@@ -49,7 +49,7 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
         .tileset  = 0,
         .tilemap  = 2,
 
-        .color_mode = 1
+        .colors = 1
     },
 
     // BG2
@@ -58,7 +58,7 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
         .tileset  = 3,
         .tilemap  = 4,
 
-        .color_mode = 1
+        .colors = 1
     },
 
     // BG3
@@ -67,7 +67,7 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
         .tileset  = 3,
         .tilemap  = 6,
 
-        .color_mode = 1
+        .colors = 1
     }
 };
 
@@ -87,7 +87,7 @@ void screen_init(void) {
 
     // configure backgrounds
     for(u32 i = 0; i < BACKGROUND_COUNT; i++)
-        background_config(&bg_configs[i], i);
+        background_config(i, &bg_configs[i]);
 
     // load tileset
     memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset) / 2);

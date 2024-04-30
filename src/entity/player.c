@@ -81,7 +81,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
         .affine_parameter = 0,
         .double_size = 1
     };
-    sprite_set(&sprite, used_sprites++);
+    sprite_config(used_sprites++, &sprite);
 
     // set OBJ parameter
     vu16 *parameters = &OAM[3];
