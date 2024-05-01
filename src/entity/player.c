@@ -20,15 +20,22 @@
 #include "input.h"
 #include "math.h"
 
-#define MAX_SPEED (24)
+#define   MAX_SPEED (1280)
+#define START_SPEED (64)
 
 struct player_Data {
-    i8 xm;
-    i8 ym;
+    i16 subx;
+    i16 suby;
+
+    i16 xm;
+    i16 ym;
+
+    i8 stored_xm;
+    i8 stored_ym;
 
     u8 sprite_flip;
 
-    u8 unused[13];
+    u8 unused[5];
 };
 
 static_assert(
@@ -40,42 +47,57 @@ IWRAM_SECTION
 static void player_tick(struct Level *level, struct entity_Data *data) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    static i8 stored_xm = 0;
-    static i8 stored_ym = 0;
-
+    // process player input
     if(input_pressed(KEY_UP)) {
-        stored_xm = 0;
-        stored_ym = -1;
+        player_data->stored_xm = 0;
+        player_data->stored_ym = -1;
     } else if(input_pressed(KEY_LEFT)) {
-        stored_xm = -1;
-        stored_ym = 0;
+        player_data->stored_xm = -1;
+        player_data->stored_ym = 0;
     } else if(input_pressed(KEY_DOWN)) {
-        stored_xm = 0;
-        stored_ym = +1;
+        player_data->stored_xm = 0;
+        player_data->stored_ym = +1;
     } else if(input_pressed(KEY_RIGHT)) {
-        stored_xm = +1;
-        stored_ym = 0;
+        player_data->stored_xm = +1;
+        player_data->stored_ym = 0;
     }
 
     if(player_data->xm == 0 && player_data->ym == 0) {
-        player_data->xm = stored_xm;
-        player_data->ym = stored_ym;
+        player_data->xm = player_data->stored_xm;
+        player_data->ym = player_data->stored_ym;
 
         if(player_data->xm < 0)
             player_data->sprite_flip = 0;
         else if(player_data->xm > 0)
             player_data->sprite_flip = 1;
     } else {
-        // increase speed
-        if(player_data->xm != 0 && math_abs(player_data->xm) < MAX_SPEED)
-            player_data->xm += math_sign(player_data->xm);
-        if(player_data->ym != 0 && math_abs(player_data->ym) < MAX_SPEED)
-            player_data->ym += math_sign(player_data->ym);
+        i32 xm_sign = math_sign(player_data->xm);
+        i32 ym_sign = math_sign(player_data->ym);
 
-        entity_move(
-            level, data,
-            player_data->xm / 4, player_data->ym / 4
-        );
+        // increase speed
+        player_data->xm += 2 * xm_sign + player_data->xm / 16;
+        player_data->ym += 2 * ym_sign + player_data->ym / 16;
+
+        if(player_data->xm > MAX_SPEED)
+            player_data->xm = MAX_SPEED;
+        if(player_data->ym > MAX_SPEED)
+            player_data->ym = MAX_SPEED;
+
+        // sub-pixel movement
+        i32 x_speed = math_max(START_SPEED, math_abs(player_data->xm));
+        i32 y_speed = math_max(START_SPEED, math_abs(player_data->ym));
+
+        player_data->subx += xm_sign * x_speed;
+        player_data->suby += ym_sign * y_speed;
+
+        i32 full_xm = player_data->subx / 128;
+        i32 full_ym = player_data->suby / 128;
+
+        player_data->subx %= 128;
+        player_data->suby %= 128;
+
+        // full-pixel movement
+        entity_move(level, data, full_xm, full_ym);
     }
 }
 
