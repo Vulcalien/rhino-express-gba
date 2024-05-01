@@ -20,6 +20,8 @@
 #include "input.h"
 #include "math.h"
 
+#define MAX_SPEED (24)
+
 struct player_Data {
     i8 xm;
     i8 ym;
@@ -38,7 +40,43 @@ IWRAM_SECTION
 static void player_tick(struct Level *level, struct entity_Data *data) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    // TODO ...
+    static i8 stored_xm = 0;
+    static i8 stored_ym = 0;
+
+    if(input_pressed(KEY_UP)) {
+        stored_xm = 0;
+        stored_ym = -1;
+    } else if(input_pressed(KEY_LEFT)) {
+        stored_xm = -1;
+        stored_ym = 0;
+    } else if(input_pressed(KEY_DOWN)) {
+        stored_xm = 0;
+        stored_ym = +1;
+    } else if(input_pressed(KEY_RIGHT)) {
+        stored_xm = +1;
+        stored_ym = 0;
+    }
+
+    if(player_data->xm == 0 && player_data->ym == 0) {
+        player_data->xm = stored_xm;
+        player_data->ym = stored_ym;
+
+        if(player_data->xm < 0)
+            player_data->sprite_flip = 0;
+        else if(player_data->xm > 0)
+            player_data->sprite_flip = 1;
+    } else {
+        // increase speed
+        if(player_data->xm != 0 && math_abs(player_data->xm) < MAX_SPEED)
+            player_data->xm += math_sign(player_data->xm);
+        if(player_data->ym != 0 && math_abs(player_data->ym) < MAX_SPEED)
+            player_data->ym += math_sign(player_data->ym);
+
+        entity_move(
+            level, data,
+            player_data->xm / 4, player_data->ym / 4
+        );
+    }
 }
 
 static inline u32 calculate_inverse_y_scale(u32 arg) {
@@ -72,7 +110,6 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
         .y = data->y - (256 * 16) / inverse_y_scale,
 
         .size = 1,
-        .flip = player_data->sprite_flip,
 
         .tile = 0,
         .color_mode = 1,
@@ -120,7 +157,7 @@ bool level_add_player(struct Level *level, u32 xt, u32 yt) {
     player_data->xm = 0;
     player_data->ym = 0;
 
-    player_data->sprite_flip = 0; // TODO is this right?
+    player_data->sprite_flip = 0;
 
     level_add_entity(level, ENTITY_PLAYER, id);
     return true;
