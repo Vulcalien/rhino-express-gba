@@ -37,6 +37,14 @@ static void start_init(void *data) {
     level_set_tile(&level, 7, 4, TILE_ROCK);
     level_set_tile(&level, 8, 4, TILE_WATER);
 
+    level_set_tile(&level, 5, 7, TILE_HIGH_GROUND);
+
+    level_set_tile(&level, 6, 4, TILE_HIGH_GROUND);
+    level_set_tile(&level, 6, 5, TILE_HIGH_GROUND);
+    level_set_tile(&level, 6, 6, TILE_HIGH_GROUND);
+    level_set_tile(&level, 7, 2, TILE_HIGH_GROUND);
+    level_set_tile(&level, 7, 6, TILE_HIGH_GROUND);
+
     level_add_player(&level, 1, 7);
 }
 

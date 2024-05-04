@@ -89,6 +89,8 @@ void screen_init(void) {
     for(u32 i = 0; i < BACKGROUND_COUNT; i++)
         background_config(i, &bg_configs[i]);
 
+    background_set_offset(BG2, 0, 5);
+
     // load tileset
     memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset) / 2);
     memcpy16(OBJ_TILESET,  (vu16 *) sprites, sizeof(tileset) / 2);

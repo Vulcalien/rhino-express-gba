@@ -95,6 +95,27 @@ DRAW_FUNC(ground_draw) {
     draw_outer_borders(level, xt, yt);
 }
 
+DRAW_FUNC(high_ground_draw) {
+    ground_draw(level, xt, yt);
+
+    vu16 *high = GET_HIGH(level, xt, yt);
+
+    bool left  = level_get_tile(level, xt - 1, yt) != TILE_HIGH_GROUND;
+    bool right = level_get_tile(level, xt + 1, yt) != TILE_HIGH_GROUND;
+    bool up    = level_get_tile(level, xt, yt - 1) != TILE_HIGH_GROUND;
+    bool down  = level_get_tile(level, xt, yt + 1) != TILE_HIGH_GROUND;
+
+    high[0]  = TILE((left  && up) ? 2 : 10, 1, 0);
+    high[1]  = TILE((right && up) ? 2 : 10, 0, 0);
+    high[32] = TILE((left  && down) ? 18 : 10, 1, 0);
+    high[33] = TILE((right && down) ? 18 : 10, 0, 0);
+
+    if(down) {
+        high[64] = TILE(left  ? 26 : 25, 1, 0);
+        high[65] = TILE(right ? 26 : 25, 0, 0);
+    }
+}
+
 DRAW_FUNC(platform_draw) {
     vu16 *low = GET_LOW(level, xt, yt);
 
@@ -174,7 +195,9 @@ const struct tile_Type tile_type_list[TILE_TYPES] = {
         .draw = ground_draw
     },
     [TILE_HIGH_GROUND] = {
-        .is_solid = true
+        .is_solid = true,
+
+        .draw = high_ground_draw
     },
 
     [TILE_PLATFORM] = {
