@@ -43,14 +43,30 @@ static_assert(
     "struct player_Data is of wrong size"
 );
 
+static inline bool is_tile_center(i32 x, i32 y) {
+    u32 tile_pixels = 1 << LEVEL_TILE_SIZE;
+    return (x % tile_pixels == tile_pixels / 2 &&
+            y % tile_pixels == tile_pixels / 2);
+}
+
+static inline void add_step_particle(struct Level *level,
+                                     struct entity_Data *data) {
+    // TODO
+}
+
 // returns 'true' if the player was able to move exactly by (xm, ym)
 // i.e. was not blocked by anything
 static inline bool move_full_pixels(struct Level *level,
                                     struct entity_Data *data,
                                     i32 xm, i32 ym) {
     while(xm != 0 || ym != 0) {
+        bool was_in_tile_center = is_tile_center(data->x, data->y);
+
         if(!entity_move(level, data, math_sign(xm), math_sign(ym)))
             return false;
+
+        if(was_in_tile_center)
+            add_step_particle(level, data);
 
         xm -= math_sign(xm);
         ym -= math_sign(ym);
