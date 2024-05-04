@@ -43,6 +43,26 @@ static_assert(
     "struct player_Data is of wrong size"
 );
 
+// returns 'true' if the player was able to move exactly by (xm, ym)
+// i.e. was not blocked by anything
+static inline bool move_full_pixels(struct Level *level,
+                                    struct entity_Data *data,
+                                    i32 xm, i32 ym) {
+    while(xm != 0) {
+        if(!entity_move(level, data, math_sign(xm), 0))
+            return false;
+        xm -= math_sign(xm);
+    }
+
+    while(ym != 0) {
+        if(!entity_move(level, data, 0, math_sign(ym)))
+            return false;
+        ym -= math_sign(ym);
+    }
+
+    return true;
+}
+
 IWRAM_SECTION
 static void player_tick(struct Level *level, struct entity_Data *data) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
@@ -97,7 +117,11 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
         player_data->suby %= 128;
 
         // full-pixel movement
-        entity_move(level, data, full_xm, full_ym);
+        if(!move_full_pixels(level, data, full_xm, full_ym)) {
+            // the player was blocked: there was a collision
+            player_data->xm = 0;
+            player_data->ym = 0;
+        }
     }
 }
 
