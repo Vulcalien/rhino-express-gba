@@ -48,18 +48,13 @@ static_assert(
 static inline bool move_full_pixels(struct Level *level,
                                     struct entity_Data *data,
                                     i32 xm, i32 ym) {
-    while(xm != 0) {
-        if(!entity_move(level, data, math_sign(xm), 0))
+    while(xm != 0 || ym != 0) {
+        if(!entity_move(level, data, math_sign(xm), math_sign(ym)))
             return false;
-        xm -= math_sign(xm);
-    }
 
-    while(ym != 0) {
-        if(!entity_move(level, data, 0, math_sign(ym)))
-            return false;
+        xm -= math_sign(xm);
         ym -= math_sign(ym);
     }
-
     return true;
 }
 
