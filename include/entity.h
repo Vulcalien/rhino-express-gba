@@ -25,7 +25,7 @@ enum entity_TypeID {
     ENTITY_DECOR_HOUSE,
 
     ENTITY_PARTICLE_BLOCK,
-    ENTITY_PARTICLE_WALK,
+    ENTITY_PARTICLE_STEP,
     ENTITY_PARTICLE_FOG,
     ENTITY_PARTICLE_FALLING_PLATFORM,
 
@@ -130,6 +130,6 @@ extern const struct entity_Type
     entity_decor_house,
 
     entity_particle_block,
-    entity_particle_walk,
+    entity_particle_step,
     entity_particle_fog,
     entity_particle_falling_platform;

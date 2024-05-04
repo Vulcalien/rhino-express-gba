@@ -16,24 +16,24 @@
 #include "entity.h"
 
 IWRAM_SECTION
-static void walk_tick(struct Level *level, struct entity_Data *data) {
+static void step_tick(struct Level *level, struct entity_Data *data) {
     // TODO
 }
 
 IWRAM_SECTION
-static u32 walk_draw(struct Level *level, struct entity_Data *data,
+static u32 step_draw(struct Level *level, struct entity_Data *data,
                      u32 used_sprites) {
     // TODO
     return 1;
 }
 
 // TODO
-const struct entity_Type entity_particle_walk = {
+const struct entity_Type entity_particle_step = {
     .xr = 0,
     .yr = 0,
 
     .is_solid = false,
 
-    .tick = walk_tick,
-    .draw = walk_draw
+    .tick = step_tick,
+    .draw = step_draw
 };
