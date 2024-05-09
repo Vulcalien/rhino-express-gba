@@ -43,6 +43,22 @@ static_assert(
     "struct player_Data is of wrong size"
 );
 
+static inline void read_input(i8 *xm, i8 *ym) {
+    if(input_pressed(KEY_UP)) {
+        *xm = 0;
+        *ym = -1;
+    } else if(input_pressed(KEY_LEFT)) {
+        *xm = -1;
+        *ym = 0;
+    } else if(input_pressed(KEY_DOWN)) {
+        *xm = 0;
+        *ym = +1;
+    } else if(input_pressed(KEY_RIGHT)) {
+        *xm = +1;
+        *ym = 0;
+    }
+}
+
 static inline bool is_tile_center(i32 x, i32 y) {
     u32 tile_pixels = 1 << LEVEL_TILE_SIZE;
     return (x % tile_pixels == tile_pixels / 2 &&
@@ -79,24 +95,13 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
     // process player input
-    if(input_pressed(KEY_UP)) {
-        player_data->stored_xm = 0;
-        player_data->stored_ym = -1;
-    } else if(input_pressed(KEY_LEFT)) {
-        player_data->stored_xm = -1;
-        player_data->stored_ym = 0;
-    } else if(input_pressed(KEY_DOWN)) {
-        player_data->stored_xm = 0;
-        player_data->stored_ym = +1;
-    } else if(input_pressed(KEY_RIGHT)) {
-        player_data->stored_xm = +1;
-        player_data->stored_ym = 0;
-    }
+    read_input(&player_data->stored_xm, &player_data->stored_ym);
 
     if(player_data->xm == 0 && player_data->ym == 0) {
         player_data->xm = player_data->stored_xm;
         player_data->ym = player_data->stored_ym;
 
+        // update sprite flip bit
         if(player_data->xm < 0)
             player_data->sprite_flip = 0;
         else if(player_data->xm > 0)
