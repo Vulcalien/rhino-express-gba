@@ -19,11 +19,13 @@
 #include "sprite.h"
 #include "input.h"
 #include "math.h"
+#include "random.h"
 
 #define   MAX_SPEED (1280)
 #define START_SPEED (64)
 
 struct player_Data {
+    // subpixel coordinates (128:1)
     i16 subx;
     i16 suby;
 
@@ -42,6 +44,17 @@ static_assert(
     sizeof(struct player_Data) == ENTITY_EXTRA_DATA_SIZE,
     "struct player_Data is of wrong size"
 );
+
+#define LETTERS_LIMIT (8)
+
+static struct {
+    // subpixel coordinates (256:1)
+    i32 subx;
+    i32 suby;
+
+    u16 angle;
+    u16 radius;
+} letters[LETTERS_LIMIT];
 
 static inline void read_input(i8 *xm, i8 *ym) {
     if(input_pressed(KEY_UP)) {
@@ -147,16 +160,41 @@ static inline u32 calculate_inverse_y_scale(u32 arg) {
     return 256 - val;
 }
 
-IWRAM_SECTION
-static inline draw_letters(struct Level *level, i32 x, i32 y,
-                           u32 used_sprites) {
+// draw 'count' letters around the center (xc, yc)
+static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
+                               u32 used_sprites) {
+    // make sure that 'count' is less than the limit
+    if(count > LETTERS_LIMIT)
+        count = LETTERS_LIMIT;
+
+    // make sure that all sprites can be drawn
+    if(count > SPRITE_COUNT - used_sprites)
+        count = SPRITE_COUNT - used_sprites;
+
     struct Sprite sprite = {
-        .tile = 52,
+        .tile = 52 * 2,
         .color_mode = 1
     };
 
-    // TODO ...
-    return 0;
+    for(u32 i = 0; i < count; i++) {
+        // calculate target location
+        u16 angle = letters[i].angle - tick_count * 256;
+
+        i32 xd = (letters[i].radius)     * math_cos(angle) / 0x4000;
+        i32 yd = (letters[i].radius - 1) * math_sin(angle) / 0x4000;
+
+        i32 target_x = xc + xd;
+        i32 target_y = yc + yd;
+
+        // gradually adjust letter location to make a trailing effect
+        letters[i].subx = (letters[i].subx * 7 + (target_x * 256)) / 8;
+        letters[i].suby = (letters[i].suby * 7 + (target_y * 256)) / 8;
+
+        sprite.x = (letters[i].subx / 256) - 4;
+        sprite.y = (letters[i].suby / 256) - 4;
+        sprite_config(used_sprites++, &sprite);
+    }
+    return count;
 }
 
 IWRAM_SECTION
@@ -189,7 +227,8 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     parameters[8]  = 0;
     parameters[12] = inverse_y_scale;
 
-    return 1 + draw_letters(level, data->x, data->y, used_sprites);
+    // DEBUG specify the real number of letters
+    return 1 + draw_letters(8, data->x, data->y + 4, used_sprites);
 }
 
 const struct entity_Type entity_player = {
@@ -201,6 +240,24 @@ const struct entity_Type entity_player = {
     .tick = player_tick,
     .draw = player_draw
 };
+
+// initialize data used to draw letters
+static inline void init_letter_draw_data(void) {
+    for(u32 i = 0; i < LETTERS_LIMIT; i++) {
+        letters[i].angle = (MATH_PI * 2) * i / LETTERS_LIMIT;
+
+        letters[i].radius = 7 + rand() % 3;
+    }
+
+    // shuffle angle offsets
+    for(u32 i = 0; i < LETTERS_LIMIT; i++) {
+        u32 other = rand() % LETTERS_LIMIT;
+
+        u16 tmp = letters[i].angle;
+        letters[i].angle = letters[other].angle;
+        letters[other].angle = tmp;
+    }
+}
 
 bool level_add_player(struct Level *level, u32 xt, u32 yt) {
     level_EntityID id = level_new_entity(level);
@@ -220,6 +277,8 @@ bool level_add_player(struct Level *level, u32 xt, u32 yt) {
     player_data->ym = 0;
 
     player_data->sprite_flip = 0;
+
+    init_letter_draw_data();
 
     level_add_entity(level, ENTITY_PLAYER, id);
     return true;
