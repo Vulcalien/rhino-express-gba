@@ -78,9 +78,44 @@ static inline bool is_tile_center(i32 x, i32 y) {
             y % tile_pixels == tile_pixels / 2);
 }
 
-static inline void add_step_particle(struct Level *level,
-                                     struct entity_Data *data) {
+static inline void step_on_tile(struct Level *level,
+                                struct entity_Data *data,
+                                i32 xt, i32 yt) {
+    struct player_Data *player_data = (struct player_Data *) &data->data;
+
     // TODO
+    switch(level_get_tile(level, xt, yt)) {
+        case TILE_VOID:
+        case TILE_HOLE:
+            break;
+
+        case TILE_WOOD:
+            break;
+
+        case TILE_ROCK:
+            break;
+
+        case TILE_WATER:
+            break;
+
+        default:
+            break;
+    }
+}
+
+static inline void leave_tile(struct Level *level,
+                              struct entity_Data *data,
+                              i32 xt, i32 yt) {
+    struct player_Data *player_data = (struct player_Data *) &data->data;
+
+    // TODO
+    switch(level_get_tile(level, xt, yt)) {
+        case TILE_FALL_PLATFORM:
+            break;
+
+        default:
+            break;
+    }
 }
 
 // returns 'true' if the player was able to move exactly by (xm, ym)
@@ -89,13 +124,29 @@ static inline bool move_full_pixels(struct Level *level,
                                     struct entity_Data *data,
                                     i32 xm, i32 ym) {
     while(xm != 0 || ym != 0) {
-        bool was_in_tile_center = is_tile_center(data->x, data->y);
+        bool in_center_before = is_tile_center(data->x, data->y);
+
+        if(in_center_before) {
+            i32 xt = data->x >> LEVEL_TILE_SIZE;
+            i32 yt = data->y >> LEVEL_TILE_SIZE;
+            step_on_tile(level, data, xt, yt);
+        }
 
         if(!entity_move(level, data, math_sign(xm), math_sign(ym)))
             return false;
 
-        if(was_in_tile_center)
-            add_step_particle(level, data);
+        if(in_center_before) {
+            // TODO add step particles
+        }
+
+        bool in_center_after = is_tile_center(data->x, data->y);
+
+        // leave the previously occupied tile
+        if(in_center_after) {
+            i32 prev_xt = (data->x >> LEVEL_TILE_SIZE) - math_sign(xm);
+            i32 prev_yt = (data->y >> LEVEL_TILE_SIZE) - math_sign(ym);
+            leave_tile(level, data, prev_xt, prev_yt);
+        }
 
         xm -= math_sign(xm);
         ym -= math_sign(ym);

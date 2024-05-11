@@ -217,17 +217,17 @@ const struct tile_Type tile_type_list[TILE_TYPES] = {
     },
 
     [TILE_WOOD] = {
-        .is_solid = true,
+        .is_solid = false,
 
         .draw = wood_draw
     },
     [TILE_ROCK] = {
-        .is_solid = true,
+        .is_solid = false,
 
         .draw = rock_draw
     },
     [TILE_WATER] = {
-        .is_solid = true,
+        .is_solid = false,
 
         .draw = water_draw
     }
