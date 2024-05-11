@@ -96,6 +96,10 @@ static inline void enter_tile(struct Level *level,
             break;
 
         case TILE_WATER:
+            player_data->xm = player_data->ym = 0;
+            player_data->stored_xm = player_data->stored_ym = 0;
+            // TODO add block particle
+            // TODO add water sound
             break;
 
         default:
@@ -108,9 +112,11 @@ static inline void leave_tile(struct Level *level,
                               i32 xt, i32 yt) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    // TODO
     switch(level_get_tile(level, xt, yt)) {
         case TILE_FALL_PLATFORM:
+            level_set_tile(level, xt, yt, TILE_HOLE);
+            // TODO add falling platform particle
+            // TODO add falling platform sound
             break;
 
         default:

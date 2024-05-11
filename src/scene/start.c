@@ -45,7 +45,7 @@ static void start_init(void *data) {
     level_set_tile(&level, 7, 2, TILE_HIGH_GROUND);
     level_set_tile(&level, 7, 6, TILE_HIGH_GROUND);
 
-    level_add_player(&level, 1, 7);
+    level_add_player(&level, 7, 7);
 }
 
 static void start_tick(void) {
