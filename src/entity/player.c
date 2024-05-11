@@ -78,9 +78,9 @@ static inline bool is_tile_center(i32 x, i32 y) {
             y % tile_pixels == tile_pixels / 2);
 }
 
-static inline void step_on_tile(struct Level *level,
-                                struct entity_Data *data,
-                                i32 xt, i32 yt) {
+static inline void enter_tile(struct Level *level,
+                              struct entity_Data *data,
+                              i32 xt, i32 yt) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
     // TODO
@@ -123,14 +123,10 @@ static inline void leave_tile(struct Level *level,
 static inline bool move_full_pixels(struct Level *level,
                                     struct entity_Data *data,
                                     i32 xm, i32 ym) {
+    struct player_Data *player_data = (struct player_Data *) &data->data;
+
     while(xm != 0 || ym != 0) {
         bool in_center_before = is_tile_center(data->x, data->y);
-
-        if(in_center_before) {
-            i32 xt = data->x >> LEVEL_TILE_SIZE;
-            i32 yt = data->y >> LEVEL_TILE_SIZE;
-            step_on_tile(level, data, xt, yt);
-        }
 
         if(!entity_move(level, data, math_sign(xm), math_sign(ym)))
             return false;
@@ -139,13 +135,18 @@ static inline bool move_full_pixels(struct Level *level,
             // TODO add step particles
         }
 
-        bool in_center_after = is_tile_center(data->x, data->y);
-
-        // leave the previously occupied tile
-        if(in_center_after) {
+        if(is_tile_center(data->x, data->y)) {
             i32 prev_xt = (data->x >> LEVEL_TILE_SIZE) - math_sign(xm);
             i32 prev_yt = (data->y >> LEVEL_TILE_SIZE) - math_sign(ym);
             leave_tile(level, data, prev_xt, prev_yt);
+
+            i32 next_xt = data->x >> LEVEL_TILE_SIZE;
+            i32 next_yt = data->y >> LEVEL_TILE_SIZE;
+            enter_tile(level, data, next_xt, next_yt);
+
+            // check if movement was canceled
+            if(player_data->xm == 0 && player_data->ym == 0)
+                break;
         }
 
         xm -= math_sign(xm);
