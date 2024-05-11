@@ -259,7 +259,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
 
     struct Sprite sprite = {
         .x = data->x - 16,
-        .y = data->y - (256 * 16) / inverse_y_scale,
+        .y = data->y - 4 - (256 * 16) / inverse_y_scale,
 
         .size = 1,
 
@@ -280,7 +280,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     parameters[12] = inverse_y_scale;
 
     // DEBUG specify the real number of letters
-    return 1 + draw_letters(8, data->x, data->y + 4, used_sprites);
+    return 1 + draw_letters(8, data->x, data->y, used_sprites);
 }
 
 const struct entity_Type entity_player = {
