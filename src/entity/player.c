@@ -35,9 +35,11 @@ struct player_Data {
     i8 stored_xm;
     i8 stored_ym;
 
+    bool hit_obstacle;
+
     u8 sprite_flip;
 
-    u8 unused[5];
+    u8 unused[4];
 };
 
 static_assert(
@@ -90,9 +92,13 @@ static inline void enter_tile(struct Level *level,
             break;
 
         case TILE_WOOD:
+            // TODO check if the player is fast enough to break the wood
+            player_data->hit_obstacle = true;
             break;
 
         case TILE_ROCK:
+            // TODO check if the player is fast enough to break the rock
+            player_data->hit_obstacle = true;
             break;
 
         case TILE_WATER:
@@ -153,6 +159,13 @@ static inline bool move_full_pixels(struct Level *level,
             // check if movement was canceled
             if(player_data->xm == 0 && player_data->ym == 0)
                 break;
+
+            // check if an obstacle was hit
+            if(player_data->hit_obstacle) {
+                player_data->xm = -math_sign(player_data->xm);
+                player_data->ym = -math_sign(player_data->ym);
+                break;
+            }
         }
 
         xm -= math_sign(xm);
@@ -172,11 +185,24 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
         player_data->xm = player_data->stored_xm;
         player_data->ym = player_data->stored_ym;
 
+        player_data->stored_xm = player_data->stored_ym = 0;
+
         // update sprite flip bit
         if(player_data->xm < 0)
             player_data->sprite_flip = 0;
         else if(player_data->xm > 0)
             player_data->sprite_flip = 1;
+    } else if(player_data->hit_obstacle) {
+        // if an obstacle was hit, gradually move back by one tile
+        entity_move(
+            level, data,
+            player_data->xm * 2, player_data->ym * 2
+        );
+
+        if(is_tile_center(data->x, data->y)) {
+            player_data->xm = player_data->ym = 0;
+            player_data->hit_obstacle = false;
+        }
     } else {
         i32 xm_sign = math_sign(player_data->xm);
         i32 ym_sign = math_sign(player_data->ym);
