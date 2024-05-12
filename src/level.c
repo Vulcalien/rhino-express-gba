@@ -15,6 +15,7 @@
  */
 #include "level.h"
 
+#include "background.h"
 #include "sprite.h"
 #include "entity.h"
 
@@ -99,6 +100,9 @@ void level_tick(struct Level *level) {
 }
 
 static inline void draw_tiles(struct Level *level) {
+    background_set_offset(BG2, level->offset.x, level->offset.y + 5);
+    background_set_offset(BG3, level->offset.x, level->offset.y);
+
     for(u32 y = 0; y < LEVEL_H; y++) {
         for(u32 x = 0; x < LEVEL_W; x++) {
             const struct tile_Type *type = tile_get_type(
@@ -120,7 +124,12 @@ static inline void draw_entities(struct Level *level) {
         if(!type)
             continue;
 
-        used_sprites += type->draw(level, data, used_sprites);
+        const i32 draw_x = data->x - level->offset.x;
+        const i32 draw_y = data->y - level->offset.y;
+
+        used_sprites += type->draw(
+            level, data, draw_x, draw_y, used_sprites
+        );
         if(used_sprites >= SPRITE_COUNT)
             break;
     }

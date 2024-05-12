@@ -24,7 +24,7 @@ static void falling_platform_tick(struct Level *level,
 IWRAM_SECTION
 static u32 falling_platform_draw(struct Level *level,
                                  struct entity_Data *data,
-                                 u32 used_sprites) {
+                                 i32 x, i32 y, u32 used_sprites) {
     // TODO
     return 1;
 }

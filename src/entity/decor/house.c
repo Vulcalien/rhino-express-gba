@@ -22,7 +22,7 @@ static void house_tick(struct Level *level, struct entity_Data *data) {
 
 IWRAM_SECTION
 static u32 house_draw(struct Level *level, struct entity_Data *data,
-                      u32 used_sprites) {
+                      i32 x, i32 y, u32 used_sprites) {
     // TODO
     return 1;
 }

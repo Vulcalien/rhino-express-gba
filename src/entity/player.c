@@ -257,15 +257,15 @@ static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
 
 IWRAM_SECTION
 static u32 player_draw(struct Level *level, struct entity_Data *data,
-                       u32 used_sprites) {
+                       i32 x, i32 y, u32 used_sprites) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
     // 8-bit fixed point decimal (1 = 256)
     u32 inverse_y_scale = calculate_inverse_y_scale(tick_count);
 
     struct Sprite sprite = {
-        .x = data->x - 16,
-        .y = data->y - 4 - (256 * 16) / inverse_y_scale,
+        .x = x - 16,
+        .y = y - 4 - (256 * 16) / inverse_y_scale,
 
         .size = 1,
 
@@ -286,7 +286,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     parameters[12] = inverse_y_scale;
 
     // DEBUG specify the real number of letters
-    return 1 + draw_letters(8, data->x, data->y, used_sprites);
+    return 1 + draw_letters(8, x, y, used_sprites);
 }
 
 const struct entity_Type entity_player = {
