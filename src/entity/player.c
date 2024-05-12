@@ -202,6 +202,10 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
         if(is_tile_center(data->x, data->y)) {
             player_data->xm = player_data->ym = 0;
             player_data->hit_obstacle = false;
+            level->offset.y = 0;
+        } else {
+            if(tick_count % 2 == 0)
+                level->offset.y = -2 + rand() % 5;
         }
     } else {
         i32 xm_sign = math_sign(player_data->xm);
