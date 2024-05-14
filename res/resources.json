@@ -42,5 +42,28 @@
 
             "static": true
         }
+    ],
+
+    "files": [
+        {
+            "name": "music_game",
+
+            "input": "res/music/game.raw",
+            "output": "src/res/music/game.c"
+        },
+
+        {
+            "name": "music_map",
+
+            "input": "res/music/map.raw",
+            "output": "src/res/music/map.c"
+        },
+
+        {
+            "name": "music_editing",
+
+            "input": "res/music/editing.raw",
+            "output": "src/res/music/editing.c"
+        }
     ]
 }
