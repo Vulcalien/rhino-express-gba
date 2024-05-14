@@ -26,13 +26,13 @@ CFLAGS   := -O3 -fomit-frame-pointer -marm -mcpu=arm7tdmi\
 
 ASFLAGS := -mcpu=arm7tdmi
 
-LDFLAGS := -nostartfiles -Tlib/base/lnkscript
+LDFLAGS := -nostartfiles -Tlib/libsimplegba/lnkscript
 LDLIBS  :=
 
-# base library
-CPPFLAGS += -Ilib/base/include
-LDFLAGS  += -Llib/base/bin
-LDLIBS   += -l:base.a
+# libsimplegba
+CPPFLAGS += -Ilib/libsimplegba/include
+LDFLAGS  += -Llib/libsimplegba/bin
+LDLIBS   += -lsimplegba
 
 ifeq ($(CURRENT_OS),UNIX)
     CC      := arm-none-eabi-gcc
@@ -46,6 +46,11 @@ else ifeq ($(CURRENT_OS),WINDOWS)
     OBJCOPY :=
 
     EMULATOR :=
+endif
+
+# if LINK_MAP=1, generate a link map
+ifeq ($(LINK_MAP),1)
+    LDFLAGS += -Wl,-Map=$(BIN_DIR)/output.map
 endif
 
 # === Extensions & Commands ===
@@ -121,10 +126,10 @@ $(BIN_DIR) $(OBJ_DIRS) $(RES_OUT_DIRS):
 
 .PHONY: build-deps clean-deps
 build-deps:
-	$(MAKE) -C lib/base build
+	$(MAKE) -C lib/libsimplegba build
 
 clean-deps:
-	$(MAKE) -C lib/base clean
+	$(MAKE) -C lib/libsimplegba clean
 
 .PHONY: res
 res: $(RES_OUT_DIRS)
