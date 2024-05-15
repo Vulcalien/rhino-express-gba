@@ -86,3 +86,4 @@ extern void level_add_entity(struct Level *level,
 // ===== ===== =====
 
 extern bool level_add_player(struct Level *level, u32 xt, u32 yt);
+extern bool level_add_mailbox(struct Level *level, u32 xt, u32 yt);
