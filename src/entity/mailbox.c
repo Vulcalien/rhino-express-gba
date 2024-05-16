@@ -69,6 +69,22 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
     return 1;
 }
 
+IWRAM_SECTION
+static bool mailbox_touched_by(struct Level *level,
+                               struct entity_Data *data,
+                               struct entity_Data *touching_data) {
+    if(touching_data->type != ENTITY_PLAYER)
+        return false;
+
+    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
+    if(!mailbox_data->has_letter) {
+        mailbox_data->has_letter = true;
+        mailbox_data->animation = 0; // TODO animation
+    }
+
+    return false;
+}
+
 const struct entity_Type entity_mailbox = {
     .xr = 8,
     .yr = 8,
@@ -76,7 +92,9 @@ const struct entity_Type entity_mailbox = {
     .is_solid = true,
 
     .tick = mailbox_tick,
-    .draw = mailbox_draw
+    .draw = mailbox_draw,
+
+    .touched_by = mailbox_touched_by
 };
 
 bool level_add_mailbox(struct Level *level, u32 xt, u32 yt) {
