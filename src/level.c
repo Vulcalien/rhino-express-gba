@@ -50,6 +50,10 @@ static inline void remove_solid_entity(struct Level *level,
 }
 
 void level_init(struct Level *level) {
+    // clear 'data'
+    for(u32 i = 0; i < LEVEL_SIZE; i++)
+        level->data[i] = 0;
+
     // clear 'entities'
     for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++)
         level->entities[i].type = ENTITY_INVALID;

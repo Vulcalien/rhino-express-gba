@@ -38,6 +38,7 @@ typedef u8 level_EntityID;
 
 struct Level {
     enum tile_TypeID tiles[LEVEL_SIZE];
+    u8 data[LEVEL_SIZE];
 
     struct entity_Data entities[LEVEL_ENTITY_LIMIT];
 
@@ -69,6 +70,19 @@ inline void level_set_tile(struct Level *level, i32 x, i32 y,
                            enum tile_TypeID id) {
     if(x >= 0 && y >= 0 && x < LEVEL_W && y < LEVEL_H)
         level->tiles[x + y * LEVEL_W] = id;
+}
+
+ALWAYS_INLINE
+inline u8 level_get_data(struct Level *level, i32 x, i32 y) {
+    if(x >= 0 && y >= 0 && x < LEVEL_W && y < LEVEL_H)
+        return level->tiles[x + y * LEVEL_W];
+    return 0;
+}
+
+ALWAYS_INLINE
+inline void level_set_data(struct Level *level, i32 x, i32 y, u8 data) {
+    if(x >= 0 && y >= 0 && x < LEVEL_W && y < LEVEL_H)
+        level->data[x + y * LEVEL_W] = data;
 }
 
 // === Entity functions ===
