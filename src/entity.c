@@ -147,16 +147,23 @@ static inline bool blocked_by_entities(struct Level *level,
                 if(data2 == data)
                     continue;
 
-                if(entity_intersects(data2, x0, y0, x1, y1)) {
-                    // if defined, call 'touch_entity'
-                    if(entity_type->touch_entity) {
-                        bool should_block = entity_type->touch_entity(
-                            level, data, data2
-                        );
+                const struct entity_Type *e_type2 = entity_get_type(data2);
 
-                        if(!should_block)
-                            continue;
-                    }
+                if(entity_intersects(data2, x0, y0, x1, y1)) {
+                    bool should_block = true;
+
+                    // if defined, call 'touched_by' event
+                    if(e_type2->touched_by)
+                        if(!e_type2->touched_by(level, data2, data))
+                            should_block = false;
+
+                    // if defined, call 'touch_entity' event
+                    if(entity_type->touch_entity)
+                        if(!entity_type->touch_entity(level, data, data2))
+                            should_block = false;
+
+                    if(!should_block)
+                        continue;
 
                     // if the second entity is NOT already touching the
                     // first one, then the first one is blocked by it.

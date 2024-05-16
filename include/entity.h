@@ -77,6 +77,13 @@ struct entity_Type {
     // touched entity. If not defined, this is the default behavior.
     bool (*touch_entity)(struct Level *level, struct entity_Data *data,
                          struct entity_Data *touched_data);
+
+    // If defined, this is called when an entity trying to move
+    // (touching_data) touches this entity (data).
+    // If 'true' is returned, the moving entity should be moved by this
+    // entity. If not defined, this is the default behavior.
+    bool (*touched_by)(struct Level *level, struct entity_Data *data,
+                       struct entity_Data *touching_data);
 };
 
 extern const struct entity_Type * const entity_type_list[ENTITY_TYPES];
