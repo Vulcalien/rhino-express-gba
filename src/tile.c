@@ -149,37 +149,36 @@ DRAW_FUNC(hole_draw) {
     draw_outer_borders(level, xt, yt);
 }
 
-DRAW_FUNC(wood_draw) {
+ALWAYS_INLINE
+static inline void draw_obstacle(struct Level *level, i32 xt, i32 yt,
+                                 u32 base) {
     vu16 *low = GET_LOW(level, xt, yt);
 
-    low[0]  = TILE(32, 0, 0);
-    low[1]  = TILE(33, 0, 0);
-    low[32] = TILE(40, 0, 0);
-    low[33] = TILE(41, 0, 0);
+    u8 data = level_get_data(level, xt, yt);
+    bool platform = data & 1;
+    bool flip     = data & 2;
+
+    if(platform)
+        base += 16;
+
+    low[0]  = TILE(base     + flip, flip, 0);
+    low[1]  = TILE(base + 1 - flip, flip, 0);
+    low[32] = TILE(base + 8 + flip, flip, 0);
+    low[33] = TILE(base + 9 - flip, flip, 0);
 
     draw_outer_borders(level, xt, yt);
+}
+
+DRAW_FUNC(wood_draw) {
+    draw_obstacle(level, xt, yt, 32);
 }
 
 DRAW_FUNC(rock_draw) {
-    vu16 *low = GET_LOW(level, xt, yt);
-
-    low[0]  = TILE(34, 0, 1);
-    low[1]  = TILE(35, 0, 1);
-    low[32] = TILE(42, 0, 1);
-    low[33] = TILE(43, 0, 1);
-
-    draw_outer_borders(level, xt, yt);
+    draw_obstacle(level, xt, yt, 34);
 }
 
 DRAW_FUNC(water_draw) {
-    vu16 *low = GET_LOW(level, xt, yt);
-
-    low[0]  = TILE(36, 0, 1);
-    low[1]  = TILE(37, 0, 1);
-    low[32] = TILE(44, 0, 1);
-    low[33] = TILE(45, 0, 1);
-
-    draw_outer_borders(level, xt, yt);
+    draw_obstacle(level, xt, yt, 36);
 }
 
 const struct tile_Type tile_type_list[TILE_TYPES] = {
