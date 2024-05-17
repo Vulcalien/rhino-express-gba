@@ -208,6 +208,10 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
                 level->offset.y = -2 + rand() % 5;
         }
     } else {
+        // if the level is still in editing mode, disable it
+        if(level->is_editing)
+            level_stop_editing(level);
+
         i32 xm_sign = math_sign(player_data->xm);
         i32 ym_sign = math_sign(player_data->ym);
 

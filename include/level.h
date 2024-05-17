@@ -45,6 +45,13 @@ struct Level {
     level_EntityID
     solid_entities[LEVEL_SIZE][LEVEL_SOLID_ENTITIES_IN_TILE];
 
+    bool is_editing;
+    struct {
+        u8 wood;
+        u8 rock;
+        u8 water;
+    } obstacles_to_add;
+
     struct {
         i32 x;
         i32 y;
@@ -54,6 +61,8 @@ struct Level {
 extern void level_init(struct Level *level);
 extern void level_tick(struct Level *level);
 extern void level_draw(struct Level *level);
+
+extern void level_stop_editing(struct Level *level);
 
 // === Tile functions ===
 
