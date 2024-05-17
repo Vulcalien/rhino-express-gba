@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#include "sounds.h"
+#include "music.h"
 
 #include "res/music/game.c"
 #include "res/music/map.c"

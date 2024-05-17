@@ -17,6 +17,9 @@
 
 #include "main.h"
 
+// include the direct sound driver needed to play music
+#include "sound.h"
+
 extern const u8 music_game[260624];
 extern const u8 music_map[130312];
 extern const u8 music_editing[130312];
