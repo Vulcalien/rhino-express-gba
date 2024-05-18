@@ -64,19 +64,9 @@ void level_init(struct Level *level) {
         for(u32 i = 0; i < LEVEL_SOLID_ENTITIES_IN_TILE; i++)
             level->solid_entities[t][i] = LEVEL_NO_ENTITY;
 
-    // set 'is_editing'
-    level->is_editing = (
-        level->obstacles_to_add.wood  != 0 ||
-        level->obstacles_to_add.rock  != 0 ||
-        level->obstacles_to_add.water != 0
-    );
-
-    if(level->is_editing) {
-        ; // TODO add editor cursor entity
-        SOUND_PLAY(music_editing, true, SOUND_CHANNEL_B);
-    } else {
-        level_stop_editing(level);
-    }
+    // enter editing mode
+    level->is_editing = true;
+    SOUND_PLAY(music_editing, true, SOUND_CHANNEL_B);
 }
 
 static inline void tick_tiles(struct Level *level) {
@@ -161,11 +151,6 @@ IWRAM_SECTION
 void level_draw(struct Level *level) {
     draw_tiles(level);
     draw_entities(level);
-}
-
-void level_stop_editing(struct Level *level) {
-    level->is_editing = false;
-    SOUND_PLAY(music_game, true, SOUND_CHANNEL_B);
 }
 
 IWRAM_SECTION

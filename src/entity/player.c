@@ -178,6 +178,10 @@ IWRAM_SECTION
 static void player_tick(struct Level *level, struct entity_Data *data) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
+    // if the level is still in editing mode, do nothing
+    if(level->is_editing)
+        return;
+
     // process player input
     read_input(&player_data->stored_xm, &player_data->stored_ym);
 
@@ -208,10 +212,6 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
                 level->offset.y = -2 + rand() % 5;
         }
     } else {
-        // if the level is still in editing mode, disable it
-        if(level->is_editing)
-            level_stop_editing(level);
-
         i32 xm_sign = math_sign(player_data->xm);
         i32 ym_sign = math_sign(player_data->ym);
 

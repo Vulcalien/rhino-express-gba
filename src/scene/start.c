@@ -25,7 +25,7 @@ static void start_init(void *data) {
 
     for(u32 y = 3; y < 8; y++)
         for(u32 x = 5; x < 10; x++)
-            level_set_tile(&level, x, y, TILE_GROUND);
+            level_set_tile(&level, x, y, TILE_PLATFORM);
     level_set_tile(&level, 7, 5, TILE_VOID);
     level_set_tile(&level, 9, 7, TILE_VOID);
 
@@ -45,8 +45,11 @@ static void start_init(void *data) {
     level_set_tile(&level, 7, 2, TILE_HIGH_GROUND);
     level_set_tile(&level, 7, 6, TILE_HIGH_GROUND);
 
+    level_add_edit_cursor(&level, 8, 5);
     level_add_player(&level, 8, 7);
     level_add_mailbox(&level, 8, 7);
+
+    level.obstacles_to_add.wood = 1;
 }
 
 static void start_tick(void) {
