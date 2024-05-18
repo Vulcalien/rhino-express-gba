@@ -46,11 +46,7 @@ struct Level {
     solid_entities[LEVEL_SIZE][LEVEL_SOLID_ENTITIES_IN_TILE];
 
     bool is_editing;
-    struct {
-        u8 wood;
-        u8 rock;
-        u8 water;
-    } obstacles_to_add;
+    u8 obstacles_to_add[3];
 
     struct {
         i32 x;

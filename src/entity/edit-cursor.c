@@ -20,17 +20,50 @@
 #include "music.h"
 #include "input.h"
 #include "sprite.h"
+#include "random.h"
 
-static inline bool any_obstacle_left(struct Level *level,
-                                     struct entity_Data *data) {
-    return level->obstacles_to_add.wood  != 0 ||
-           level->obstacles_to_add.rock  != 0 ||
-           level->obstacles_to_add.water != 0;
+struct cursor_Data {
+    i8 selected;
+
+    bool flip;
+
+    u8 unused[14];
+};
+
+#define OBSTACLE_TYPES (3)
+
+static inline bool any_obstacle_left(struct Level *level) {
+    for(u32 i = 0; i < OBSTACLE_TYPES; i++)
+        if(level->obstacles_to_add[i] != 0)
+            return true;
+    return false;
+}
+
+static inline void switch_item(struct Level *level,
+                               struct entity_Data *data, i32 step) {
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+
+    // if there is no obstacle left, do nothing
+    if(!any_obstacle_left(level))
+        return;
+
+    do {
+        cursor_data->selected += step;
+
+        if(cursor_data->selected < 0)
+            cursor_data->selected = OBSTACLE_TYPES - 1;
+        else if(cursor_data->selected >= OBSTACLE_TYPES)
+            cursor_data->selected = 0;
+    } while(level->obstacles_to_add[cursor_data->selected] == 0);
+
+    cursor_data->flip = rand() & 1;
 }
 
 static inline bool try_to_place(struct Level *level,
                                 struct entity_Data *data,
                                 i32 xt, i32 yt) {
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+
     if(level_get_tile(level, xt, yt) != TILE_PLATFORM)
         return false;
 
@@ -43,11 +76,20 @@ static inline bool try_to_place(struct Level *level,
             return false;
     }
 
-    // DEBUG
-    enum tile_TypeID obstacle = TILE_WOOD; // DEBUG
-    level->obstacles_to_add.wood--;
+    enum tile_TypeID tile = TILE_WOOD + cursor_data->selected;
+    level->obstacles_to_add[cursor_data->selected]--;
 
-    level_set_tile(level, xt, yt, obstacle);
+    // place tile and set its data
+    level_set_tile(level, xt, yt, tile);
+    level_set_data(
+        level, xt, yt,
+        1                 << 0 | // platform
+        cursor_data->flip << 1   // flip
+    );
+
+    if(level->obstacles_to_add[cursor_data->selected] == 0)
+        switch_item(level, data, +1);
+
     return true;
 }
 
@@ -71,7 +113,7 @@ static inline void move_cursor(struct Level *level,
 IWRAM_SECTION
 static void cursor_tick(struct Level *level,
                         struct entity_Data *data) {
-    if(!any_obstacle_left(level, data) || input_pressed(KEY_START)) {
+    if(!any_obstacle_left(level) || input_pressed(KEY_START)) {
         // exit editing mode
         level->is_editing = false;
         SOUND_PLAY(music_game, true, SOUND_CHANNEL_B);
@@ -80,11 +122,17 @@ static void cursor_tick(struct Level *level,
         return;
     }
 
-    const i32 xt = data->x >> LEVEL_TILE_SIZE;
-    const i32 yt = data->y >> LEVEL_TILE_SIZE;
+    if(input_pressed(KEY_L))
+        switch_item(level, data, -1);
+    if(input_pressed(KEY_R))
+        switch_item(level, data, +1);
 
-    if(input_pressed(KEY_A))
+    if(input_pressed(KEY_A)) {
+        const i32 xt = data->x >> LEVEL_TILE_SIZE;
+        const i32 yt = data->y >> LEVEL_TILE_SIZE;
+
         try_to_place(level, data, xt, yt);
+    }
 
     // cursor movement
     i32 xm = 0;
@@ -102,13 +150,16 @@ IWRAM_SECTION
 static u32 cursor_draw(struct Level *level,
                        struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+
     struct Sprite sprite = {
         .x = x - 8,
         .y = y - 8,
 
         .size = 1,
+        .flip = cursor_data->flip,
 
-        .tile = (20) * 2, // TODO use sprite of selected obstacle
+        .tile = (20 + cursor_data->selected * 4) * 2,
         .color_mode = 1,
 
         // TODO .mode = 1, // semi-transparent mode
@@ -138,6 +189,16 @@ bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt) {
 
     data->x = (xt << LEVEL_TILE_SIZE) + 8;
     data->y = (yt << LEVEL_TILE_SIZE) + 8;
+
+    // set specific cursor data
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+
+    cursor_data->selected = 0;
+    cursor_data->flip = rand() & 1;
+
+    // if there is no obstacle of the first type, switch to others
+    if(level->obstacles_to_add[cursor_data->selected] == 0)
+        switch_item(level, data, +1);
 
     level_add_entity(level, ENTITY_EDIT_CURSOR, id);
     return true;

@@ -49,7 +49,9 @@ static void start_init(void *data) {
     level_add_player(&level, 8, 7);
     level_add_mailbox(&level, 8, 7);
 
-    level.obstacles_to_add.wood = 1;
+    level.obstacles_to_add[0] = 1;
+    level.obstacles_to_add[1] = 1;
+    level.obstacles_to_add[2] = 1;
 }
 
 static void start_tick(void) {
