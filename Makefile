@@ -8,7 +8,7 @@ else
 endif
 
 # === Basic Info ===
-OUT_FILENAME := template
+OUT_FILENAME := rhino-express
 
 SRC_DIR := src
 OBJ_DIR := obj
