@@ -15,12 +15,14 @@
  */
 #include "entity.h"
 
-#include "level.h"
-#include "tile.h"
-#include "music.h"
 #include "input.h"
 #include "sprite.h"
 #include "random.h"
+
+#include "level.h"
+#include "tile.h"
+#include "music.h"
+#include "sfx.h"
 
 struct cursor_Data {
     i8 selected;
@@ -29,6 +31,12 @@ struct cursor_Data {
 
     u8 unused[14];
 };
+
+
+static_assert(
+    sizeof(struct cursor_Data) == ENTITY_EXTRA_DATA_SIZE,
+    "struct cursor_Data is of wrong size"
+);
 
 #define OBSTACLE_TYPES (3)
 
@@ -90,6 +98,7 @@ static inline bool try_to_place(struct Level *level,
     if(level->obstacles_to_add[cursor_data->selected] == 0)
         switch_item(level, data, +1);
 
+    SOUND_PLAY(sfx_place_obstacle, false, SOUND_CHANNEL_A);
     return true;
 }
 

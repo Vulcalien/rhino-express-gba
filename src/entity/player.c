@@ -15,11 +15,13 @@
  */
 #include "entity.h"
 
-#include "level.h"
-#include "sprite.h"
 #include "input.h"
-#include "math.h"
+#include "sprite.h"
 #include "random.h"
+#include "math.h"
+
+#include "level.h"
+#include "sfx.h"
 
 #define   MAX_SPEED (1280)
 #define START_SPEED (64)
@@ -105,7 +107,7 @@ static inline void enter_tile(struct Level *level,
             player_data->xm = player_data->ym = 0;
             player_data->stored_xm = player_data->stored_ym = 0;
             // TODO add block particle
-            // TODO add water sound
+            SOUND_PLAY(sfx_water, false, SOUND_CHANNEL_A);
             break;
 
         default:
@@ -164,6 +166,8 @@ static inline bool move_full_pixels(struct Level *level,
             if(player_data->hit_obstacle) {
                 player_data->xm = -math_sign(player_data->xm);
                 player_data->ym = -math_sign(player_data->ym);
+
+                SOUND_PLAY(sfx_hit_obstacle, false, SOUND_CHANNEL_A);
                 break;
             }
         }
