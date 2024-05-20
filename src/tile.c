@@ -30,8 +30,7 @@
 
 #define TILE get_tile_value
 
-ALWAYS_INLINE
-static inline u16 get_tile_value(u32 number, u32 flip, u32 palette) {
+static INLINE u16 get_tile_value(u32 number, u32 flip, u32 palette) {
     return (number  & 0x3ff) << 0  |
            (flip    & 0x03)  << 10 |
            (palette & 0x0f)  << 12;
@@ -149,8 +148,7 @@ DRAW_FUNC(hole_draw) {
     draw_outer_borders(level, xt, yt);
 }
 
-ALWAYS_INLINE
-static inline void draw_obstacle(struct Level *level, i32 xt, i32 yt,
+static INLINE void draw_obstacle(struct Level *level, i32 xt, i32 yt,
                                  u32 base) {
     vu16 *low = GET_LOW(level, xt, yt);
 
