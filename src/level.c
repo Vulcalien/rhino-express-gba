@@ -17,7 +17,10 @@
 
 #include "background.h"
 #include "sprite.h"
+#include "random.h"
+
 #include "entity.h"
+#include "tile.h"
 #include "music.h"
 
 static inline void insert_solid_entity(struct Level *level,
@@ -151,6 +154,29 @@ IWRAM_SECTION
 void level_draw(struct Level *level) {
     draw_tiles(level);
     draw_entities(level);
+}
+
+IWRAM_SECTION
+void level_load(struct Level *level, u8 tiles[LEVEL_SIZE]) {
+    for(u32 y = 0; y < LEVEL_H; y++) {
+        for(u32 x = 0; x < LEVEL_W; x++) {
+            const u8 tile = tiles[x + y * LEVEL_W];
+            if(tile >= TILE_TYPES)
+                continue;
+
+            level_set_tile(level, x, y, tile);
+
+            u8 data = 0;
+            switch(tile) {
+                case TILE_WOOD:
+                case TILE_ROCK:
+                case TILE_WATER:
+                    data = rand() & 1;
+                    break;
+            }
+            level_set_data(level, x, y, data);
+        }
+    }
 }
 
 IWRAM_SECTION

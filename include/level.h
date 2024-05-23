@@ -58,6 +58,8 @@ extern void level_init(struct Level *level);
 extern void level_tick(struct Level *level);
 extern void level_draw(struct Level *level);
 
+extern void level_load(struct Level *level, u8 tiles[LEVEL_SIZE]);
+
 // === Tile functions ===
 
 INLINE enum tile_TypeID level_get_tile(struct Level *level,
