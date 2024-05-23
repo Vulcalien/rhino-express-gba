@@ -1,10 +1,13 @@
 {
+    "input_dir": "res",
+    "output_dir": "src/res",
+
     "tilesets": [
         {
             "name": "tileset",
 
-            "input": "res/tileset.png",
-            "output": "src/res/tileset.c",
+            "input": "tileset.png",
+            "output": "tileset.c",
 
             "tile_width": 1,
             "tile_height": 1,
@@ -19,8 +22,8 @@
         {
             "name": "sprites",
 
-            "input": "res/sprites.png",
-            "output": "src/res/sprites.c",
+            "input": "sprites.png",
+            "output": "sprites.c",
 
             "tile_width": 2,
             "tile_height": 2,
@@ -37,8 +40,8 @@
         {
             "name": "palette",
 
-            "input": "res/palette.png",
-            "output": "src/res/palette.c",
+            "input": "palette.png",
+            "output": "palette.c",
 
             "static": true
         }
@@ -48,41 +51,41 @@
         {
             "name": "music_game",
 
-            "input": "res/music/game.raw",
-            "output": "src/res/music/game.c"
+            "input": "music/game.raw",
+            "output": "music/game.c"
         },
 
         {
             "name": "music_map",
 
-            "input": "res/music/map.raw",
-            "output": "src/res/music/map.c"
+            "input": "music/map.raw",
+            "output": "music/map.c"
         },
 
         {
             "name": "music_editing",
 
-            "input": "res/music/editing.raw",
-            "output": "src/res/music/editing.c"
+            "input": "music/editing.raw",
+            "output": "music/editing.c"
         },
 
         {
             "name": "sfx_place_obstacle",
 
-            "input": "res/sfx/place_obstacle.raw",
-            "output": "src/res/sfx/place_obstacle.c"
+            "input": "sfx/place_obstacle.raw",
+            "output": "sfx/place_obstacle.c"
         },
         {
             "name": "sfx_hit_obstacle",
 
-            "input": "res/sfx/hit_obstacle.raw",
-            "output": "src/res/sfx/hit_obstacle.c"
+            "input": "sfx/hit_obstacle.raw",
+            "output": "sfx/hit_obstacle.c"
         },
         {
             "name": "sfx_water",
 
-            "input": "res/sfx/water.raw",
-            "output": "src/res/sfx/water.c"
+            "input": "sfx/water.raw",
+            "output": "sfx/water.c"
         }
     ]
 }
