@@ -157,7 +157,7 @@ void level_draw(struct Level *level) {
 }
 
 IWRAM_SECTION
-void level_load(struct Level *level, u8 tiles[LEVEL_SIZE]) {
+void level_load(struct Level *level, const u8 tiles[LEVEL_SIZE]) {
     for(u32 y = 0; y < LEVEL_H; y++) {
         for(u32 x = 0; x < LEVEL_W; x++) {
             const u8 tile = tiles[x + y * LEVEL_W];

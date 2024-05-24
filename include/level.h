@@ -58,7 +58,7 @@ extern void level_init(struct Level *level);
 extern void level_tick(struct Level *level);
 extern void level_draw(struct Level *level);
 
-extern void level_load(struct Level *level, u8 tiles[LEVEL_SIZE]);
+extern void level_load(struct Level *level, const u8 tiles[LEVEL_SIZE]);
 
 // === Tile functions ===
 
