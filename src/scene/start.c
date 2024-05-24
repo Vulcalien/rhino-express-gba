@@ -22,6 +22,9 @@ static struct Level level;
 
 #include "../res/levels/1.c"
 #include "../res/levels/2.c"
+#include "../res/levels/3.c"
+#include "../res/levels/4.c"
+#include "../res/levels/5.c"
 
 static void start_init(void *data) {
     level_init(&level);
@@ -56,7 +59,7 @@ static void start_init(void *data) {
     level.obstacles_to_add[1] = 1;
     level.obstacles_to_add[2] = 1;
 
-    level_load(&level, level_2);
+    level_load(&level, level_5);
 }
 
 static void start_tick(void) {

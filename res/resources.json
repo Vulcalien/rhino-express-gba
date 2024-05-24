@@ -107,6 +107,33 @@
 
             "palette": "res/levels/pix-to-tile.png",
             "bpp": 8
+        },
+        {
+            "name": "level_3",
+
+            "input": "levels/3.png",
+            "output": "levels/3.c",
+
+            "palette": "res/levels/pix-to-tile.png",
+            "bpp": 8
+        },
+        {
+            "name": "level_4",
+
+            "input": "levels/4.png",
+            "output": "levels/4.c",
+
+            "palette": "res/levels/pix-to-tile.png",
+            "bpp": 8
+        },
+        {
+            "name": "level_5",
+
+            "input": "levels/5.png",
+            "output": "levels/5.c",
+
+            "palette": "res/levels/pix-to-tile.png",
+            "bpp": 8
         }
     ]
 }
