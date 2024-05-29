@@ -107,7 +107,7 @@ static inline void enter_tile(struct Level *level,
             player_data->xm = player_data->ym = 0;
             player_data->stored_xm = player_data->stored_ym = 0;
             // TODO add block particle
-            SOUND_PLAY(sfx_water, false, SOUND_CHANNEL_A);
+            SOUND_DMA_PLAY(sfx_water, false, SOUND_DMA_A);
             break;
 
         default:
@@ -167,7 +167,7 @@ static inline bool move_full_pixels(struct Level *level,
                 player_data->xm = -math_sign(player_data->xm);
                 player_data->ym = -math_sign(player_data->ym);
 
-                SOUND_PLAY(sfx_hit_obstacle, false, SOUND_CHANNEL_A);
+                SOUND_DMA_PLAY(sfx_hit_obstacle, false, SOUND_DMA_A);
                 break;
             }
         }

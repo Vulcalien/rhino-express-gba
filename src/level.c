@@ -69,7 +69,7 @@ void level_init(struct Level *level) {
 
     // enter editing mode
     level->is_editing = true;
-    SOUND_PLAY(music_editing, true, SOUND_CHANNEL_B);
+    SOUND_DMA_PLAY(music_editing, true, SOUND_DMA_B);
 }
 
 static inline void tick_tiles(struct Level *level) {

@@ -98,7 +98,7 @@ static inline bool try_to_place(struct Level *level,
     if(level->obstacles_to_add[cursor_data->selected] == 0)
         switch_item(level, data, +1);
 
-    SOUND_PLAY(sfx_place_obstacle, false, SOUND_CHANNEL_A);
+    SOUND_DMA_PLAY(sfx_place_obstacle, false, SOUND_DMA_A);
     return true;
 }
 
@@ -125,7 +125,7 @@ static void cursor_tick(struct Level *level,
     if(!any_obstacle_left(level) || input_pressed(KEY_START)) {
         // exit editing mode
         level->is_editing = false;
-        SOUND_PLAY(music_game, true, SOUND_CHANNEL_B);
+        SOUND_DMA_PLAY(music_game, true, SOUND_DMA_B);
 
         data->should_remove = true;
         return;
