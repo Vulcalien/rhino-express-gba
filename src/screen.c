@@ -90,12 +90,12 @@ void screen_init(void) {
         background_config(i, &bg_configs[i]);
 
     // load tileset
-    memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset) / 2);
-    memcpy16(OBJ_TILESET,  (vu16 *) sprites, sizeof(tileset) / 2);
+    memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset));
+    memcpy16(OBJ_TILESET,  (vu16 *) sprites, sizeof(tileset));
 
     // load palette
-    memcpy16(PALETTE_BG,  palette, sizeof(palette) / 2);
-    memcpy16(PALETTE_OBJ, palette, sizeof(palette) / 2);
+    memcpy16(PALETTE_BG,  palette, sizeof(palette));
+    memcpy16(PALETTE_OBJ, palette, sizeof(palette));
 
     // hide all sprites
     for(u32 i = 0; i < SPRITE_COUNT; i++)
