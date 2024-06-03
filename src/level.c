@@ -157,10 +157,15 @@ void level_draw(struct Level *level) {
 }
 
 IWRAM_SECTION
-void level_load(struct Level *level, const u8 tiles[LEVEL_SIZE]) {
-    for(u32 y = 0; y < LEVEL_H; y++) {
-        for(u32 x = 0; x < LEVEL_W; x++) {
-            const u8 tile = tiles[x + y * LEVEL_W];
+void level_load(struct Level *level,
+                const struct level_Metadata *metadata) {
+    // TODO set level offset
+
+    // load level tiles
+    const u8 *tiles = metadata->tile_data;
+    for(u32 y = 0; y < metadata->height; y++) {
+        for(u32 x = 0; x < metadata->width; x++) {
+            const u8 tile = tiles[x + y * metadata->width];
             if(tile >= TILE_TYPES)
                 continue;
 
@@ -177,6 +182,10 @@ void level_load(struct Level *level, const u8 tiles[LEVEL_SIZE]) {
             level_set_data(level, x, y, data);
         }
     }
+
+    // copy 'obstacles_to_add'
+    for(u32 i = 0; i < 3; i++)
+        level->obstacles_to_add[i] = metadata->obstacles_to_add[i];
 }
 
 IWRAM_SECTION
@@ -207,3 +216,48 @@ void level_add_entity(struct Level *level,
         insert_solid_entity(level, data, id, xt, yt);
     }
 }
+
+// Levels
+
+#include "res/levels/1.c"
+#include "res/levels/2.c"
+#include "res/levels/3.c"
+#include "res/levels/4.c"
+#include "res/levels/5.c"
+
+const struct level_Metadata level_metadata[LEVEL_COUNT] = {
+    // Level 1
+    {
+        .width   = 7, .height  = 4,
+        .spawn_x = 1, .spawn_y = 1,
+        .tile_data = level_1
+    },
+
+    // Level 2
+    {
+        .width   = 7, .height  = 8,
+        .spawn_x = 5, .spawn_y = 3,
+        .tile_data = level_2
+    },
+
+    // Level 3
+    {
+        .width   = 6, .height  = 8,
+        .spawn_x = 1, .spawn_y = 4,
+        .tile_data = level_3
+    },
+
+    // Level 4
+    {
+        .width   = 7, .height  = 5,
+        .spawn_x = 5, .spawn_y = 1,
+        .tile_data = level_4
+    },
+
+    // Level 5
+    {
+        .width   = 7, .height  = 8,
+        .spawn_x = 5, .spawn_y = 4,
+        .tile_data = level_5
+    }
+};

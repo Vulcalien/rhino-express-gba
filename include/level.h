@@ -54,11 +54,24 @@ struct Level {
     } offset;
 };
 
+struct level_Metadata {
+    u8 width  : 4;
+    u8 height : 4;
+
+    u8 spawn_x : 4;
+    u8 spawn_y : 4;
+
+    const u8 *tile_data;
+
+    u8 obstacles_to_add[3];
+};
+
 extern void level_init(struct Level *level);
 extern void level_tick(struct Level *level);
 extern void level_draw(struct Level *level);
 
-extern void level_load(struct Level *level, const u8 tiles[LEVEL_SIZE]);
+extern void level_load(struct Level *level,
+                       const struct level_Metadata *metadata);
 
 // === Tile functions ===
 
@@ -97,6 +110,11 @@ extern level_EntityID level_new_entity(struct Level *level);
 extern void level_add_entity(struct Level *level,
                              enum entity_TypeID type,
                              level_EntityID id);
+
+// === Levels ===
+
+#define LEVEL_COUNT 5
+extern const struct level_Metadata level_metadata[LEVEL_COUNT];
 
 // ===== ===== =====
 

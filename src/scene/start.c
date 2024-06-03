@@ -20,36 +20,8 @@
 
 static struct Level level;
 
-#include "../res/levels/1.c"
-#include "../res/levels/2.c"
-#include "../res/levels/3.c"
-#include "../res/levels/4.c"
-#include "../res/levels/5.c"
-
 static void start_init(void *data) {
     level_init(&level);
-
-    for(u32 y = 3; y < 8; y++)
-        for(u32 x = 5; x < 10; x++)
-            level_set_tile(&level, x, y, TILE_PLATFORM);
-    level_set_tile(&level, 7, 5, TILE_VOID);
-    level_set_tile(&level, 9, 7, TILE_VOID);
-
-    level_set_tile(&level, 8, 7, TILE_PLATFORM);
-    level_set_tile(&level, 7, 7, TILE_FALL_PLATFORM);
-    level_set_tile(&level, 6, 8, TILE_HOLE);
-
-    level_set_tile(&level, 6, 3, TILE_WOOD);
-    level_set_tile(&level, 7, 4, TILE_ROCK);
-    level_set_tile(&level, 8, 4, TILE_WATER);
-
-    level_set_tile(&level, 5, 7, TILE_HIGH_GROUND);
-
-    level_set_tile(&level, 6, 4, TILE_HIGH_GROUND);
-    level_set_tile(&level, 6, 5, TILE_HIGH_GROUND);
-    level_set_tile(&level, 6, 6, TILE_HIGH_GROUND);
-    level_set_tile(&level, 7, 2, TILE_HIGH_GROUND);
-    level_set_tile(&level, 7, 6, TILE_HIGH_GROUND);
 
     level_add_edit_cursor(&level, 8, 5);
     level_add_player(&level, 8, 7);
@@ -59,7 +31,7 @@ static void start_init(void *data) {
     level.obstacles_to_add[1] = 1;
     level.obstacles_to_add[2] = 1;
 
-    level_load(&level, level_5);
+    level_load(&level, &level_metadata[0]);
 }
 
 static void start_tick(void) {
