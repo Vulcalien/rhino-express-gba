@@ -21,7 +21,7 @@
 #include "entity.h"
 
 // Level size (in tiles)
-#define LEVEL_W (15)
+#define LEVEL_W (10)
 #define LEVEL_H (10)
 #define LEVEL_SIZE (LEVEL_W * LEVEL_H)
 
@@ -66,7 +66,6 @@ struct level_Metadata {
     u8 obstacles_to_add[3];
 };
 
-extern void level_init(struct Level *level);
 extern void level_tick(struct Level *level);
 extern void level_draw(struct Level *level);
 

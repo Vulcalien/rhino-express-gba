@@ -19,6 +19,7 @@
 #include "sprite.h"
 #include "random.h"
 
+#include "screen.h"
 #include "entity.h"
 #include "tile.h"
 #include "music.h"
@@ -51,25 +52,6 @@ static inline void remove_solid_entity(struct Level *level,
     const u32 tile = xt + yt * LEVEL_W;
     if(level->solid_entities[tile][data->solid_id] == id)
         level->solid_entities[tile][data->solid_id] = LEVEL_NO_ENTITY;
-}
-
-void level_init(struct Level *level) {
-    // clear 'data'
-    for(u32 i = 0; i < LEVEL_SIZE; i++)
-        level->data[i] = 0;
-
-    // clear 'entities'
-    for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++)
-        level->entities[i].type = ENTITY_INVALID;
-
-    // clear 'solid_entities'
-    for(u32 t = 0; t < LEVEL_SIZE; t++)
-        for(u32 i = 0; i < LEVEL_SOLID_ENTITIES_IN_TILE; i++)
-            level->solid_entities[t][i] = LEVEL_NO_ENTITY;
-
-    // enter editing mode
-    level->is_editing = true;
-    SOUND_DMA_PLAY(music_editing, true, SOUND_DMA_B);
 }
 
 static inline void tick_tiles(struct Level *level) {
@@ -156,12 +138,24 @@ void level_draw(struct Level *level) {
     draw_entities(level);
 }
 
-IWRAM_SECTION
-void level_load(struct Level *level,
-                const struct level_Metadata *metadata) {
-    // TODO set level offset
+static inline void level_init(struct Level *level) {
+    // clear 'data'
+    for(u32 i = 0; i < LEVEL_SIZE; i++)
+        level->data[i] = 0;
 
-    // load level tiles
+    // clear 'entities'
+    for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++)
+        level->entities[i].type = ENTITY_INVALID;
+
+    // clear 'solid_entities'
+    for(u32 t = 0; t < LEVEL_SIZE; t++)
+        for(u32 i = 0; i < LEVEL_SOLID_ENTITIES_IN_TILE; i++)
+            level->solid_entities[t][i] = LEVEL_NO_ENTITY;
+}
+
+
+static inline void load_tiles(struct Level *level,
+                              const struct level_Metadata *metadata) {
     const u8 *tiles = metadata->tile_data;
     for(u32 y = 0; y < metadata->height; y++) {
         for(u32 x = 0; x < metadata->width; x++) {
@@ -182,10 +176,35 @@ void level_load(struct Level *level,
             level_set_data(level, x, y, data);
         }
     }
+}
+
+static inline void set_initial_offset(struct Level *level,
+                                const struct level_Metadata *metadata) {
+    const u32 width_pixels  = metadata->width  << LEVEL_TILE_SIZE;
+    const u32 height_pixels = metadata->height << LEVEL_TILE_SIZE;
+    level->offset.x = -(SCREEN_W - width_pixels) / 2;
+    level->offset.y = -(SCREEN_H - height_pixels - 32) / 2;
+}
+
+IWRAM_SECTION
+void level_load(struct Level *level,
+                const struct level_Metadata *metadata) {
+    level_init(level);
+
+    load_tiles(level, metadata);
+    set_initial_offset(level, metadata);
 
     // copy 'obstacles_to_add'
     for(u32 i = 0; i < 3; i++)
         level->obstacles_to_add[i] = metadata->obstacles_to_add[i];
+
+    // enter editing mode
+    level->is_editing = true;
+    level_add_edit_cursor(level, 8, 5); // TODO set real coordinates
+    SOUND_DMA_PLAY(music_editing, true, SOUND_DMA_B);
+
+    // add player
+    level_add_player(level, metadata->spawn_x, metadata->spawn_y);
 }
 
 IWRAM_SECTION
