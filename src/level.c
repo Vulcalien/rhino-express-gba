@@ -205,6 +205,7 @@ void level_load(struct Level *level,
     load_tiles(level, metadata);
     set_initial_offset(level, metadata);
 
+    level->letters_to_deliver = metadata->letter_count;
     load_mailboxes(level, metadata);
 
     // copy 'obstacles_to_add'

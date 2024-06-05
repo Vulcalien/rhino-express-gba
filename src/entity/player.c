@@ -332,8 +332,11 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     parameters[8]  = 0;
     parameters[12] = inverse_y_scale;
 
-    // DEBUG specify the real number of letters
-    return 1 + draw_letters(8, x, y, used_sprites);
+    const u32 letter_sprites = draw_letters(
+        level->letters_to_deliver, x, y, used_sprites
+    );
+
+    return 1 + letter_sprites;
 }
 
 IWRAM_SECTION
