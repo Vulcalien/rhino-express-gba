@@ -159,20 +159,22 @@ static inline void load_tiles(struct Level *level,
     const u8 *tiles = metadata->tile_data;
     for(u32 y = 0; y < metadata->height; y++) {
         for(u32 x = 0; x < metadata->width; x++) {
-            const u8 tile = tiles[x + y * metadata->width];
-            if(tile >= TILE_TYPES)
-                continue;
+            u8 tile = tiles[x + y * metadata->width];
+            u8 data = 0;
+
+            // translate obstacles-with-platform pseudo-tiles and set
+            // the platform bit
+            if(tile >= 12 && tile <= 14) {
+                tile -= 6;
+                data |= BIT(0);
+            }
+
+            // if the tile is an obstacle, randomly set the flip bit
+            if(tile >= TILE_WOOD && tile <= TILE_WATER)
+                if((rand() & 1) == 0)
+                    data |= BIT(1);
 
             level_set_tile(level, x, y, tile);
-
-            u8 data = 0;
-            switch(tile) {
-                case TILE_WOOD:
-                case TILE_ROCK:
-                case TILE_WATER:
-                    data = rand() & 1;
-                    break;
-            }
             level_set_data(level, x, y, data);
         }
     }

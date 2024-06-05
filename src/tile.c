@@ -153,8 +153,8 @@ static INLINE void draw_obstacle(struct Level *level, i32 xt, i32 yt,
     vu16 *low = GET_LOW(level, xt, yt);
 
     u8 data = level_get_data(level, xt, yt);
-    bool platform = data & 1;
-    bool flip     = data & 2;
+    bool platform = data & BIT(0);
+    bool flip     = data & BIT(1);
 
     if(platform)
         base += 16;
