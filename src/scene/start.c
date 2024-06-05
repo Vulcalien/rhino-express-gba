@@ -21,8 +21,7 @@
 static struct Level level;
 
 static void start_init(void *data) {
-    level_load(&level, &level_metadata[2]);
-    level_add_mailbox(&level, 8, 7);
+    level_load(&level, &level_metadata[4]);
 }
 
 static void start_tick(void) {

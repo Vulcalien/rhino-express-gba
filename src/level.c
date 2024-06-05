@@ -157,9 +157,9 @@ static inline void level_init(struct Level *level) {
 static inline void load_tiles(struct Level *level,
                               const struct level_Metadata *metadata) {
     const u8 *tiles = metadata->tile_data;
-    for(u32 y = 0; y < metadata->height; y++) {
-        for(u32 x = 0; x < metadata->width; x++) {
-            u8 tile = tiles[x + y * metadata->width];
+    for(u32 y = 0; y < metadata->size.h; y++) {
+        for(u32 x = 0; x < metadata->size.w; x++) {
+            u8 tile = tiles[x + y * metadata->size.w];
             u8 data = 0;
 
             // translate obstacles-with-platform pseudo-tiles and set
@@ -182,10 +182,19 @@ static inline void load_tiles(struct Level *level,
 
 static inline void set_initial_offset(struct Level *level,
                                 const struct level_Metadata *metadata) {
-    const u32 width_pixels  = metadata->width  << LEVEL_TILE_SIZE;
-    const u32 height_pixels = metadata->height << LEVEL_TILE_SIZE;
+    const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
+    const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
     level->offset.x = -(SCREEN_W - width_pixels) / 2;
     level->offset.y = -(SCREEN_H - height_pixels - 32) / 2;
+}
+
+static inline void load_mailboxes(struct Level *level,
+                            const struct level_Metadata *metadata) {
+    for(u32 i = 0; i < metadata->letter_count; i++) {
+        level_add_mailbox(
+            level, metadata->mailboxes[i].x, metadata->mailboxes[i].y
+        );
+    }
 }
 
 IWRAM_SECTION
@@ -195,6 +204,8 @@ void level_load(struct Level *level,
 
     load_tiles(level, metadata);
     set_initial_offset(level, metadata);
+
+    load_mailboxes(level, metadata);
 
     // copy 'obstacles_to_add'
     for(u32 i = 0; i < 3; i++)
@@ -206,7 +217,7 @@ void level_load(struct Level *level,
     SOUND_DMA_PLAY(music_editing, true, SOUND_DMA_B);
 
     // add player
-    level_add_player(level, metadata->spawn_x, metadata->spawn_y);
+    level_add_player(level, metadata->spawn.x, metadata->spawn.y);
 }
 
 IWRAM_SECTION
@@ -249,36 +260,64 @@ void level_add_entity(struct Level *level,
 const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 1
     {
-        .width   = 7, .height  = 4,
-        .spawn_x = 1, .spawn_y = 1,
-        .tile_data = level_1
+        .size = { 7, 4 },
+        .spawn = { 1, 1 },
+        .tile_data = level_1,
+
+        .letter_count = 1,
+        .mailboxes = {
+            { 4, 1 }
+        }
     },
 
     // Level 2
     {
-        .width   = 7, .height  = 8,
-        .spawn_x = 5, .spawn_y = 3,
-        .tile_data = level_2
+        .size = { 7, 8 },
+        .spawn = { 5, 3 },
+        .tile_data = level_2,
+
+        .letter_count = 2,
+        .mailboxes = {
+            { 3, 2 },
+            { 3, 5 }
+        }
     },
 
     // Level 3
     {
-        .width   = 6, .height  = 8,
-        .spawn_x = 1, .spawn_y = 4,
-        .tile_data = level_3
+        .size = { 6, 8 },
+        .spawn = { 1, 4 },
+        .tile_data = level_3,
+
+        .letter_count = 2,
+        .mailboxes = {
+            { 2, 2 },
+            { 3, 4 }
+        }
     },
 
     // Level 4
     {
-        .width   = 7, .height  = 5,
-        .spawn_x = 5, .spawn_y = 1,
-        .tile_data = level_4
+        .size = { 7, 5 },
+        .spawn = { 5, 1 },
+        .tile_data = level_4,
+
+        .letter_count = 1,
+        .mailboxes = {
+            { 2, 2 }
+        }
     },
 
     // Level 5
     {
-        .width   = 7, .height  = 8,
-        .spawn_x = 5, .spawn_y = 4,
-        .tile_data = level_5
+        .size = { 7, 8 },
+        .spawn = { 5, 4 },
+        .tile_data = level_5,
+
+        .letter_count = 2,
+        .mailboxes = {
+            { 3, 2 },
+            { 2, 4 }
+        }
     }
 };
