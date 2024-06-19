@@ -73,14 +73,15 @@ IWRAM_SECTION
 static bool mailbox_touched_by(struct Level *level,
                                struct entity_Data *data,
                                struct entity_Data *touching_data) {
-    if(touching_data->type != ENTITY_PLAYER)
+    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
+
+    if(touching_data->type != ENTITY_PLAYER || mailbox_data->has_letter)
         return false;
 
-    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
-    if(!mailbox_data->has_letter) {
-        mailbox_data->has_letter = true;
-        mailbox_data->animation = 0; // TODO animation
-    }
+    mailbox_data->has_letter = true;
+    mailbox_data->animation = 0; // TODO animation
+
+    level->letters_to_deliver--;
 
     return false;
 }
