@@ -18,7 +18,7 @@
 #include "background.h"
 #include "sprite.h"
 #include "palette.h"
-#include "util.h"
+#include "memory.h"
 
 #define DISPLAY_CONTROL *((vu16 *) 0x04000000)
 #define DISPLAY_STATUS  *((vu16 *) 0x04000004)
