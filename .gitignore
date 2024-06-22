@@ -3,6 +3,7 @@
 /bin
 
 # Converted resources
+res/levels.json
 src/res
 
 # Release files

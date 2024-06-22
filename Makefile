@@ -132,8 +132,15 @@ clean-deps:
 	$(MAKE) -C lib/libsimplegba clean
 
 .PHONY: res
-res: $(RES_OUT_DIRS)
+res: $(RES_OUT_DIRS) gen-levels-json
 	scripts/convert-resources.py "$(RES_DIR)/resources.json"
+	scripts/convert-resources.py "$(RES_DIR)/levels.json"
+
+.PHONY: gen-levels-json
+gen-levels-json:
+	scripts/gen-levels-json.py "$(RES_DIR)/levels" \
+	                           "src/res/levels"    \
+	                           "$(RES_DIR)/levels.json"
 
 .PHONY: release
 release:

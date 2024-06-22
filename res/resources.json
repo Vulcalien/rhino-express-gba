@@ -87,53 +87,5 @@
             "input": "sfx/water.raw",
             "output": "sfx/water.c"
         }
-    ],
-
-    "images": [
-        {
-            "name": "level_1",
-
-            "input": "levels/1.png",
-            "output": "levels/1.c",
-
-            "palette": "res/levels/pix-to-tile.png",
-            "bpp": 8
-        },
-        {
-            "name": "level_2",
-
-            "input": "levels/2.png",
-            "output": "levels/2.c",
-
-            "palette": "res/levels/pix-to-tile.png",
-            "bpp": 8
-        },
-        {
-            "name": "level_3",
-
-            "input": "levels/3.png",
-            "output": "levels/3.c",
-
-            "palette": "res/levels/pix-to-tile.png",
-            "bpp": 8
-        },
-        {
-            "name": "level_4",
-
-            "input": "levels/4.png",
-            "output": "levels/4.c",
-
-            "palette": "res/levels/pix-to-tile.png",
-            "bpp": 8
-        },
-        {
-            "name": "level_5",
-
-            "input": "levels/5.png",
-            "output": "levels/5.c",
-
-            "palette": "res/levels/pix-to-tile.png",
-            "bpp": 8
-        }
     ]
 }
