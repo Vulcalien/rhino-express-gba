@@ -131,7 +131,7 @@ extern const struct level_Metadata level_metadata[LEVEL_COUNT];
 
 // ===== ===== =====
 
-extern bool level_add_player(struct Level *level, u32 xt, u32 yt);
+extern bool level_add_player(struct Level *level);
 extern bool level_add_mailbox(struct Level *level, u32 xt, u32 yt);
 
 extern bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt);

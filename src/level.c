@@ -231,7 +231,7 @@ void level_load(struct Level *level,
     SOUND_DMA_PLAY(music_editing, true, SOUND_DMA_B);
 
     // add player
-    level_add_player(level, metadata->spawn.x, metadata->spawn.y);
+    level_add_player(level);
 }
 
 IWRAM_SECTION

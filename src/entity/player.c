@@ -78,9 +78,18 @@ static inline void handle_animation(struct Level *level,
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
     switch(player_data->animation) {
-        case ANIMATION_SPAWN:
-            player_data->animation = 0; // TODO
+        case ANIMATION_SPAWN: {
+            struct level_Metadata *metadata = level->metadata;
+            u32 target_y = (metadata->spawn.y << LEVEL_TILE_SIZE) + 8;
+
+            if(data->y < target_y) {
+                data->y += 4;
+            } else {
+                player_data->animation = 0;
+                // TODO rumble effect
+            }
             break;
+        }
 
         case ANIMATION_FALL:
             player_data->animation_stage++;
@@ -421,7 +430,7 @@ static inline void init_letter_draw_data(void) {
     }
 }
 
-bool level_add_player(struct Level *level, u32 xt, u32 yt) {
+bool level_add_player(struct Level *level) {
     level_EntityID id = level_new_entity(level);
     if(id == LEVEL_NO_ENTITY)
         return false;
@@ -429,8 +438,8 @@ bool level_add_player(struct Level *level, u32 xt, u32 yt) {
     // set generic entity data
     struct entity_Data *data = &level->entities[id];
 
-    data->x = (xt << LEVEL_TILE_SIZE) + 8;
-    data->y = (yt << LEVEL_TILE_SIZE) + 8;
+    data->x = (level->metadata->spawn.x << LEVEL_TILE_SIZE) + 8;
+    data->y = 0; // TODO make it -8
 
     // set specific player data
     struct player_Data *player_data = (struct player_Data *) &data->data;
