@@ -45,6 +45,8 @@ struct Level {
     level_EntityID
     solid_entities[LEVEL_SIZE][LEVEL_SOLID_ENTITIES_IN_TILE];
 
+    const struct level_Metadata *metadata;
+
     u8 letters_to_deliver;
 
     bool is_editing;

@@ -94,11 +94,13 @@ void level_tick(struct Level *level) {
 }
 
 static inline void draw_tiles(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
     background_set_offset(BG2, level->offset.x, level->offset.y + 5);
     background_set_offset(BG3, level->offset.x, level->offset.y);
 
-    for(u32 y = 0; y < LEVEL_H; y++) {
-        for(u32 x = 0; x < LEVEL_W; x++) {
+    for(u32 y = 0; y < metadata->size.h; y++) {
+        for(u32 x = 0; x < metadata->size.w; x++) {
             const struct tile_Type *type = tile_get_type(
                 level_get_tile(level, x, y)
             );
@@ -138,7 +140,10 @@ void level_draw(struct Level *level) {
     draw_entities(level);
 }
 
-static inline void level_init(struct Level *level) {
+static inline void level_init(struct Level *level,
+                              const struct level_Metadata *metadata) {
+    level->metadata = metadata;
+
     // clear 'data'
     for(u32 i = 0; i < LEVEL_SIZE; i++)
         level->data[i] = 0;
@@ -154,8 +159,9 @@ static inline void level_init(struct Level *level) {
 }
 
 
-static inline void load_tiles(struct Level *level,
-                              const struct level_Metadata *metadata) {
+static inline void load_tiles(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
     const u8 *tiles = metadata->tile_data;
     for(u32 y = 0; y < metadata->size.h; y++) {
         for(u32 x = 0; x < metadata->size.w; x++) {
@@ -180,16 +186,18 @@ static inline void load_tiles(struct Level *level,
     }
 }
 
-static inline void set_initial_offset(struct Level *level,
-                                const struct level_Metadata *metadata) {
+static inline void set_initial_offset(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
     const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
     const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
     level->offset.x = -(SCREEN_W - width_pixels) / 2;
     level->offset.y = -(SCREEN_H - height_pixels - 32) / 2;
 }
 
-static inline void load_mailboxes(struct Level *level,
-                            const struct level_Metadata *metadata) {
+static inline void load_mailboxes(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
     for(u32 i = 0; i < metadata->letter_count; i++) {
         level_add_mailbox(
             level, metadata->mailboxes[i].x, metadata->mailboxes[i].y
@@ -200,13 +208,13 @@ static inline void load_mailboxes(struct Level *level,
 IWRAM_SECTION
 void level_load(struct Level *level,
                 const struct level_Metadata *metadata) {
-    level_init(level);
+    level_init(level, metadata);
 
-    load_tiles(level, metadata);
-    set_initial_offset(level, metadata);
+    load_tiles(level);
+    set_initial_offset(level);
 
     level->letters_to_deliver = metadata->letter_count;
-    load_mailboxes(level, metadata);
+    load_mailboxes(level);
 
     // copy 'obstacles_to_add'
     for(u32 i = 0; i < 3; i++)
