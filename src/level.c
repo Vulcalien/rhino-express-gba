@@ -18,6 +18,7 @@
 #include "background.h"
 #include "sprite.h"
 #include "random.h"
+#include "memory.h"
 
 #include "screen.h"
 #include "entity.h"
@@ -136,6 +137,10 @@ static inline void draw_entities(struct Level *level) {
 
 IWRAM_SECTION
 void level_draw(struct Level *level) {
+    // clear the tilemap before redrawing
+    memset32((vu32 *) BG2_TILEMAP, 0, 32 * 32 * 2);
+    memset32((vu32 *) BG3_TILEMAP, 0, 32 * 32 * 2);
+
     draw_tiles(level);
     draw_entities(level);
 }
