@@ -37,11 +37,10 @@ struct player_Data {
     i8 stored_xm;
     i8 stored_ym;
 
-    bool hit_obstacle;
+    u8 hit_obstacle : 1;
+    u8 sprite_flip : 1;
 
-    u8 sprite_flip;
-
-    u8 unused[4];
+    u8 unused[5];
 };
 
 static_assert(
@@ -197,9 +196,9 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
 
         // update sprite flip bit
         if(player_data->xm < 0)
-            player_data->sprite_flip = 0;
+            player_data->sprite_flip = false;
         else if(player_data->xm > 0)
-            player_data->sprite_flip = 1;
+            player_data->sprite_flip = true;
     } else if(player_data->hit_obstacle) {
         // if an obstacle was hit, gradually move back by one tile
         entity_move(
@@ -399,7 +398,7 @@ bool level_add_player(struct Level *level, u32 xt, u32 yt) {
     player_data->xm = 0;
     player_data->ym = 0;
 
-    player_data->sprite_flip = 0;
+    player_data->sprite_flip = false;
 
     init_letter_draw_data();
 
