@@ -238,8 +238,10 @@ IWRAM_SECTION
 level_EntityID level_new_entity(struct Level *level) {
     for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++) {
         struct entity_Data *data = &level->entities[i];
-        if(!entity_is_valid(data))
+        if(!entity_is_valid(data)) {
+            memset(data->data, 0, ENTITY_EXTRA_DATA_SIZE);
             return i;
+        }
     }
     return LEVEL_NO_ENTITY;
 }
