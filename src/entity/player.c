@@ -26,6 +26,9 @@
 #define   MAX_SPEED (1280)
 #define START_SPEED (64)
 
+#define ANIMATION_SPAWN 1
+#define ANIMATION_FALL  2
+
 struct player_Data {
     // subpixel coordinates (128:1)
     i16 subx;
@@ -37,10 +40,13 @@ struct player_Data {
     i8 stored_xm;
     i8 stored_ym;
 
+    u8 animation;
+    u8 animation_stage;
+
     u8 hit_obstacle : 1;
     u8 sprite_flip : 1;
 
-    u8 unused[5];
+    u8 unused[3];
 };
 
 static_assert(
@@ -58,6 +64,35 @@ static struct {
     u16 angle;
     u16 radius;
 } letters[LETTERS_LIMIT];
+
+static inline void set_animation(struct entity_Data *data,
+                                 u8 animation) {
+    struct player_Data *player_data = (struct player_Data *) &data->data;
+
+    player_data->animation = animation;
+    player_data->animation_stage = 0;
+}
+
+static inline void handle_animation(struct Level *level,
+                                    struct entity_Data *data) {
+    struct player_Data *player_data = (struct player_Data *) &data->data;
+
+    switch(player_data->animation) {
+        case ANIMATION_SPAWN:
+            player_data->animation = 0; // TODO
+            break;
+
+        case ANIMATION_FALL:
+            player_data->animation_stage++;
+            if(player_data->animation_stage == 60)
+                level_load(level, level->metadata);
+            break;
+
+        default:
+            player_data->animation = 0;
+            break;
+    }
+}
 
 static inline void read_input(i8 *xm, i8 *ym) {
     if(input_pressed(KEY_UP)) {
@@ -86,10 +121,10 @@ static inline void enter_tile(struct Level *level,
                               i32 xt, i32 yt) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    // TODO
     switch(level_get_tile(level, xt, yt)) {
         case TILE_VOID:
         case TILE_HOLE:
+            set_animation(data, ANIMATION_FALL);
             break;
 
         case TILE_WOOD:
@@ -180,6 +215,11 @@ static inline bool move_full_pixels(struct Level *level,
 IWRAM_SECTION
 static void player_tick(struct Level *level, struct entity_Data *data) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
+
+    if(player_data->animation) {
+        handle_animation(level, data);
+        return;
+    }
 
     // if the level is still in editing mode, do nothing
     if(level->is_editing)
@@ -395,10 +435,7 @@ bool level_add_player(struct Level *level, u32 xt, u32 yt) {
     // set specific player data
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    player_data->xm = 0;
-    player_data->ym = 0;
-
-    player_data->sprite_flip = false;
+    set_animation(data, ANIMATION_SPAWN);
 
     init_letter_draw_data();
 
