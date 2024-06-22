@@ -28,6 +28,7 @@
 
 #define ANIMATION_SPAWN 1
 #define ANIMATION_FALL  2
+#define ANIMATION_WIN   3
 
 struct player_Data {
     // subpixel coordinates (128:1)
@@ -93,9 +94,24 @@ static inline void handle_animation(struct Level *level,
 
         case ANIMATION_FALL:
             player_data->animation_stage++;
-            if(player_data->animation_stage == 60) {
+            if(player_data->animation_stage > 60) {
                 // TODO find a way to keep obstacles and other things
                 // from changing orientation
+                level_load(level, level->metadata);
+            }
+            break;
+
+        case ANIMATION_WIN:
+            player_data->animation_stage++;
+            if(player_data->animation_stage > 60 && data->y > -64)
+                data->y -= 4;
+            if(player_data->animation_stage > 120) {
+                // TODO fadeout
+            }
+            if(player_data->animation_stage > 180) {
+                // TODO go to level selection menu
+
+                // DEBUG
                 level_load(level, level->metadata);
             }
             break;
@@ -241,6 +257,12 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
     read_input(&player_data->stored_xm, &player_data->stored_ym);
 
     if(player_data->xm == 0 && player_data->ym == 0) {
+        if(level->letters_to_deliver == 0) {
+            // all letters are delivered and the player is still
+            set_animation(data, ANIMATION_WIN);
+            return;
+        }
+
         player_data->xm = player_data->stored_xm;
         player_data->ym = player_data->stored_ym;
 
