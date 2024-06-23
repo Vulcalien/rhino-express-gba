@@ -138,6 +138,15 @@ static inline void read_input(i8 *xm, i8 *ym) {
     }
 }
 
+static inline void update_sprite_flip(struct entity_Data *data) {
+    struct player_Data *player_data = (struct player_Data *) &data->data;
+
+    if(player_data->xm < 0)
+        player_data->sprite_flip = false;
+    else if(player_data->xm > 0)
+        player_data->sprite_flip = true;
+}
+
 static inline bool is_tile_center(i32 x, i32 y) {
     u32 tile_pixels = 1 << LEVEL_TILE_SIZE;
     return (x % tile_pixels == tile_pixels / 2 &&
@@ -263,16 +272,14 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
             return;
         }
 
+        // set new values for (xm, ym)
         player_data->xm = player_data->stored_xm;
         player_data->ym = player_data->stored_ym;
 
+        // clear (stored_xm, stored_ym)
         player_data->stored_xm = player_data->stored_ym = 0;
 
-        // update sprite flip bit
-        if(player_data->xm < 0)
-            player_data->sprite_flip = false;
-        else if(player_data->xm > 0)
-            player_data->sprite_flip = true;
+        update_sprite_flip(data);
     } else if(player_data->hit_obstacle) {
         // if an obstacle was hit, gradually move back by one tile
         entity_move(
