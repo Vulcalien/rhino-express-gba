@@ -15,9 +15,9 @@
  */
 #include "entity.h"
 
-#include "input.h"
-#include "sprite.h"
-#include "random.h"
+#include <gba/input.h>
+#include <gba/sprite.h>
+#include <random.h>
 
 #include "level.h"
 #include "tile.h"

@@ -18,7 +18,7 @@
 #include "main.h"
 
 // include the direct sound driver needed to play music
-#include "sound.h"
+#include <gba/sound.h>
 
 extern const u8 sfx_place_obstacle[1906];
 extern const u8 sfx_hit_obstacle[887];

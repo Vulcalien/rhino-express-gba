@@ -15,8 +15,9 @@
  */
 #include "entity.h"
 
+#include <gba/sprite.h>
+
 #include "level.h"
-#include "sprite.h"
 
 struct mailbox_Data {
     u16 animation;

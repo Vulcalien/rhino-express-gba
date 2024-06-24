@@ -15,10 +15,10 @@
  */
 #include "level.h"
 
-#include "background.h"
-#include "sprite.h"
-#include "random.h"
-#include "memory.h"
+#include <gba/background.h>
+#include <gba/sprite.h>
+#include <memory.h>
+#include <random.h>
 
 #include "screen.h"
 #include "entity.h"

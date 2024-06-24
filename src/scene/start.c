@@ -15,8 +15,9 @@
  */
 #include "scene.h"
 
+#include <random.h>
+
 #include "level.h"
-#include "random.h"
 
 static struct Level level;
 
