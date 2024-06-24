@@ -6,13 +6,13 @@
         {
             "name": "tileset",
 
-            "input": "tileset.png",
+            "input": "img/tileset.png",
             "output": "tileset.c",
 
             "tile_width": 1,
             "tile_height": 1,
 
-            "palette": "res/palette.png",
+            "palette": "res/img/palette.png",
             "transparent": "#ff00ff",
             "bpp": 8,
 
@@ -22,13 +22,13 @@
         {
             "name": "sprites",
 
-            "input": "sprites.png",
+            "input": "img/sprites.png",
             "output": "sprites.c",
 
             "tile_width": 2,
             "tile_height": 2,
 
-            "palette": "res/palette.png",
+            "palette": "res/img/palette.png",
             "transparent": "#ff00ff",
             "bpp": 8,
 
@@ -40,7 +40,7 @@
         {
             "name": "palette",
 
-            "input": "palette.png",
+            "input": "img/palette.png",
             "output": "palette.c",
 
             "static": true
