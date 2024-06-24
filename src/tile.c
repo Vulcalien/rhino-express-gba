@@ -59,27 +59,21 @@ static void draw_outer_borders(struct Level *level, i32 xt, i32 yt) {
     }
 
     if(left) {
-        low[31] = TILE(9, 1, 0);
-        if(up) {
+        low[31] = TILE(down ? 9 : 25, 1, 0);
+
+        if(up)
             low[-1] = TILE(1, 1, 0);
-        } else {
-            if(top_left)
-                low[-1] = TILE(9, 1, 0);
-            else
-                low[-1] = TILE(24, 1, 0);
-        }
+        else
+            low[-1] = TILE(top_left ? 25 : 24, 1, 0);
     }
 
     if(right) {
-        low[34] = TILE(9, 0, 0);
-        if(up) {
+        low[34] = TILE(down ? 9 : 25, 0, 0);
+
+        if(up)
             low[2] = TILE(1, 0, 0);
-        } else {
-            if(top_right)
-                low[2] = TILE(9, 0, 0);
-            else
-                low[2] = TILE(24, 0, 0);
-        }
+        else
+            low[2] = TILE(top_right ? 25 : 24, 0, 0);
     }
 }
 
@@ -110,8 +104,8 @@ DRAW_FUNC(high_ground_draw) {
     high[33] = TILE((right && down) ? 18 : 10, 0, 0);
 
     if(down) {
-        high[64] = TILE(left  ? 26 : 25, 1, 0);
-        high[65] = TILE(right ? 26 : 25, 0, 0);
+        high[64] = TILE(left  ? 26 : 16, 1, 0);
+        high[65] = TILE(right ? 26 : 16, 0, 0);
     }
 }
 
