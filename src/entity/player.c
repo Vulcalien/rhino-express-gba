@@ -80,7 +80,7 @@ static inline void handle_animation(struct Level *level,
 
     switch(player_data->animation) {
         case ANIMATION_SPAWN: {
-            struct level_Metadata *metadata = level->metadata;
+            const struct level_Metadata *metadata = level->metadata;
             u32 target_y = (metadata->spawn.y << LEVEL_TILE_SIZE) + 8;
 
             if(data->y < target_y) {
@@ -221,13 +221,15 @@ static inline bool move_full_pixels(struct Level *level,
         }
 
         if(is_tile_center(data->x, data->y)) {
-            i32 prev_xt = (data->x >> LEVEL_TILE_SIZE) - math_sign(xm);
-            i32 prev_yt = (data->y >> LEVEL_TILE_SIZE) - math_sign(ym);
-            leave_tile(level, data, prev_xt, prev_yt);
-
             i32 next_xt = data->x >> LEVEL_TILE_SIZE;
             i32 next_yt = data->y >> LEVEL_TILE_SIZE;
             enter_tile(level, data, next_xt, next_yt);
+
+            if(!player_data->hit_obstacle) {
+                i32 prev_xt = (data->x >> LEVEL_TILE_SIZE) - math_sign(xm);
+                i32 prev_yt = (data->y >> LEVEL_TILE_SIZE) - math_sign(ym);
+                leave_tile(level, data, prev_xt, prev_yt);
+            }
 
             // check if movement was canceled
             if(player_data->xm == 0 && player_data->ym == 0)
