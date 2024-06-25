@@ -21,8 +21,8 @@
 #include "entity.h"
 
 // Level size (in tiles)
-#define LEVEL_W (10)
-#define LEVEL_H (10)
+#define LEVEL_W (16)
+#define LEVEL_H (16)
 #define LEVEL_SIZE (LEVEL_W * LEVEL_H)
 
 // Tile size: 3 = 8x8, 4 = 16x16, 5 = 32x32
@@ -126,7 +126,7 @@ extern void level_add_entity(struct Level *level,
 
 // === Levels ===
 
-#define LEVEL_COUNT 9
+#define LEVEL_COUNT 13
 extern const struct level_Metadata level_metadata[LEVEL_COUNT];
 
 // ===== ===== =====

@@ -276,6 +276,10 @@ void level_add_entity(struct Level *level,
 #include "res/levels/7.c"
 #include "res/levels/8.c"
 #include "res/levels/9.c"
+#include "res/levels/10.c"
+#include "res/levels/11.c"
+#include "res/levels/12.c"
+#include "res/levels/13.c"
 
 const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 1
@@ -394,5 +398,60 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 5, 5 }
         },
         .obstacles_to_add = { 0, 2, 0 }
+    },
+
+    // Level 10
+    {
+        .size = { 11, 6 },
+        .spawn = { 5, 4 },
+        .tile_data = level_10,
+
+        .letter_count = 2,
+        .mailboxes = {
+            { 2, 2 },
+            { 8, 3 }
+        },
+        .obstacles_to_add = { 0, 1, 0 }
+    },
+
+    // Level 11
+    {
+        .size = { 7, 7 },
+        .spawn = { 2, 3 },
+        .tile_data = level_11,
+
+        .letter_count = 3,
+        .mailboxes = {
+            { 3, 2 },
+            { 4, 3 },
+            { 2, 4 }
+        },
+        .obstacles_to_add = { 0, 3, 0 }
+    },
+
+    // Level 12
+    {
+        // TODO this is a tutorial level
+        .size = { 10, 4 },
+        .spawn = { 4, 2 },
+        .tile_data = level_12,
+
+        .letter_count = 1,
+        .mailboxes = {
+            { 2, 2 }
+        }
+    },
+
+    // Level 13
+    {
+        // TODO this is a tutorial level
+        .size = { 6, 13 },
+        .spawn = { 1, 8 },
+        .tile_data = level_13,
+
+        .letter_count = 1,
+        .mailboxes = {
+            { 3, 4 }
+        }
     }
 };
