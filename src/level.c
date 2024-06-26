@@ -315,6 +315,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .mailboxes = {
             { 4, 1 }
+        },
+
+        .houses = {
+            { 5, 1 }
         }
     },
 
@@ -327,6 +331,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 3, 2 },
             { 3, 5 }
+        },
+
+        .houses = {
+            { 1, 6 }
         }
     },
 
@@ -339,6 +347,11 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 2, 2 },
             { 3, 4 }
+        },
+
+        .houses = {
+            { 1, 1 },
+            { 4, 3 }
         }
     },
 
@@ -350,6 +363,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .mailboxes = {
             { 2, 2 }
+        },
+
+        .houses = {
+            { 1, 1, true }
         }
     },
 
@@ -362,6 +379,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 3, 2 },
             { 2, 4 }
+        },
+
+        .houses = {
+            { 1, 1 },
+            { 4, 2 },
+            { 4, 6 }
         }
     },
 
@@ -375,6 +398,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 5, 2 },
             { 7, 3 },
             { 3, 4 }
+        },
+
+        .houses = {
+            { 6, 1 },
+            { 8, 3 },
+            { 1, 4 }
         }
     },
 
@@ -400,7 +429,11 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 2, 2 }
         },
-        .obstacles_to_add = { 2, 0, 0 }
+        .obstacles_to_add = { 2, 0, 0 },
+
+        .houses = {
+            { 1, 1 }
+        }
     },
 
     // Level 9
@@ -413,7 +446,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 2, 2 },
             { 5, 5 }
         },
-        .obstacles_to_add = { 0, 2, 0 }
+        .obstacles_to_add = { 0, 2, 0 },
+
+        .houses = {
+            { 1, 3 },
+            { 1, 4, true }
+        }
     },
 
     // Level 10
@@ -426,7 +464,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 2, 2 },
             { 8, 3 }
         },
-        .obstacles_to_add = { 0, 1, 0 }
+        .obstacles_to_add = { 0, 1, 0 },
+
+        .houses = {
+            { 1, 1 },
+            { 9, 2, true }
+        }
     },
 
     // Level 11
@@ -440,7 +483,13 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 4, 3 },
             { 2, 4 }
         },
-        .obstacles_to_add = { 0, 3, 0 }
+        .obstacles_to_add = { 0, 3, 0 },
+
+        .houses = {
+            { 3, 1 },
+            { 1, 2 },
+            { 1, 5 }
+        }
     },
 
     // Level 12
@@ -452,6 +501,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .mailboxes = {
             { 2, 2 }
+        },
+
+        .houses = {
+            { 1, 1 }
         }
     },
 
@@ -464,6 +517,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .mailboxes = {
             { 3, 4 }
+        },
+
+        .houses = {
+            { 2, 3 }
         }
     }
 };
