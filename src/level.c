@@ -225,11 +225,13 @@ static inline void load_decor_houses(struct Level *level) {
         u32 x = metadata->houses[i].x;
         u32 y = metadata->houses[i].y;
 
+        bool lower = metadata->houses[i].lower;
+
         // the list is terminated by (0, 0)
         if(x == 0 && y == 0)
             break;
 
-        level_add_decor_house(level, x, y);
+        level_add_decor_house(level, x, y, lower);
     }
 }
 

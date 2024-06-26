@@ -56,7 +56,8 @@ const struct entity_Type entity_decor_house = {
     .draw = house_draw
 };
 
-bool level_add_decor_house(struct Level *level, u32 xt, u32 yt) {
+bool level_add_decor_house(struct Level *level, u32 xt, u32 yt,
+                           bool lower) {
     level_EntityID id = level_new_entity(level);
     if(id == LEVEL_NO_ENTITY)
         return false;
@@ -65,6 +66,9 @@ bool level_add_decor_house(struct Level *level, u32 xt, u32 yt) {
 
     data->x = (xt << LEVEL_TILE_SIZE) + 8;
     data->y = (yt << LEVEL_TILE_SIZE) + 8;
+
+    if(lower)
+        data->y += 4;
 
     level_add_entity(level, ENTITY_DECOR_HOUSE, id);
     return true;
