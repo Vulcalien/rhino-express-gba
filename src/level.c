@@ -203,10 +203,18 @@ static inline void set_initial_offset(struct Level *level) {
 static inline void load_mailboxes(struct Level *level) {
     const struct level_Metadata *metadata = level->metadata;
 
-    for(u32 i = 0; i < metadata->letter_count; i++) {
-        level_add_mailbox(
-            level, metadata->mailboxes[i].x, metadata->mailboxes[i].y
-        );
+    level->letters_to_deliver = 0;
+    while(true) {
+        u32 x = metadata->mailboxes[level->letters_to_deliver].x;
+        u32 y = metadata->mailboxes[level->letters_to_deliver].y;
+
+        // the list is terminated by (0, 0)
+        if(x == 0 && y == 0)
+            break;
+
+        level_add_mailbox(level, x, y);
+
+        level->letters_to_deliver++;
     }
 }
 
@@ -218,7 +226,6 @@ void level_load(struct Level *level,
     load_tiles(level);
     set_initial_offset(level);
 
-    level->letters_to_deliver = metadata->letter_count;
     load_mailboxes(level);
 
     // copy 'obstacles_to_add'
@@ -288,7 +295,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 1, 1 },
         .tile_data = level_1,
 
-        .letter_count = 1,
         .mailboxes = {
             { 4, 1 }
         }
@@ -300,7 +306,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 5, 3 },
         .tile_data = level_2,
 
-        .letter_count = 2,
         .mailboxes = {
             { 3, 2 },
             { 3, 5 }
@@ -313,7 +318,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 1, 4 },
         .tile_data = level_3,
 
-        .letter_count = 2,
         .mailboxes = {
             { 2, 2 },
             { 3, 4 }
@@ -326,7 +330,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 5, 1 },
         .tile_data = level_4,
 
-        .letter_count = 1,
         .mailboxes = {
             { 2, 2 }
         }
@@ -338,7 +341,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 5, 4 },
         .tile_data = level_5,
 
-        .letter_count = 2,
         .mailboxes = {
             { 3, 2 },
             { 2, 4 }
@@ -351,7 +353,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 4, 3 },
         .tile_data = level_6,
 
-        .letter_count = 3,
         .mailboxes = {
             { 5, 2 },
             { 7, 3 },
@@ -366,7 +367,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 1, 1 },
         .tile_data = level_7,
 
-        .letter_count = 1,
         .mailboxes = {
             { 3, 1 }
         },
@@ -379,7 +379,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 2, 4 },
         .tile_data = level_8,
 
-        .letter_count = 1,
         .mailboxes = {
             { 2, 2 }
         },
@@ -392,7 +391,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 2, 5 },
         .tile_data = level_9,
 
-        .letter_count = 2,
         .mailboxes = {
             { 2, 2 },
             { 5, 5 }
@@ -406,7 +404,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 5, 4 },
         .tile_data = level_10,
 
-        .letter_count = 2,
         .mailboxes = {
             { 2, 2 },
             { 8, 3 }
@@ -420,7 +417,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 2, 3 },
         .tile_data = level_11,
 
-        .letter_count = 3,
         .mailboxes = {
             { 3, 2 },
             { 4, 3 },
@@ -436,7 +432,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 4, 2 },
         .tile_data = level_12,
 
-        .letter_count = 1,
         .mailboxes = {
             { 2, 2 }
         }
@@ -449,7 +444,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .spawn = { 1, 8 },
         .tile_data = level_13,
 
-        .letter_count = 1,
         .mailboxes = {
             { 3, 4 }
         }

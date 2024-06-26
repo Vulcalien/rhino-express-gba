@@ -59,6 +59,8 @@ struct Level {
 };
 
 struct level_Metadata {
+    const u8 *tile_data;
+
     struct {
         u8 w : 4;
         u8 h : 4;
@@ -69,13 +71,11 @@ struct level_Metadata {
         u8 y : 4;
     } spawn;
 
-    const u8 *tile_data;
-
-    u8 letter_count;
+    // list terminated by (0, 0)
     struct {
         u8 x : 4;
         u8 y : 4;
-    } mailboxes[8];
+    } mailboxes[9];
 
     u8 obstacles_to_add[3];
 };
