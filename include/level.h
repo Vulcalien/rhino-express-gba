@@ -78,6 +78,12 @@ struct level_Metadata {
     } mailboxes[9];
 
     u8 obstacles_to_add[3];
+
+    // list terminated by (0, 0)
+    struct {
+        u8 x : 4;
+        u8 y : 4;
+    } houses[9];
 };
 
 extern void level_tick(struct Level *level);

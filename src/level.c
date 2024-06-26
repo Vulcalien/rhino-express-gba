@@ -218,6 +218,21 @@ static inline void load_mailboxes(struct Level *level) {
     }
 }
 
+static inline void load_decor_houses(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
+    for(u32 i = 0; true; i++) {
+        u32 x = metadata->houses[i].x;
+        u32 y = metadata->houses[i].y;
+
+        // the list is terminated by (0, 0)
+        if(x == 0 && y == 0)
+            break;
+
+        level_add_decor_house(level, x, y);
+    }
+}
+
 IWRAM_SECTION
 void level_load(struct Level *level,
                 const struct level_Metadata *metadata) {
@@ -227,6 +242,7 @@ void level_load(struct Level *level,
     set_initial_offset(level);
 
     load_mailboxes(level);
+    load_decor_houses(level);
 
     // copy 'obstacles_to_add'
     for(u32 i = 0; i < 3; i++)
