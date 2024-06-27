@@ -197,7 +197,7 @@ static inline void set_initial_offset(struct Level *level) {
     const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
     const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
     level->offset.x = -(SCREEN_W - width_pixels) / 2;
-    level->offset.y = -(SCREEN_H - height_pixels - 32) / 2;
+    level->offset.y = -(SCREEN_H - height_pixels) / 2;
 }
 
 static inline void load_mailboxes(struct Level *level) {
@@ -313,7 +313,7 @@ void level_add_entity(struct Level *level,
 const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 1
     {
-        .size = { 7, 4 },
+        .size = { 7, 6 },
         .spawn = { 1, 1 },
         .tile_data = level_1,
 
@@ -515,16 +515,16 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 13
     {
         // TODO this is a tutorial level
-        .size = { 6, 13 },
-        .spawn = { 1, 8 },
+        .size = { 6, 11 },
+        .spawn = { 1, 6 },
         .tile_data = level_13,
 
         .mailboxes = {
-            { 3, 4 }
+            { 3, 2 }
         },
 
         .houses = {
-            { 2, 3 }
+            { 2, 1 }
         }
     },
 
