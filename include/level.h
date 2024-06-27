@@ -134,7 +134,7 @@ extern void level_add_entity(struct Level *level,
 
 // === Levels ===
 
-#define LEVEL_COUNT 13
+#define LEVEL_COUNT 17
 extern const struct level_Metadata level_metadata[LEVEL_COUNT];
 
 // ===== ===== =====
