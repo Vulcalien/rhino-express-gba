@@ -87,5 +87,19 @@
             "input": "sfx/water.raw",
             "output": "sfx/water.c"
         }
+    ],
+
+    "images": [
+        {
+            "name": "map",
+
+            "input": "img/map.png",
+            "output": "map.c",
+
+            "palette": "res/img/palette.png",
+            "bpp": 8,
+
+            "static": true
+        }
     ]
 }
