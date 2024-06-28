@@ -38,4 +38,5 @@ INLINE void scene_set(const struct Scene *new_scene,
 
 // Scenes
 extern const struct Scene
-    scene_start;
+    scene_start,
+    scene_map;

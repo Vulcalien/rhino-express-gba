@@ -19,3 +19,4 @@
 #include "bios.h"
 
 extern u32 tick_count;
+extern u32 levels_cleared;
