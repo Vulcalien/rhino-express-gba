@@ -15,7 +15,9 @@
  */
 #include "scene.h"
 
+#include <gba/display.h>
 #include <gba/input.h>
+#include <memory.h>
 
 #define PAGE_COUNT 3
 static u8 first_level_in_pages[PAGE_COUNT + 1] = {
@@ -26,6 +28,18 @@ static i8 page;
 static i8 level;
 
 static void map_init(void *data) {
+    // switch to Video Mode 4
+    vsync();
+    display_config(&(struct Display) {
+        .mode = 4,
+
+        .obj_mapping = 1,
+
+        .enable_bg2 = 1,
+        .enable_obj = 1
+    });
+    display_set_page(0);
+
     // TODO set level and page
 }
 
@@ -76,8 +90,19 @@ static void map_tick(void) {
         page++;
 }
 
+#include "../res/map.c"
+
 static void map_draw(void) {
-    // TODO
+    u32 offset = page * 240; // TODO add a sliding effect
+
+    vu8 *raster = (vu8 *) display_get_raster(0);
+    for(u32 y = 0; y < 160; y++) {
+        memcpy32(
+            (vu32 *) &raster[y * 240],
+            (vu32 *) &map[offset + y * 240 * 4],
+            240
+        );
+    }
 }
 
 const struct Scene scene_map = {
