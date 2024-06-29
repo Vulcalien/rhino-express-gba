@@ -26,3 +26,6 @@
 #define BG3_TILEMAP ((vu16 *) 0x06003000)
 
 extern void screen_init(void);
+
+extern void screen_mode_0(void);
+extern void screen_mode_4(void);

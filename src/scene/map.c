@@ -20,6 +20,8 @@
 #include <memory.h>
 #include <math.h>
 
+#include "screen.h"
+
 #define PAGE_COUNT 3
 static u8 first_level_in_pages[PAGE_COUNT + 1] = {
     0, 6, 11, 17
@@ -31,17 +33,7 @@ static i8 page;
 static i8 level;
 
 static void map_init(void *data) {
-    // switch to Video Mode 4
-    vsync();
-    display_config(&(struct Display) {
-        .mode = 4,
-
-        .obj_mapping = 1,
-
-        .enable_bg2 = 1,
-        .enable_obj = 1
-    });
-    display_set_page(0);
+    screen_mode_4();
 
     // TODO set level and page
 

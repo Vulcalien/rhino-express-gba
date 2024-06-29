@@ -16,12 +16,14 @@
 #include "scene.h"
 
 #include "level.h"
+#include "screen.h"
 
 static struct Level level;
 
 static void game_init(void *data) {
-    u32 selected_level = *((u32 *) data);
+    screen_mode_0();
 
+    u32 selected_level = *((u32 *) data);
     level_load(&level, &level_metadata[selected_level]);
 }
 
