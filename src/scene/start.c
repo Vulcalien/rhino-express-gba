@@ -15,22 +15,13 @@
  */
 #include "scene.h"
 
-#include <random.h>
-
-#include "level.h"
-
-static struct Level level;
-
 static void start_init(void *data) {
-    level_load(&level, &level_metadata[4]);
 }
 
 static void start_tick(void) {
-    level_tick(&level);
 }
 
 static void start_draw(void) {
-    level_draw(&level);
 }
 
 const struct Scene scene_start = {
