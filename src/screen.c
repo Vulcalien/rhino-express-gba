@@ -25,44 +25,6 @@
 
 #define OBJ_TILESET ((vu16 *) 0x06010000)
 
-static const struct Background bg_configs[BACKGROUND_COUNT] = {
-    // BG0
-    {
-        .priority = 0,
-        .tileset  = 0,
-        .tilemap  = 0,
-
-        .colors = 1
-    },
-
-    // BG1
-    {
-        .priority = 1,
-        .tileset  = 0,
-        .tilemap  = 2,
-
-        .colors = 1
-    },
-
-    // BG2
-    {
-        .priority = 2,
-        .tileset  = 3,
-        .tilemap  = 4,
-
-        .colors = 1
-    },
-
-    // BG3
-    {
-        .priority = 3,
-        .tileset  = 3,
-        .tilemap  = 6,
-
-        .colors = 1
-    }
-};
-
 #include "res/tileset.c"
 #include "res/sprites.c"
 #include "res/palette.c"
@@ -75,8 +37,20 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
 
 void screen_init(void) {
     // configure backgrounds
-    for(u32 i = 0; i < BACKGROUND_COUNT; i++)
-        background_config(i, &bg_configs[i]);
+    background_config(BG2, &(struct Background) {
+        .priority = 2,
+        .tileset  = 3,
+        .tilemap  = 4,
+
+        .colors = 1
+    });
+    background_config(BG3, &(struct Background) {
+        .priority = 3,
+        .tileset  = 3,
+        .tilemap  = 6,
+
+        .colors = 1
+    });
 
     // load spritesheet
     LOAD_TILESET(OBJ_TILESET, sprites);
