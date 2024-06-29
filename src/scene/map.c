@@ -36,9 +36,11 @@ static i8 level;
 static void map_init(void *data) {
     screen_mode_4();
 
-    bool has_cleared_level = *((bool *) data);
-    if(has_cleared_level && level == levels_cleared)
-        levels_cleared++;
+    if(data) {
+        bool has_cleared_level = *((bool *) data);
+        if(has_cleared_level && level == levels_cleared)
+            levels_cleared++;
+    }
 
     // TODO set level and page
 
