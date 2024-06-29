@@ -18,16 +18,10 @@
 #include <gba/display.h>
 #include <gba/background.h>
 #include <gba/sprite.h>
-#include <gba/palette.h>
 #include <memory.h>
 
 #define WINDOW_IN  *((vu16 *) 0x04000048)
 #define WINDOW_OUT *((vu16 *) 0x0400004a)
-
-#define CHAR_BLOCK_0 ((vu16 *) 0x06000000)
-#define CHAR_BLOCK_1 ((vu16 *) 0x06004000)
-#define CHAR_BLOCK_2 ((vu16 *) 0x06008000)
-#define CHAR_BLOCK_3 ((vu16 *) 0x0600c000)
 
 #define OBJ_TILESET ((vu16 *) 0x06010000)
 
@@ -73,6 +67,12 @@ static const struct Background bg_configs[BACKGROUND_COUNT] = {
 #include "res/sprites.c"
 #include "res/palette.c"
 
+#define LOAD_TILESET(dest, tileset)\
+    memcpy16((dest), (vu16 *) (tileset), sizeof(tileset))
+
+#define LOAD_PALETTE(dest, palette)\
+    memcpy16((dest), (vu16 *) (palette), sizeof(palette))
+
 void screen_init(void) {
     display_config(&(struct Display) {
         .mode = 0,
@@ -92,12 +92,12 @@ void screen_init(void) {
         background_config(i, &bg_configs[i]);
 
     // load tileset
-    memcpy16(CHAR_BLOCK_3, (vu16 *) tileset, sizeof(tileset));
-    memcpy16(OBJ_TILESET,  (vu16 *) sprites, sizeof(tileset));
+    LOAD_TILESET(background_get_tileset(BG2), tileset);
+    LOAD_TILESET(OBJ_TILESET, sprites);
 
     // load palette
-    memcpy16(PALETTE_BG,  palette, sizeof(palette));
-    memcpy16(PALETTE_OBJ, palette, sizeof(palette));
+    LOAD_PALETTE(DISPLAY_BG_PALETTE,  palette);
+    LOAD_PALETTE(DISPLAY_OBJ_PALETTE, palette);
 
     // hide all sprites
     for(u32 i = 0; i < SPRITE_COUNT; i++)
