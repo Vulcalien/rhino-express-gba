@@ -20,6 +20,7 @@
 #include <memory.h>
 #include <math.h>
 
+#include "level.h"
 #include "screen.h"
 
 #define PAGE_COUNT 3
@@ -108,6 +109,14 @@ static void map_tick(void) {
         page++;
 
     update_draw_offset();
+
+    // check if the player has chosen a level
+    if(input_pressed(KEY_A) || input_pressed(KEY_START)) {
+        if(level < LEVEL_COUNT) {
+            u32 selected_level_arg = level;
+            scene_set(&scene_game, true, &selected_level_arg);
+        }
+    }
 }
 
 #include "../res/map.c"
