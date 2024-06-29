@@ -18,11 +18,14 @@
 #include <gba/display.h>
 #include <gba/input.h>
 #include <memory.h>
+#include <math.h>
 
 #define PAGE_COUNT 3
 static u8 first_level_in_pages[PAGE_COUNT + 1] = {
     0, 6, 11, 17
 };
+
+static u16 draw_offset;
 
 static i8 page;
 static i8 level;
@@ -41,6 +44,8 @@ static void map_init(void *data) {
     display_set_page(0);
 
     // TODO set level and page
+
+    draw_offset = page * 240;
 }
 
 static void map_tick(void) {
@@ -88,18 +93,37 @@ static void map_tick(void) {
         page--;
     if(level >= first_level_in_pages[page + 1])
         page++;
+
+    // update 'draw_offset'
+    if(draw_offset != page * 240) {
+        u32 diff = page * 240 - draw_offset;
+
+        u32 speed;
+        if(math_abs(diff) > 140)
+            speed = 12;
+        else if(math_abs(diff) > 100)
+            speed = 10;
+        else if(math_abs(diff) > 60)
+            speed = 8;
+        else if(math_abs(diff) > 20)
+            speed = 6;
+        else if(math_abs(diff) > 4)
+            speed = 4;
+        else
+            speed = 2;
+
+        draw_offset += speed * math_sign(diff);
+    }
 }
 
 #include "../res/map.c"
 
 static void map_draw(void) {
-    u32 offset = page * 240; // TODO add a sliding effect
-
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
         memcpy32(
             (vu32 *) &raster[y * 240],
-            (vu32 *) &map[offset + y * 240 * 4],
+            (vu32 *) &map[draw_offset + y * 240 * 4],
             240
         );
     }
