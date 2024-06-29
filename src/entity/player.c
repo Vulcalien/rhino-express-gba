@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include "level.h"
+#include "scene.h"
 #include "sfx.h"
 
 #define   MAX_SPEED (1280)
@@ -106,13 +107,7 @@ static inline void handle_animation(struct Level *level,
             if(player_data->animation_stage > 60 && data->y > -64)
                 data->y -= 4;
             if(player_data->animation_stage > 120) {
-                // TODO fadeout
-            }
-            if(player_data->animation_stage > 180) {
-                // TODO go to level selection menu
-
-                // DEBUG
-                level_load(level, level->metadata);
+                scene_set(&scene_map, true, (bool []) { true });
             }
             break;
 

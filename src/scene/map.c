@@ -36,6 +36,10 @@ static i8 level;
 static void map_init(void *data) {
     screen_mode_4();
 
+    bool has_cleared_level = *((bool *) data);
+    if(has_cleared_level && level == levels_cleared)
+        levels_cleared++;
+
     // TODO set level and page
 
     draw_offset = page * 240;
@@ -111,12 +115,9 @@ static void map_tick(void) {
     update_draw_offset();
 
     // check if the player has chosen a level
-    if(input_pressed(KEY_A) || input_pressed(KEY_START)) {
-        if(level < LEVEL_COUNT) {
-            u32 selected_level_arg = level;
-            scene_set(&scene_game, true, &selected_level_arg);
-        }
-    }
+    if(input_pressed(KEY_A) || input_pressed(KEY_START))
+        if(level < LEVEL_COUNT)
+            scene_set(&scene_game, true, (u32 []) { level });
 }
 
 #include "../res/map.c"
