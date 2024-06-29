@@ -48,53 +48,14 @@ static void map_init(void *data) {
     draw_offset = page * 240;
 }
 
-static void map_tick(void) {
-    // 0 = none, -1 = right-to-left, +1 = left-to-right
-    i32 page_change_dir = 0;
+static inline void validate_bounds_i8(i8 *val, i8 min, i8 max) {
+    if(*val < min)
+        *val = min;
+    if(*val > max)
+        *val = max;
+}
 
-    // move left/right by one page
-    if(input_pressed(KEY_L)) {
-        page--;
-        page_change_dir = -1;
-    }
-    if(input_pressed(KEY_R)) {
-        page++;
-        page_change_dir = +1;
-    }
-
-    if(page_change_dir != 0) {
-        // check if the player tried to move to a non-existing page
-        if(page < 0)
-            page = 0;
-        if(page >= PAGE_COUNT)
-            page = PAGE_COUNT - 1;
-
-        // update the selected level based on page change direction
-        if(page_change_dir < 0)
-            level = first_level_in_pages[page + 1] - 1;
-        else
-            level = first_level_in_pages[page];
-    }
-
-    // move left/right by one level
-    if(input_pressed(KEY_LEFT))
-        level--;
-    if(input_pressed(KEY_RIGHT))
-        level++;
-
-    // check if the player tried to move to a non-existing level
-    if(level < 0)
-        level = 0;
-    if(level > levels_cleared)
-        level = levels_cleared;
-
-    // adjust the selected page
-    if(level < first_level_in_pages[page])
-        page--;
-    if(level >= first_level_in_pages[page + 1])
-        page++;
-
-    // update 'draw_offset'
+static inline void update_draw_offset(void) {
     if(draw_offset != page * 240) {
         u32 diff = page * 240 - draw_offset;
 
@@ -114,6 +75,47 @@ static void map_tick(void) {
 
         draw_offset += speed * math_sign(diff);
     }
+}
+
+static void map_tick(void) {
+    // 0 = none, -1 = right-to-left, +1 = left-to-right
+    i32 page_change_dir = 0;
+
+    // move left/right by one page
+    if(input_pressed(KEY_L)) {
+        page--;
+        page_change_dir = -1;
+    }
+    if(input_pressed(KEY_R)) {
+        page++;
+        page_change_dir = +1;
+    }
+
+    if(page_change_dir != 0) {
+        validate_bounds_i8(&page, 0, PAGE_COUNT - 1);
+
+        // update the selected level based on page change direction
+        if(page_change_dir < 0)
+            level = first_level_in_pages[page + 1] - 1;
+        else
+            level = first_level_in_pages[page];
+    }
+
+    // move left/right by one level
+    if(input_pressed(KEY_LEFT))
+        level--;
+    if(input_pressed(KEY_RIGHT))
+        level++;
+
+    validate_bounds_i8(&level, 0, levels_cleared);
+
+    // adjust the selected page
+    if(level < first_level_in_pages[page])
+        page--;
+    if(level >= first_level_in_pages[page + 1])
+        page++;
+
+    update_draw_offset();
 }
 
 #include "../res/map.c"
