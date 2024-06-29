@@ -21,10 +21,13 @@
 static struct Level level;
 
 static void game_init(void *data) {
-    screen_mode_0();
-
     u32 selected_level = *((u32 *) data);
     level_load(&level, &level_metadata[selected_level]);
+
+    screen_mode_0();
+
+    // draw now to prevent showing garbage on the first frame
+    scene_game.draw();
 }
 
 static void game_tick(void) {

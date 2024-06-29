@@ -34,8 +34,6 @@ static i8 page;
 static i8 level;
 
 static void map_init(void *data) {
-    screen_mode_4();
-
     if(data) {
         bool has_cleared_level = *((bool *) data);
         if(has_cleared_level && level == levels_cleared)
@@ -45,6 +43,11 @@ static void map_init(void *data) {
     // TODO set level and page
 
     draw_offset = page * 240;
+
+    screen_mode_4();
+
+    // draw now to prevent showing garbage on the first frame
+    scene_map.draw();
 }
 
 static inline void validate_bounds_i8(i8 *val, i8 min, i8 max) {
