@@ -23,7 +23,7 @@
 #define WINDOW_IN  *((vu16 *) 0x04000048)
 #define WINDOW_OUT *((vu16 *) 0x0400004a)
 
-#define OBJ_TILESET ((vu16 *) 0x06010000)
+#define OBJ_TILESET ((vu16 *) 0x06014000)
 
 #include "res/tileset.c"
 #include "res/sprites.c"

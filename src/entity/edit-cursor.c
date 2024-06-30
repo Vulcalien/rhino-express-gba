@@ -168,7 +168,7 @@ static u32 cursor_draw(struct Level *level,
         .size = 1,
         .flip = cursor_data->flip,
 
-        .tile = (20 + cursor_data->selected * 4) * 2,
+        .tile = 512 + 40 + cursor_data->selected * 8,
         .color_mode = 1,
 
         // TODO .mode = 1, // semi-transparent mode

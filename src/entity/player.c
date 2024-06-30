@@ -354,7 +354,7 @@ static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
         count = SPRITE_COUNT - used_sprites;
 
     struct Sprite sprite = {
-        .tile = 52 * 2,
+        .tile = 512 + 104,
         .color_mode = 1
     };
 
@@ -393,7 +393,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
 
         .size = 1,
 
-        .tile = 0,
+        .tile = 512 + 0,
         .color_mode = 1,
 
         .affine_transformation = 1,
