@@ -16,6 +16,7 @@
 #include "scene.h"
 
 #include <gba/display.h>
+#include <gba/sprite.h>
 #include <gba/input.h>
 #include <gba/dma.h>
 #include <memory.h>
@@ -128,7 +129,56 @@ static void map_tick(void) {
 
 #include "../res/map.c"
 
+IWRAM_SECTION
 static void map_draw(void) {
+    // draw level selection buttons
+    struct {
+        i16 x;
+        i16 y;
+    } level_buttons[LEVEL_COUNT] = {
+        { 75,  39  },
+        { 75,  79  },
+        { 91,  123 },
+        { 131, 103 },
+        { 143, 55  },
+        { 175, 87  },
+
+        { 315, 37  },
+        { 323, 89  },
+        { 363, 125 },
+        { 391, 85  },
+        { 395, 41  },
+
+        { 547, 36  },
+        { 579, 60  },
+        { 555, 92  },
+        { 587, 128 },
+        { 622, 96  },
+        { 631, 52  }
+    };
+
+    for(u32 i = 0; i < levels_cleared; i++) {
+        i32 draw_x = level_buttons[i].x - draw_offset;
+        i32 draw_y = level_buttons[i].y;
+
+        if(draw_x < -8 || draw_x > 248) {
+            sprite_hide(i);
+            continue;
+        }
+
+        struct Sprite sprite = {
+            .x = draw_x - 8,
+            .y = draw_y - 8,
+
+            .size = 1,
+
+            .tile = 512 + 0, // DEBUG
+            .color_mode = 1
+        };
+        sprite_config(i, &sprite);
+    }
+
+    // draw bitmap
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
         dma_config(DMA3, &(struct DMA) {
