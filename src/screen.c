@@ -23,8 +23,6 @@
 #define WINDOW_IN  *((vu16 *) 0x04000048)
 #define WINDOW_OUT *((vu16 *) 0x0400004a)
 
-#define OBJ_TILESET ((vu16 *) 0x06014000)
-
 #include "res/tileset.c"
 #include "res/sprites.c"
 #include "res/palette.c"
@@ -53,7 +51,7 @@ void screen_init(void) {
     });
 
     // load spritesheet
-    LOAD_TILESET(OBJ_TILESET, sprites);
+    LOAD_TILESET(display_get_charblock(5), sprites);
 
     // load palette
     LOAD_PALETTE(DISPLAY_BG_PALETTE,  palette);
@@ -76,7 +74,7 @@ void screen_mode_0(void) {
         .enable_obj = 1
     });
 
-    LOAD_TILESET(background_get_tileset(BG2), tileset);
+    LOAD_TILESET(display_get_charblock(3), tileset);
 
     sprite_hide_all();
 }
