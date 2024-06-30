@@ -17,6 +17,7 @@
 
 #include <gba/display.h>
 #include <gba/input.h>
+#include <gba/dma.h>
 #include <memory.h>
 #include <math.h>
 
@@ -130,10 +131,14 @@ static void map_tick(void) {
 static void map_draw(void) {
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
-        memcpy32(
+        dma_config(DMA3, &(struct DMA) {
+            .chunk = DMA_CHUNK_32_BIT
+        });
+        dma_transfer(
+            DMA3,
             (vu32 *) &raster[y * 240],
             (vu32 *) &map[draw_offset + y * 240 * 4],
-            240
+            240 / 4
         );
     }
 }
