@@ -172,7 +172,7 @@ static void map_draw(void) {
 
             .size = 1,
 
-            .tile = 512 + 0, // DEBUG
+            .tile = 512 + 64 + 8 * (i == level),
             .color_mode = 1
         };
         sprite_config(i, &sprite);
