@@ -16,7 +16,6 @@
 #include "scene.h"
 
 #include <gba/display.h>
-#include <gba/sprite.h>
 #include <gba/input.h>
 #include <gba/dma.h>
 #include <memory.h>
@@ -128,10 +127,10 @@ static void map_tick(void) {
 }
 
 #include "../res/map.c"
+#include "../res/level-buttons.c"
 
 IWRAM_SECTION
 static void map_draw(void) {
-    // draw level selection buttons
     struct {
         i16 x;
         i16 y;
@@ -157,27 +156,6 @@ static void map_draw(void) {
         { 631, 52  }
     };
 
-    for(u32 i = 0; i < levels_cleared; i++) {
-        i32 draw_x = level_buttons[i].x - draw_offset;
-        i32 draw_y = level_buttons[i].y;
-
-        if(draw_x < -8 || draw_x > 248) {
-            sprite_hide(i);
-            continue;
-        }
-
-        struct Sprite sprite = {
-            .x = draw_x - 8,
-            .y = draw_y - 8,
-
-            .size = 1,
-
-            .tile = 512 + 64 + 8 * (i == level),
-            .color_mode = 1
-        };
-        sprite_config(i, &sprite);
-    }
-
     // draw bitmap
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
@@ -190,6 +168,40 @@ static void map_draw(void) {
             (vu32 *) &map[draw_offset + y * 240 * 4],
             240 / 4
         );
+    }
+
+    // draw level selection buttons
+    // FIXME the buttons are a few pixels off
+    for(u32 i = 0; i < levels_cleared; i++) {
+        // calculate the top-left corner
+        const i32 corner_x = level_buttons[i].x - draw_offset - 8;
+        const i32 corner_y = level_buttons[i].y - 8;
+
+        if(corner_x < -16 || corner_x >= 240)
+            continue;
+
+        const i32 x0 = math_max(0, -corner_x);
+        const i32 x1 = math_min(16, 240 - corner_x);
+
+        for(u32 y = 0; y < 16; y++) {
+            const u32 ypix = corner_y + y;
+
+            for(u32 x = x0; x < x1; x++) {
+                const u32 xpix = corner_x + x;
+
+                const u8 pixel = level_button_images[
+                    (x + (i == level) * 16) + (y + i * 16) * 32
+                ];
+
+                vu16 *pixels = (vu16 *) &raster[
+                    (xpix & ~1) + ypix * 240
+                ];
+                if(xpix & 1)
+                    *pixels = (*pixels & 0x00ff) | pixel << 8;
+                else
+                    *pixels = (*pixels & 0xff00) | pixel << 0;
+            }
+        }
     }
 }
 

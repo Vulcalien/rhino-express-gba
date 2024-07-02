@@ -100,6 +100,18 @@
             "bpp": 8,
 
             "static": true
+        },
+
+        {
+            "name": "level_button_images",
+
+            "input": "img/level-buttons.png",
+            "output": "level-buttons.c",
+
+            "palette": "res/img/palette.png",
+            "bpp": 8,
+
+            "static": true
         }
     ]
 }
