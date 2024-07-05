@@ -86,9 +86,12 @@ static inline void handle_animation(struct Level *level,
 
             if(data->y < target_y) {
                 data->y += 4;
+            } else if(player_data->animation_stage < 15) {
+                player_data->animation_stage++;
+                level->shake = true;
             } else {
                 player_data->animation = 0;
-                // TODO shake effect
+                level->shake = false;
             }
             break;
         }
