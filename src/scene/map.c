@@ -172,7 +172,7 @@ static void map_draw(void) {
 
     // draw level selection buttons
     // FIXME the buttons are a few pixels off
-    for(u32 i = 0; i < levels_cleared; i++) {
+    for(u32 i = 0; i < math_min(levels_cleared + 1, LEVEL_COUNT); i++) {
         // calculate the top-left corner
         const i32 corner_x = level_buttons[i].x - draw_offset - 8;
         const i32 corner_y = level_buttons[i].y - 8;
