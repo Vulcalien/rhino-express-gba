@@ -579,7 +579,7 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 6 },
             { 6, 6 }
         },
-        .obstacles_to_add = { 2, 1, 0 },
+        .obstacles_to_add = { 2, 1, 1 },
 
         .houses = {
             { 1, 1 },
