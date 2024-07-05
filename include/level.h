@@ -56,6 +56,8 @@ struct Level {
         i32 x;
         i32 y;
     } offset;
+
+    bool shake;
 };
 
 struct level_Metadata {

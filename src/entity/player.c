@@ -88,7 +88,7 @@ static inline void handle_animation(struct Level *level,
                 data->y += 4;
             } else {
                 player_data->animation = 0;
-                // TODO rumble effect
+                // TODO shake effect
             }
             break;
         }
@@ -284,22 +284,13 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
             player_data->xm * 2, player_data->ym * 2
         );
 
-        static i8 last_rumble_offset = 0;
+        level->shake = true;
 
+        // if the center was reached, stop going back and the rumbling
         if(is_tile_center(data->x, data->y)) {
             player_data->xm = player_data->ym = 0;
             player_data->hit_obstacle = false;
-
-            // restore initial level offset
-            level->offset.y -= last_rumble_offset;
-            last_rumble_offset = 0;
-        } else {
-            if(tick_count % 2 == 0) {
-                // apply a new level offset
-                level->offset.y -= last_rumble_offset;
-                last_rumble_offset = -2 + rand() % 5;
-                level->offset.y += last_rumble_offset;
-            }
+            level->shake = false;
         }
     } else {
         i32 xm_sign = math_sign(player_data->xm);

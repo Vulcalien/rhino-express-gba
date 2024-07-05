@@ -55,6 +55,20 @@ static inline void remove_solid_entity(struct Level *level,
         level->solid_entities[tile][data->solid_id] = LEVEL_NO_ENTITY;
 }
 
+static inline void update_offset(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
+    const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
+    const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
+
+    level->offset.x = -(SCREEN_W - width_pixels) / 2;
+    level->offset.y = -(SCREEN_H - height_pixels) / 2;
+
+    // apply shaking effect
+    if(level->shake && (tick_count & 1))
+        level->offset.y += (-2 + rand() % 4);
+}
+
 static inline void tick_tiles(struct Level *level) {
     // ...
 }
@@ -90,6 +104,8 @@ static inline void tick_entities(struct Level *level) {
 
 IWRAM_SECTION
 void level_tick(struct Level *level) {
+    update_offset(level);
+
     tick_tiles(level);
     tick_entities(level);
 }
@@ -190,15 +206,6 @@ static inline void load_tiles(struct Level *level) {
     }
 }
 
-static inline void set_initial_offset(struct Level *level) {
-    const struct level_Metadata *metadata = level->metadata;
-
-    const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
-    const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
-    level->offset.x = -(SCREEN_W - width_pixels) / 2;
-    level->offset.y = -(SCREEN_H - height_pixels) / 2;
-}
-
 static inline void load_mailboxes(struct Level *level) {
     const struct level_Metadata *metadata = level->metadata;
 
@@ -238,10 +245,9 @@ IWRAM_SECTION
 void level_load(struct Level *level,
                 const struct level_Metadata *metadata) {
     level_init(level, metadata);
+    update_offset(level);
 
     load_tiles(level);
-    set_initial_offset(level);
-
     load_mailboxes(level);
     load_decor_houses(level);
 
