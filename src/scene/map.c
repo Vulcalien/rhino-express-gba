@@ -29,7 +29,7 @@ static u8 first_level_in_pages[PAGE_COUNT + 1] = {
     0, 6, 11, 17
 };
 
-static u16 draw_offset;
+static u16 draw_offset; // this value should always be a multiple of two
 
 static i8 page;
 static i8 level;
@@ -159,14 +159,16 @@ static void map_draw(void) {
     // draw bitmap
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
+        // 'draw_offset' is always a multiple of two,
+        // so 16-bit chunks work well
         dma_config(DMA3, &(struct DMA) {
-            .chunk = DMA_CHUNK_32_BIT
+            .chunk = DMA_CHUNK_16_BIT
         });
         dma_transfer(
             DMA3,
-            (vu32 *) &raster[y * 240],
-            (vu32 *) &map[draw_offset + y * 240 * 4],
-            240 / 4
+            (vu16 *) &raster[y * 240],
+            (vu16 *) &map[draw_offset + y * 240 * 4],
+            240 / 2
         );
     }
 
