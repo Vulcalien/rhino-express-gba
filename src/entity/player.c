@@ -27,6 +27,9 @@
 #define   MAX_SPEED (1280)
 #define START_SPEED (64)
 
+#define BREAK_WOOD_SPEED (546)
+#define BREAK_ROCK_SPEED (660)
+
 #define ANIMATION_SPAWN 1
 #define ANIMATION_FALL  2
 #define ANIMATION_WIN   3
@@ -156,6 +159,9 @@ static inline void enter_tile(struct Level *level,
                               i32 xt, i32 yt) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
+    // calculate speed (only one between xm and ym is nonzero)
+    const u32 speed = math_abs(player_data->xm + player_data->ym);
+
     switch(level_get_tile(level, xt, yt)) {
         case TILE_VOID:
         case TILE_HOLE:
@@ -163,13 +169,21 @@ static inline void enter_tile(struct Level *level,
             break;
 
         case TILE_WOOD:
-            // TODO check if the player is fast enough to break the wood
-            player_data->hit_obstacle = true;
+            if(speed >= BREAK_WOOD_SPEED) {
+                level_set_tile(level, xt, yt, TILE_PLATFORM);
+                // TODO play break sound and add particles
+            } else {
+                player_data->hit_obstacle = true;
+            }
             break;
 
         case TILE_ROCK:
-            // TODO check if the player is fast enough to break the rock
-            player_data->hit_obstacle = true;
+            if(speed >= BREAK_ROCK_SPEED) {
+                level_set_tile(level, xt, yt, TILE_PLATFORM);
+                // TODO play break sound and add particles
+            } else {
+                player_data->hit_obstacle = true;
+            }
             break;
 
         case TILE_WATER:
