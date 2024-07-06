@@ -124,7 +124,7 @@ static void map_tick(void) {
     // check if the player has chosen a level
     if(input_pressed(KEY_A) || input_pressed(KEY_START))
         if(level < LEVEL_COUNT)
-            scene_set(&scene_game, true, (u32 []) { level });
+            scene_set(&scene_game, (u32 []) { level });
 }
 
 #include "../res/map.c"

@@ -112,9 +112,8 @@ static inline void handle_animation(struct Level *level,
             player_data->animation_stage++;
             if(player_data->animation_stage > 60 && data->y > -64)
                 data->y -= 4;
-            if(player_data->animation_stage > 120) {
-                scene_set(&scene_map, true, (bool []) { true });
-            }
+            if(player_data->animation_stage > 120)
+                scene_set(&scene_map, (bool []) { true });
             break;
 
         default:
