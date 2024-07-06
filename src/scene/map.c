@@ -122,9 +122,16 @@ static void map_tick(void) {
     update_draw_offset();
 
     // check if the player has chosen a level
-    if(input_pressed(KEY_A) || input_pressed(KEY_START))
-        if(level < LEVEL_COUNT)
-            scene_set(&scene_game, (u32 []) { level });
+    if(input_pressed(KEY_A) || input_pressed(KEY_START)) {
+        if(level < LEVEL_COUNT) {
+            // when calling 'scene_transition_to', the data passed is
+            // not used immediately (it needs static storage duration)
+            static u32 game_scene_arg;
+            game_scene_arg = level;
+
+            scene_transition_to(&scene_game, &game_scene_arg);
+        }
+    }
 }
 
 #include "../res/map.c"
