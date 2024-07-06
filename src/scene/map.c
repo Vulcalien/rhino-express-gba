@@ -23,6 +23,7 @@
 
 #include "level.h"
 #include "screen.h"
+#include "crosshair.h"
 
 #define PAGE_COUNT 3
 static u8 first_level_in_pages[PAGE_COUNT + 1] = {
@@ -156,6 +157,8 @@ static void map_draw(void) {
         { 631, 52  }
     };
 
+    const u32 crosshair_sprites = 0; // ID of the first crosshair sprite
+
     // draw bitmap
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
@@ -175,9 +178,17 @@ static void map_draw(void) {
     // draw level selection buttons
     // FIXME the buttons are a few pixels off
     for(u32 i = 0; i < math_min(levels_cleared + 1, LEVEL_COUNT); i++) {
+        // calculate the button's center
+        const i32 xc = level_buttons[i].x - draw_offset;
+        const i32 yc = level_buttons[i].y;
+
+        // draw the crosshair
+        if(i == level)
+            crosshair_draw(crosshair_sprites, xc, yc);
+
         // calculate the top-left corner
-        const i32 corner_x = level_buttons[i].x - draw_offset - 8;
-        const i32 corner_y = level_buttons[i].y - 8;
+        const i32 corner_x = xc- 8;
+        const i32 corner_y = yc - 8;
 
         if(corner_x < -16 || corner_x >= 240)
             continue;
@@ -205,6 +216,9 @@ static void map_draw(void) {
             }
         }
     }
+
+    if(level == LEVEL_COUNT)
+        sprite_hide_range(crosshair_sprites, crosshair_sprites + 4);
 }
 
 const struct Scene scene_map = {

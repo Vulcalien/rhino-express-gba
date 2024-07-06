@@ -21,6 +21,7 @@
 
 #include "level.h"
 #include "tile.h"
+#include "crosshair.h"
 #include "music.h"
 #include "sfx.h"
 
@@ -175,7 +176,7 @@ static u32 cursor_draw(struct Level *level,
     };
     sprite_config(used_sprites++, &sprite);
 
-    return 1;
+    return 1 + crosshair_draw(used_sprites, x, y);
 }
 
 const struct entity_Type entity_edit_cursor = {
