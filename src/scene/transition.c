@@ -15,7 +15,9 @@
  */
 #include "scene.h"
 
-#define TRANSITION_TIME 60
+#include <math.h>
+
+#define TRANSITION_TIME 64
 
 static u32 transition_time = 0;
 static struct scene_Transition transition_data;
@@ -53,6 +55,15 @@ static void transition_draw(void) {
         transition_data.previous_scene->draw();
     else if(transition_time > TRANSITION_TIME / 2)
         transition_data.next_scene->draw();
+
+    // apply fade effect
+    u32 fade = math_min(
+        math_sin(
+            transition_time * MATH_PI / TRANSITION_TIME
+        ) * 320 / 0x4000,
+        256
+    );
+    screen_fade(0x0000, fade);
 }
 
 const struct Scene scene_transition = {
