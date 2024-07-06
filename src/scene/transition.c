@@ -17,6 +17,8 @@
 
 #include <math.h>
 
+#include "screen.h"
+
 #define TRANSITION_TIME 64
 
 static u32 transition_time = 0;
