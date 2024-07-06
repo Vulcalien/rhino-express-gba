@@ -125,7 +125,7 @@ static void cursor_tick(struct Level *level,
     if(!any_obstacle_left(level) || input_pressed(KEY_START)) {
         // exit editing mode
         level->is_editing = false;
-        SOUND_DMA_PLAY(music_game, true, SOUND_DMA_B);
+        MUSIC_PLAY(music_game);
 
         data->should_remove = true;
         return;

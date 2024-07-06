@@ -17,8 +17,9 @@
 
 #include "main.h"
 
-// include the direct sound driver needed to play music
 #include <gba/sound.h>
+
+#define MUSIC_PLAY(sound) SOUND_DMA_PLAY(sound, true, SOUND_DMA_B)
 
 extern const u8 music_game[260624];
 extern const u8 music_map[130312];
