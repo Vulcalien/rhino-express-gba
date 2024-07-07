@@ -41,8 +41,8 @@
             "input": "img/cutscenes.png",
             "output": "cutscenes.c",
 
-            "tile_width": 4,
-            "tile_height": 4,
+            "tile_width": 8,
+            "tile_height": 8,
 
             "palette": "res/img/palette.png",
             "bpp": 8,
