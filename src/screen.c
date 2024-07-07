@@ -30,6 +30,9 @@
 #define LOAD_TILESET(dest, tileset)\
     memcpy16((dest), (vu16 *) (tileset), sizeof(tileset))
 
+#define LOAD_PALETTE(dest, palette)\
+    memcpy16((dest), (vu16 *) (palette), sizeof(palette))
+
 void screen_init(void) {
     // configure backgrounds
     background_config(BG2, &(struct Background) {
@@ -51,36 +54,11 @@ void screen_init(void) {
     LOAD_TILESET(display_get_charblock(5), sprites);
 
     // load palette
-    screen_fade(0, 0);
+    LOAD_PALETTE(DISPLAY_BG_PALETTE,  palette);
+    LOAD_PALETTE(DISPLAY_OBJ_PALETTE, palette);
 
     // disable forced blank
     display_force_blank(false);
-}
-
-// val between 0 (min) and 256 (max)
-IWRAM_SECTION
-void screen_fade(u32 target_color, u32 val) {
-    const u32 palette_size = sizeof(palette) / sizeof(u16);
-
-    for(u32 i = 0; i < palette_size; i++) {
-        // calculate contributions of target and palette colors
-        u32 target_r = (target_color >> 0)  & 0x1f;
-        u32 target_g = (target_color >> 5)  & 0x1f;
-        u32 target_b = (target_color >> 10) & 0x1f;
-
-        u32 palette_r = (palette[i] >> 0)  & 0x1f;
-        u32 palette_g = (palette[i] >> 5)  & 0x1f;
-        u32 palette_b = (palette[i] >> 10) & 0x1f;
-
-        u32 color = (
-            ((target_r * val + palette_r * (256 - val)) / 256) << 0  |
-            ((target_g * val + palette_g * (256 - val)) / 256) << 5  |
-            ((target_b * val + palette_b * (256 - val)) / 256) << 10
-        );
-
-        DISPLAY_BG_PALETTE[i]  = color;
-        DISPLAY_OBJ_PALETTE[i] = color;
-    }
 }
 
 void screen_mode_0(void) {

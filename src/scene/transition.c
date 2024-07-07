@@ -15,6 +15,7 @@
  */
 #include "scene.h"
 
+#include <gba/display.h>
 #include <math.h>
 
 #include "screen.h"
@@ -59,13 +60,13 @@ static void transition_draw(void) {
         transition_data.next_scene->draw();
 
     // apply fade effect
-    u32 fade = math_min(
-        math_sin(
-            transition_time * MATH_PI / TRANSITION_TIME
-        ) * 320 / 0x4000,
-        256
-    );
-    screen_fade(0x0000, fade);
+    u32 fade = math_sin(
+        transition_time * MATH_PI / TRANSITION_TIME
+    ) * 20 / 0x4000;
+    display_darken(&(struct display_Target) {
+        .bg0 = 1, .bg1 = 1, .bg2 = 1, .bg3 = 1,
+        .obj = 1, .backdrop = 1
+    }, fade);
 }
 
 const struct Scene scene_transition = {

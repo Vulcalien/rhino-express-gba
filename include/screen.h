@@ -27,8 +27,5 @@
 
 extern void screen_init(void);
 
-// val between 0 (min) and 256 (max)
-extern void screen_fade(u32 target_color, u32 val);
-
 extern void screen_mode_0(void);
 extern void screen_mode_4(void);
