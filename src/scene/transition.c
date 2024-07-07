@@ -63,10 +63,7 @@ static void transition_draw(void) {
     u32 fade = math_sin(
         transition_time * MATH_PI / TRANSITION_TIME
     ) * 20 / 0x4000;
-    display_darken(&(struct display_Target) {
-        .bg0 = 1, .bg1 = 1, .bg2 = 1, .bg3 = 1,
-        .obj = 1, .backdrop = 1
-    }, fade);
+    display_darken(NULL, fade);
 }
 
 const struct Scene scene_transition = {
