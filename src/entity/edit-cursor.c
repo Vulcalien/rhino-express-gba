@@ -162,7 +162,7 @@ static u32 cursor_draw(struct Level *level,
                        i32 x, i32 y, u32 used_sprites) {
     struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
 
-    struct Sprite sprite = {
+    sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 8,
         .y = y - 8,
 
@@ -170,11 +170,10 @@ static u32 cursor_draw(struct Level *level,
         .flip = cursor_data->flip,
 
         .tile = 512 + 40 + cursor_data->selected * 8,
-        .color_mode = 1,
+        .colors = 1,
 
         // TODO .mode = 1, // semi-transparent mode
-    };
-    sprite_config(used_sprites++, &sprite);
+    });
 
     return 1 + crosshair_draw(used_sprites, x, y);
 }

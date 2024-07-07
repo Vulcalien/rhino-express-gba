@@ -44,7 +44,7 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
                         i32 x, i32 y, u32 used_sprites) {
     struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
 
-    struct Sprite sprite = {
+    sprite_config(used_sprites++, &(struct Sprite) {
         // TODO better adjust the coordinates to match the original
         .x = x - 16,
         .y = y - 16,
@@ -52,13 +52,12 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
         .size = 1,
 
         .tile = 512 + 8 + mailbox_data->has_letter * 8,
-        .color_mode = 1,
+        .colors = 1,
 
-        .affine_transformation = 1,
+        .affine = 1,
         .affine_parameter = 1, // TODO
         .double_size = 1
-    };
-    sprite_config(used_sprites++, &sprite);
+    });
 
     // DEBUG
     vu16 *parameters = &OAM[16 + 3];

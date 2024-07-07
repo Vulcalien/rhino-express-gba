@@ -31,7 +31,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .y = yc - distance - 8,
 
         .tile = tile,
-        .color_mode = 1
+        .colors = 1
     });
 
     sprite_config(id++, &(struct Sprite) {
@@ -41,7 +41,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .flip = 1,
 
         .tile = tile,
-        .color_mode = 1
+        .colors = 1
     });
 
     sprite_config(id++, &(struct Sprite) {
@@ -51,7 +51,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .flip = 2,
 
         .tile = tile,
-        .color_mode = 1
+        .colors = 1
     });
 
     sprite_config(id++, &(struct Sprite) {
@@ -61,7 +61,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .flip = 3,
 
         .tile = tile,
-        .color_mode = 1
+        .colors = 1
     });
 
     return 4;

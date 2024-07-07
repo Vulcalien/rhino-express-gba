@@ -32,16 +32,15 @@ static u32 house_draw(struct Level *level, struct entity_Data *data,
     if(level_get_tile(level, xt, yt) == TILE_HIGH_GROUND)
         y -= 4;
 
-    struct Sprite sprite = {
+    sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 8,
         .y = y - 8 - 4,
 
         .size = 1,
 
         .tile = 512 + 24,
-        .color_mode = 1
-    };
-    sprite_config(used_sprites++, &sprite);
+        .colors = 1
+    });
 
     return 1;
 }

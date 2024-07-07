@@ -362,11 +362,6 @@ static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
     if(count > SPRITE_COUNT - used_sprites)
         count = SPRITE_COUNT - used_sprites;
 
-    struct Sprite sprite = {
-        .tile = 512 + 104,
-        .color_mode = 1
-    };
-
     for(u32 i = 0; i < count; i++) {
         // calculate target location
         u16 angle = letters[i].angle - tick_count * 256;
@@ -381,9 +376,13 @@ static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
         letters[i].subx = (letters[i].subx * 7 + (target_x * 256)) / 8;
         letters[i].suby = (letters[i].suby * 7 + (target_y * 256)) / 8;
 
-        sprite.x = (letters[i].subx / 256) - 4;
-        sprite.y = (letters[i].suby / 256) - 4;
-        sprite_config(used_sprites++, &sprite);
+        sprite_config(used_sprites++, &(struct Sprite) {
+            .x = (letters[i].subx / 256) - 4,
+            .y = (letters[i].suby / 256) - 4,
+
+            .tile = 512 + 104,
+            .colors = 1
+        });
     }
     return count;
 }
@@ -396,20 +395,19 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     // 8-bit fixed point decimal (1 = 256)
     u32 inverse_y_scale = calculate_inverse_y_scale(tick_count);
 
-    struct Sprite sprite = {
+    sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 16,
         .y = y - 4 - (256 * 16) / inverse_y_scale,
 
         .size = 1,
 
         .tile = 512 + 0,
-        .color_mode = 1,
+        .colors = 1,
 
-        .affine_transformation = 1,
+        .affine = 1,
         .affine_parameter = 0,
         .double_size = 1
-    };
-    sprite_config(used_sprites++, &sprite);
+    });
 
     // set OBJ parameter
     vu16 *parameters = &OAM[3];
