@@ -453,12 +453,12 @@ static inline void init_letter_draw_data(void) {
     for(u32 i = 0; i < LETTERS_LIMIT; i++) {
         letters[i].angle = (MATH_PI * 2) * i / LETTERS_LIMIT;
 
-        letters[i].radius = 7 + rand() % 3;
+        letters[i].radius = 7 + random(3);
     }
 
     // shuffle angle offsets
     for(u32 i = 0; i < LETTERS_LIMIT; i++) {
-        u32 other = rand() % LETTERS_LIMIT;
+        u32 other = random(LETTERS_LIMIT);
 
         u16 tmp = letters[i].angle;
         letters[i].angle = letters[other].angle;

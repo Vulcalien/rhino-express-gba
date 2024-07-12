@@ -65,7 +65,7 @@ static inline void switch_item(struct Level *level,
             cursor_data->selected = 0;
     } while(level->obstacles_to_add[cursor_data->selected] == 0);
 
-    cursor_data->flip = rand() & 1;
+    cursor_data->flip = random(2);
 }
 
 static inline bool try_to_place(struct Level *level,
@@ -203,7 +203,7 @@ bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt) {
     struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
 
     cursor_data->selected = 0;
-    cursor_data->flip = rand() & 1;
+    cursor_data->flip = random(2);
 
     // if there is no obstacle of the first type, switch to others
     if(level->obstacles_to_add[cursor_data->selected] == 0)

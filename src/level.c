@@ -66,7 +66,7 @@ static inline void update_offset(struct Level *level) {
 
     // apply shaking effect
     if(level->shake && (tick_count & 1))
-        level->offset.y += (-2 + rand() % 4);
+        level->offset.y += (-2 + random(4));
 }
 
 static inline void tick_tiles(struct Level *level) {
@@ -197,7 +197,7 @@ static inline void load_tiles(struct Level *level) {
 
             // if the tile is an obstacle, randomly set the flip bit
             if(tile >= TILE_WOOD && tile <= TILE_WATER)
-                if((rand() & 1) == 0)
+                if(random(2) == 0)
                     data |= BIT(1);
 
             level_set_tile(level, x, y, tile);
