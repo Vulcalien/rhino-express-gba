@@ -7,7 +7,7 @@
             "name": "tileset",
 
             "input": "img/tileset.png",
-            "output": "tileset.c",
+            "output": "img/tileset.c",
 
             "tile_width": 1,
             "tile_height": 1,
@@ -23,7 +23,7 @@
             "name": "sprites",
 
             "input": "img/sprites.png",
-            "output": "sprites.c",
+            "output": "img/sprites.c",
 
             "tile_width": 2,
             "tile_height": 2,
@@ -39,7 +39,7 @@
             "name": "cutscenes",
 
             "input": "img/cutscenes.png",
-            "output": "cutscenes.c",
+            "output": "img/cutscenes.c",
 
             "tile_width": 8,
             "tile_height": 8,
@@ -71,7 +71,7 @@
             "name": "palette",
 
             "input": "img/palette.png",
-            "output": "palette.c",
+            "output": "img/palette.c",
 
             "static": true
         }
@@ -124,7 +124,7 @@
             "name": "map",
 
             "input": "img/map.png",
-            "output": "map.c",
+            "output": "img/map.c",
 
             "palette": "res/img/palette.png",
             "bpp": 8,
@@ -136,7 +136,7 @@
             "name": "level_button_images",
 
             "input": "img/level-buttons.png",
-            "output": "level-buttons.c",
+            "output": "img/level-buttons.c",
 
             "palette": "res/img/palette.png",
             "bpp": 8,

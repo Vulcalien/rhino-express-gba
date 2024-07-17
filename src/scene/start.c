@@ -32,7 +32,7 @@ static void start_init(void *data) {
 static void start_tick(void) {
 }
 
-#include "../res/cutscenes.c"
+#include "../res/img/cutscenes.c"
 
 IWRAM_SECTION
 static void start_draw(void) {

@@ -23,9 +23,9 @@
 #define WINDOW_IN  *((vu16 *) 0x04000048)
 #define WINDOW_OUT *((vu16 *) 0x0400004a)
 
-#include "res/tileset.c"
-#include "res/sprites.c"
-#include "res/palette.c"
+#include "res/img/tileset.c"
+#include "res/img/sprites.c"
+#include "res/img/palette.c"
 
 #define LOAD_TILESET(dest, tileset)\
     memcpy16((dest), (vu16 *) (tileset), sizeof(tileset))

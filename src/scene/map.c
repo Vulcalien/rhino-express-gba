@@ -134,8 +134,8 @@ static void map_tick(void) {
     }
 }
 
-#include "../res/map.c"
-#include "../res/level-buttons.c"
+#include "../res/img/map.c"
+#include "../res/img/level-buttons.c"
 
 IWRAM_SECTION
 static void map_draw(void) {
