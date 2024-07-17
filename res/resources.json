@@ -48,6 +48,21 @@
             "bpp": 8,
 
             "static": true
+        },
+
+        {
+            "name": "cutscenes_text",
+
+            "input": "img/cutscenes-text.png",
+            "output": "img/cutscenes-text.c",
+
+            "tile_width": 4,
+            "tile_height": 1,
+
+            "palette": "res/img/palette.png",
+            "bpp": 8,
+
+            "static": true
         }
     ],
 
