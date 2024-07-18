@@ -41,6 +41,7 @@ static struct {
 static void start_init(void *data) {
     page = 0;
 
+    // DEBUG
     transparency.element = FADING_TEXT;
     transparency.dir = -1;
     transparency.val = 16;
@@ -70,8 +71,8 @@ static inline void update_transparency(void) {
 
             if(transparency.val == 0) {
                 transparency.element = FADING_IMAGE;
-                transparency.val = 16;
                 transparency.dir = -1;
+                transparency.val = 16;
             } else if(transparency.val == 16) {
                 transparency.element = FADING_NONE;
             }
@@ -82,6 +83,15 @@ static inline void update_transparency(void) {
 static void start_tick(void) {
     if(tick_count % 2 == 0)
         update_transparency();
+
+    if(transparency.element == FADING_NONE) {
+        if(input_pressed(KEY_A) || input_pressed(KEY_B) ||
+           input_pressed(KEY_START)) {
+            transparency.element = FADING_TEXT;
+            transparency.dir = -1;
+            transparency.val = 16;
+        }
+    }
 }
 
 #include "../res/img/cutscenes.c"
