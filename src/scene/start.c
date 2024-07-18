@@ -25,20 +25,63 @@
 // number of sprites used for text
 #define TEXT_SPRITES 6
 
+#define FADING_NONE  0
+#define FADING_IMAGE 1
+#define FADING_TEXT  2
+
 static u32 page;
-static u32 transparency;
+
+static struct {
+    u8 element; // one of the FADING constants
+
+    i8  dir;
+    u16 val;
+} transparency;
 
 static void start_init(void *data) {
     page = 0;
-    transparency = 0;
 
-    // DEBUG
-    transparency = 4;
+    transparency.element = FADING_TEXT;
+    transparency.dir = -1;
+    transparency.val = 16;
 
     screen_mode_4();
 }
 
+static inline void update_transparency(void) {
+    switch(transparency.element) {
+        case FADING_NONE:
+            // TODO
+            break;
+
+        case FADING_IMAGE:
+            transparency.val += transparency.dir;
+
+            if(transparency.val == 16) {
+                transparency.element = FADING_TEXT;
+                transparency.val = 0;
+            } else if(transparency.val == 0) {
+                transparency.dir = +1;
+            }
+            break;
+
+        case FADING_TEXT:
+            transparency.val += transparency.dir;
+
+            if(transparency.val == 0) {
+                transparency.element = FADING_IMAGE;
+                transparency.val = 16;
+                transparency.dir = -1;
+            } else if(transparency.val == 16) {
+                transparency.element = FADING_NONE;
+            }
+            break;
+    }
+}
+
 static void start_tick(void) {
+    if(tick_count % 2 == 0)
+        update_transparency();
 }
 
 #include "../res/img/cutscenes.c"
@@ -100,10 +143,50 @@ static void start_draw(void) {
     display_blend(
         &(struct DisplayTarget) { .obj = 1 },
         &(struct DisplayTarget) { .backdrop = 1 },
-        transparency, 16 - transparency
+        transparency.val, 16 - transparency.val
     );
 
-    // TODO set windows
+    // set windows
+    display_window_enable(DISPLAY_WINDOW_0);
+    display_window_enable(DISPLAY_WINDOW_1);
+
+    display_window_config(DISPLAY_WINDOW_OUT, &(struct DisplayWindow) {
+        .obj = 1, .effects = 0
+    });
+
+    display_window_viewport(
+        DISPLAY_WINDOW_0, image_x0, image_y0, 64, 64
+    );
+    display_window_viewport(
+        DISPLAY_WINDOW_1, text_x0, text_y0, 32 * TEXT_SPRITES, 8
+    );
+
+    switch(transparency.element) {
+        case FADING_NONE:
+            display_window_disable(DISPLAY_WINDOW_0);
+            display_window_disable(DISPLAY_WINDOW_1);
+            break;
+        case FADING_IMAGE:
+            display_window_config(
+                DISPLAY_WINDOW_0,
+                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            );
+            display_window_config(
+                DISPLAY_WINDOW_1,
+                &(struct DisplayWindow) { .obj = 0, .effects = 0 }
+            );
+            break;
+        case FADING_TEXT:
+            display_window_config(
+                DISPLAY_WINDOW_0,
+                &(struct DisplayWindow) { .obj = 1, .effects = 0 }
+            );
+            display_window_config(
+                DISPLAY_WINDOW_1,
+                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            );
+            break;
+    }
 }
 
 const struct Scene scene_start = {
