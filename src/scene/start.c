@@ -33,10 +33,12 @@ static void start_tick(void) {
 }
 
 #include "../res/img/cutscenes.c"
+#include "../res/img/cutscenes-text.c"
 
 IWRAM_SECTION
 static void start_draw(void) {
     u32 image = 0; // DEBUG
+    u32 text = 0; // DEBUG
 
     // TODO do not repeat this every draw cycle
     dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_32_BIT });
@@ -47,6 +49,14 @@ static void start_draw(void) {
         64 * 64 / 4
     );
 
+    dma_transfer(
+        DMA3,
+        display_get_charblock(5) + 96 * 64,
+        cutscenes_text + (24 * 64) * text,
+        24 * 64 / 4
+    );
+
+    // draw image sprite
     sprite_config(0, &(struct Sprite) {
         .x = (240 - 64) / 2,
         .y = (160 - 64) / 2 - 32,
@@ -56,6 +66,20 @@ static void start_draw(void) {
         .tile = 512 + 256, // TODO
         .colors = 1
     });
+
+    // draw text sprites
+    for(u32 i = 0; i < 6; i++) {
+        sprite_config(1 + i, &(struct Sprite) {
+            .x = (240 - 32 * 6) / 2 + 32 * i,
+            .y = (160 - 8) / 2 + 48,
+
+            .shape = 1, // horizontal
+            .size = 1, // 32x8
+
+            .tile = 512 + 384 + i * 8,
+            .colors = 1
+        });
+    }
 }
 
 const struct Scene scene_start = {

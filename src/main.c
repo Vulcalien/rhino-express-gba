@@ -55,7 +55,7 @@ int AgbMain(void) {
     interrupt_set_isr(IRQ_VBLANK, vblank);
 
     screen_init();
-    scene_set(&scene_map, NULL);
+    scene_set(&scene_start, NULL);
 
     while(true) {
         tick();
