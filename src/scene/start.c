@@ -65,10 +65,16 @@ static void start_draw(void) {
         24 * 64 / 4
     );
 
+    const u32 image_x0 = (240 - 64) / 2;
+    const u32 image_y0 = (160 - 64) / 2 - 32;
+
+    const u32 text_x0 = (240 - 32 * TEXT_SPRITES) / 2;
+    const u32 text_y0 = (160 - 8) / 2 + 48;
+
     // draw image sprite
     sprite_config(0, &(struct Sprite) {
-        .x = (240 - 64) / 2,
-        .y = (160 - 64) / 2 - 32,
+        .x = image_x0,
+        .y = image_y0,
 
         .size = 3, // 64x64
 
@@ -79,8 +85,8 @@ static void start_draw(void) {
     // draw text sprites
     for(u32 i = 0; i < TEXT_SPRITES; i++) {
         sprite_config(1 + i, &(struct Sprite) {
-            .x = (240 - 32 * TEXT_SPRITES) / 2 + 32 * i,
-            .y = (160 - 8) / 2 + 48,
+            .x = text_x0 + 32 * i,
+            .y = text_y0,
 
             .shape = 1, // horizontal
             .size = 1, // 32x8
