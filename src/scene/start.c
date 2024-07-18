@@ -19,8 +19,11 @@
 #include <gba/sprite.h>
 #include <gba/input.h>
 #include <gba/dma.h>
+#include <memory.h>
 
 #include "screen.h"
+
+#define PAGE_COUNT 9
 
 // number of sprites used for text
 #define TEXT_SPRITES 6
@@ -28,6 +31,13 @@
 #define FADING_NONE  0
 #define FADING_IMAGE 1
 #define FADING_TEXT  2
+
+static u8 image_in_page[PAGE_COUNT + 1] = {
+    0, 0,
+    1, 1, 1,
+    2, 2, 2, 2,
+    255 // array terminator
+};
 
 static u32 page;
 
@@ -42,27 +52,35 @@ static void start_init(void *data) {
     page = 0;
 
     // DEBUG
-    transparency.element = FADING_TEXT;
-    transparency.dir = -1;
-    transparency.val = 16;
+    transparency.element = FADING_IMAGE;
+    transparency.dir = +1;
+    transparency.val = 0;
 
     screen_mode_4();
+
+    // clear the display with the backdrop color
+    memset32((vu32 *) display_get_raster(0), 0, 240 * 160);
+
+    // configure WINDOW_OUT to only show sprites
+    display_window_config(DISPLAY_WINDOW_OUT, &(struct DisplayWindow) {
+        .obj = 1, .effects = 0
+    });
 }
 
-static inline void update_transparency(void) {
+static inline void update_fading(void) {
     switch(transparency.element) {
-        case FADING_NONE:
-            // TODO
-            break;
-
         case FADING_IMAGE:
             transparency.val += transparency.dir;
 
-            if(transparency.val == 16) {
-                transparency.element = FADING_TEXT;
-                transparency.val = 0;
-            } else if(transparency.val == 0) {
+            if(transparency.val == 0) {
+                // make the image fade-in
                 transparency.dir = +1;
+                page++;
+            } else if(transparency.val == 16) {
+                // make the text fade-in
+                transparency.element = FADING_TEXT;
+                transparency.dir = +1;
+                transparency.val = 0;
             }
             break;
 
@@ -70,9 +88,18 @@ static inline void update_transparency(void) {
             transparency.val += transparency.dir;
 
             if(transparency.val == 0) {
-                transparency.element = FADING_IMAGE;
-                transparency.dir = -1;
-                transparency.val = 16;
+                // check if the image should also be changed (note that
+                // image_in_page has a terminator at PAGE_COUNT + 1)
+                if(image_in_page[page] != image_in_page[page + 1]) {
+                    // make the image fade-out
+                    transparency.element = FADING_IMAGE;
+                    transparency.dir = -1;
+                    transparency.val = 16;
+                } else {
+                    // make the text fade-in
+                    transparency.dir = +1;
+                    page++;
+                }
             } else if(transparency.val == 16) {
                 transparency.element = FADING_NONE;
             }
@@ -82,7 +109,11 @@ static inline void update_transparency(void) {
 
 static void start_tick(void) {
     if(tick_count % 2 == 0)
-        update_transparency();
+        update_fading();
+
+    // if all pages have been shown, transition to the map scene
+    if(page == PAGE_COUNT)
+        scene_transition_to(&scene_map, NULL);
 
     if(transparency.element == FADING_NONE) {
         if(input_pressed(KEY_A) || input_pressed(KEY_B) ||
@@ -99,8 +130,17 @@ static void start_tick(void) {
 
 IWRAM_SECTION
 static void start_draw(void) {
-    u32 image = 0; // DEBUG
-    u32 text = 0; // DEBUG
+    if(page == PAGE_COUNT) {
+        display_window_disable(DISPLAY_WINDOW_0);
+        display_window_disable(DISPLAY_WINDOW_1);
+
+        sprite_hide_all();
+
+        return;
+    }
+
+    const u32 image = image_in_page[page];
+    const u32 text = page;
 
     // TODO do not repeat this every draw cycle
     dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_32_BIT });
@@ -156,13 +196,9 @@ static void start_draw(void) {
         transparency.val, 16 - transparency.val
     );
 
-    // set windows
+    // enable windows 0 and 1 and set their viewport
     display_window_enable(DISPLAY_WINDOW_0);
     display_window_enable(DISPLAY_WINDOW_1);
-
-    display_window_config(DISPLAY_WINDOW_OUT, &(struct DisplayWindow) {
-        .obj = 1, .effects = 0
-    });
 
     display_window_viewport(
         DISPLAY_WINDOW_0, image_x0, image_y0, 64, 64
@@ -171,10 +207,17 @@ static void start_draw(void) {
         DISPLAY_WINDOW_1, text_x0, text_y0, 32 * TEXT_SPRITES, 8
     );
 
+    // configure windows 0 and 1
     switch(transparency.element) {
         case FADING_NONE:
-            display_window_disable(DISPLAY_WINDOW_0);
-            display_window_disable(DISPLAY_WINDOW_1);
+            display_window_config(
+                DISPLAY_WINDOW_0,
+                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            );
+            display_window_config(
+                DISPLAY_WINDOW_1,
+                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            );
             break;
         case FADING_IMAGE:
             display_window_config(
