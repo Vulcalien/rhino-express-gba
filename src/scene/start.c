@@ -17,14 +17,23 @@
 
 #include <gba/display.h>
 #include <gba/sprite.h>
+#include <gba/input.h>
 #include <gba/dma.h>
 
 #include "screen.h"
 
+// number of sprites used for text
+#define TEXT_SPRITES 6
+
 static u32 page;
+static u32 transparency;
 
 static void start_init(void *data) {
     page = 0;
+    transparency = 0;
+
+    // DEBUG
+    transparency = 4;
 
     screen_mode_4();
 }
@@ -68,9 +77,9 @@ static void start_draw(void) {
     });
 
     // draw text sprites
-    for(u32 i = 0; i < 6; i++) {
+    for(u32 i = 0; i < TEXT_SPRITES; i++) {
         sprite_config(1 + i, &(struct Sprite) {
-            .x = (240 - 32 * 6) / 2 + 32 * i,
+            .x = (240 - 32 * TEXT_SPRITES) / 2 + 32 * i,
             .y = (160 - 8) / 2 + 48,
 
             .shape = 1, // horizontal
@@ -80,6 +89,15 @@ static void start_draw(void) {
             .colors = 1
         });
     }
+
+    // set color effects
+    display_blend(
+        &(struct DisplayTarget) { .obj = 1 },
+        &(struct DisplayTarget) { .backdrop = 1 },
+        transparency, 16 - transparency
+    );
+
+    // TODO set windows
 }
 
 const struct Scene scene_start = {
