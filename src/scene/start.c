@@ -16,6 +16,7 @@
 #include "scene.h"
 
 #include <gba/display.h>
+#include <gba/window.h>
 #include <gba/sprite.h>
 #include <gba/input.h>
 #include <gba/dma.h>
@@ -62,7 +63,7 @@ static void start_init(void *data) {
     memset32((vu32 *) display_get_raster(0), 0, 240 * 160);
 
     // configure WINDOW_OUT to only show sprites
-    display_window_config(DISPLAY_WINDOW_OUT, &(struct DisplayWindow) {
+    window_config(WINDOW_OUT, &(struct Window) {
         .obj = 1, .effects = 0
     });
 }
@@ -131,8 +132,8 @@ static void start_tick(void) {
 IWRAM_SECTION
 static void start_draw(void) {
     if(page == PAGE_COUNT) {
-        display_window_disable(DISPLAY_WINDOW_0);
-        display_window_disable(DISPLAY_WINDOW_1);
+        window_disable(WINDOW_0);
+        window_disable(WINDOW_1);
 
         sprite_hide_all();
 
@@ -197,46 +198,42 @@ static void start_draw(void) {
     );
 
     // enable windows 0 and 1 and set their viewport
-    display_window_enable(DISPLAY_WINDOW_0);
-    display_window_enable(DISPLAY_WINDOW_1);
+    window_enable(WINDOW_0);
+    window_enable(WINDOW_1);
 
-    display_window_viewport(
-        DISPLAY_WINDOW_0, image_x0, image_y0, 64, 64
-    );
-    display_window_viewport(
-        DISPLAY_WINDOW_1, text_x0, text_y0, 32 * TEXT_SPRITES, 8
-    );
+    window_viewport(WINDOW_0, image_x0, image_y0, 64, 64);
+    window_viewport(WINDOW_1, text_x0, text_y0, 32 * TEXT_SPRITES, 8);
 
     // configure windows 0 and 1
     switch(transparency.element) {
         case FADING_NONE:
-            display_window_config(
-                DISPLAY_WINDOW_0,
-                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            window_config(
+                WINDOW_0,
+                &(struct Window) { .obj = 1, .effects = 1 }
             );
-            display_window_config(
-                DISPLAY_WINDOW_1,
-                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            window_config(
+                WINDOW_1,
+                &(struct Window) { .obj = 1, .effects = 1 }
             );
             break;
         case FADING_IMAGE:
-            display_window_config(
-                DISPLAY_WINDOW_0,
-                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            window_config(
+                WINDOW_0,
+                &(struct Window) { .obj = 1, .effects = 1 }
             );
-            display_window_config(
-                DISPLAY_WINDOW_1,
-                &(struct DisplayWindow) { .obj = 0, .effects = 0 }
+            window_config(
+                WINDOW_1,
+                &(struct Window) { .obj = 0, .effects = 0 }
             );
             break;
         case FADING_TEXT:
-            display_window_config(
-                DISPLAY_WINDOW_0,
-                &(struct DisplayWindow) { .obj = 1, .effects = 0 }
+            window_config(
+                WINDOW_0,
+                &(struct Window) { .obj = 1, .effects = 0 }
             );
-            display_window_config(
-                DISPLAY_WINDOW_1,
-                &(struct DisplayWindow) { .obj = 1, .effects = 1 }
+            window_config(
+                WINDOW_1,
+                &(struct Window) { .obj = 1, .effects = 1 }
             );
             break;
     }
