@@ -16,7 +16,6 @@
 #include "scene.h"
 
 #include <gba/display.h>
-#include <gba/window.h>
 #include <gba/sprite.h>
 #include <gba/input.h>
 #include <gba/dma.h>
@@ -61,11 +60,6 @@ static void start_init(void *data) {
 
     // clear the display with the backdrop color
     memset32((vu32 *) display_get_raster(0), 0, 240 * 160);
-
-    // configure WINDOW_OUT to only show sprites
-    window_config(WINDOW_OUT, &(struct Window) {
-        .obj = 1, .effects = 0
-    });
 }
 
 static inline void update_fading(void) {
@@ -132,9 +126,6 @@ static void start_tick(void) {
 IWRAM_SECTION
 static void start_draw(void) {
     if(page == PAGE_COUNT) {
-        window_disable(WINDOW_0);
-        window_disable(WINDOW_1);
-
         sprite_hide_all();
 
         return;
@@ -172,6 +163,9 @@ static void start_draw(void) {
         .x = image_x0,
         .y = image_y0,
 
+        // set mode to semi-transparent or normal
+        .mode = (transparency.element == FADING_IMAGE ? 1 : 0),
+
         .size = 3, // 64x64
 
         .tile = 512 + 256, // TODO
@@ -184,6 +178,12 @@ static void start_draw(void) {
             .x = text_x0 + 32 * i,
             .y = text_y0,
 
+            // if the image is being faded, do not show text sprites
+            .disable = (transparency.element == FADING_IMAGE ? 1 : 0),
+
+            // set mode to semi-transparent or normal
+            .mode = (transparency.element == FADING_TEXT ? 1 : 0),
+
             .shape = 1, // horizontal
             .size = 1, // 32x8
 
@@ -192,53 +192,12 @@ static void start_draw(void) {
         });
     }
 
-    // set color effects
+    // set color effects (only apply to semi-transparent sprites)
     display_blend(
-        &(struct DisplayTarget) { .obj = 1 },
+        &(struct DisplayTarget) { 0 },
         &(struct DisplayTarget) { .backdrop = 1 },
         transparency.val, 16 - transparency.val
     );
-
-    // enable windows 0 and 1 and set their viewport
-    window_enable(WINDOW_0);
-    window_enable(WINDOW_1);
-
-    window_viewport(WINDOW_0, image_x0, image_y0, 64, 64);
-    window_viewport(WINDOW_1, text_x0, text_y0, 32 * TEXT_SPRITES, 8);
-
-    // configure windows 0 and 1
-    switch(transparency.element) {
-        case FADING_NONE:
-            window_config(
-                WINDOW_0,
-                &(struct Window) { .obj = 1, .effects = 1 }
-            );
-            window_config(
-                WINDOW_1,
-                &(struct Window) { .obj = 1, .effects = 1 }
-            );
-            break;
-        case FADING_IMAGE:
-            window_config(
-                WINDOW_0,
-                &(struct Window) { .obj = 1, .effects = 1 }
-            );
-            window_config(
-                WINDOW_1,
-                &(struct Window) { .obj = 0, .effects = 0 }
-            );
-            break;
-        case FADING_TEXT:
-            window_config(
-                WINDOW_0,
-                &(struct Window) { .obj = 1, .effects = 0 }
-            );
-            window_config(
-                WINDOW_1,
-                &(struct Window) { .obj = 1, .effects = 1 }
-            );
-            break;
-    }
 }
 
 const struct Scene scene_start = {
