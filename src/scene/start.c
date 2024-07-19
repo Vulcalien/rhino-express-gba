@@ -168,7 +168,7 @@ static void start_draw(void) {
 
         .size = 3, // 64x64
 
-        .tile = 512 + 256, // TODO
+        .tile = 512 + 256,
         .colors = 1
     });
 
