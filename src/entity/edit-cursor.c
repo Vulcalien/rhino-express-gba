@@ -170,9 +170,7 @@ static u32 cursor_draw(struct Level *level,
         .flip = cursor_data->flip,
 
         .tile = 512 + 40 + cursor_data->selected * 8,
-        .colors = 1,
-
-        // TODO .mode = 1, // semi-transparent mode
+        .colors = 1
     });
 
     return 1 + crosshair_draw(used_sprites, x, y);
