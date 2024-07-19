@@ -164,7 +164,8 @@ static void map_draw(void) {
         { 631, 52  }
     };
 
-    const u32 crosshair_sprites = 0; // ID of the first crosshair sprite
+    // ID of the first crosshair sprite
+    const u32 crosshair_sprites = SCREEN_FOG_PARTICLE_COUNT;
 
     // draw bitmap
     vu8 *raster = (vu8 *) display_get_raster(0);

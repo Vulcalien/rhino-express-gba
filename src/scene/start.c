@@ -165,8 +165,10 @@ static void start_draw(void) {
     const u32 text_x0 = (240 - 32 * TEXT_SPRITES) / 2;
     const u32 text_y0 = (160 - 8) / 2 + 48;
 
+    const u32 first_sprite = SCREEN_FOG_PARTICLE_COUNT;
+
     // draw image sprite
-    sprite_config(0, &(struct Sprite) {
+    sprite_config(first_sprite, &(struct Sprite) {
         .x = image_x0,
         .y = image_y0,
 
@@ -178,7 +180,7 @@ static void start_draw(void) {
 
     // draw text sprites
     for(u32 i = 0; i < TEXT_SPRITES; i++) {
-        sprite_config(1 + i, &(struct Sprite) {
+        sprite_config(first_sprite + 1 + i, &(struct Sprite) {
             .x = text_x0 + 32 * i,
             .y = text_y0,
 

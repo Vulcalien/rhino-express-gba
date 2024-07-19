@@ -130,7 +130,7 @@ static inline void draw_tiles(struct Level *level) {
 }
 
 static inline void draw_entities(struct Level *level) {
-    u32 used_sprites = 0;
+    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
     for(level_EntityID id = 0; id < LEVEL_ENTITY_LIMIT; id++) {
         struct entity_Data *data = &level->entities[id];
         const struct entity_Type *type = entity_get_type(data);

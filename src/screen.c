@@ -19,13 +19,34 @@
 #include <gba/background.h>
 #include <gba/sprite.h>
 #include <memory.h>
-
-#define WINDOW_IN  *((vu16 *) 0x04000048)
-#define WINDOW_OUT *((vu16 *) 0x0400004a)
+#include <random.h>
+#include <math.h>
 
 #include "res/img/tileset.c"
 #include "res/img/sprites.c"
 #include "res/img/palette.c"
+
+static struct {
+    u8 tile;
+
+    i32 x;
+    i32 y;
+
+    i16 xm;
+    i16 ym;
+} particles[SCREEN_FOG_PARTICLE_COUNT];
+
+static inline void init_fog_particles(void) {
+    for(u32 i = 0; i < SCREEN_FOG_PARTICLE_COUNT; i++) {
+        particles[i].tile = 0;
+
+        particles[i].x = 256 * random(SCREEN_W);
+        particles[i].y = 256 * random(SCREEN_H);
+
+        particles[i].xm = random(17) - 8;
+        particles[i].ym = random(17) - 8;
+    }
+}
 
 #define LOAD_TILESET(dest, tileset)\
     memcpy16((dest), (vu16 *) (tileset), sizeof(tileset))
@@ -59,6 +80,43 @@ void screen_init(void) {
 
     // disable forced blank
     display_force_blank(false);
+
+    init_fog_particles();
+}
+
+IWRAM_SECTION
+void screen_draw_fog_particles(u32 first_sprite_id) {
+    for(u32 i = 0; i < SCREEN_FOG_PARTICLE_COUNT; i++) {
+        // update particle tile
+        if(random(4) == 0) {
+            if(random(2) == 0 && particles[i].tile > 0)
+                particles[i].tile--;
+            else if(particles[i].tile < 7)
+                particles[i].tile++;
+        }
+
+        // randomly change velocity
+        particles[i].xm += random(9) - 4;
+        particles[i].ym += random(9) - 4;
+
+        if(math_abs(particles[i].xm) > 128)
+            particles[i].xm /= 2;
+        if(math_abs(particles[i].ym) > 128)
+            particles[i].ym /= 2;
+
+        // add velocity to particle position
+        particles[i].x += particles[i].xm;
+        particles[i].y += particles[i].ym;
+
+        // draw sprite
+        sprite_config(first_sprite_id + i, &(struct Sprite) {
+            .x = (particles[i].x / 256) % 256 - 4,
+            .y = (particles[i].y / 256) % 256 - 4,
+
+            .tile = 512 + 112 + 2 * particles[i].tile,
+            .colors = 1
+        });
+    }
 }
 
 void screen_mode_0(void) {

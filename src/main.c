@@ -37,6 +37,7 @@ static inline void tick(void) {
 
 static inline void draw(void) {
     scene->draw();
+    screen_draw_fog_particles(0);
 
     performance_draw();
 }

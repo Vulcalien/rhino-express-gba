@@ -25,7 +25,11 @@
 #define BG2_TILEMAP ((vu16 *) 0x06002000)
 #define BG3_TILEMAP ((vu16 *) 0x06003000)
 
+#define SCREEN_FOG_PARTICLE_COUNT 10
+
 extern void screen_init(void);
+
+extern void screen_draw_fog_particles(u32 first_sprite_id);
 
 extern void screen_mode_0(void);
 extern void screen_mode_4(void);
