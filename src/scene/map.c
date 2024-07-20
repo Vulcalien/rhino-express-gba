@@ -24,6 +24,7 @@
 #include "level.h"
 #include "screen.h"
 #include "crosshair.h"
+#include "music.h"
 
 #define PAGE_COUNT 3
 static u8 first_level_in_pages[PAGE_COUNT + 1] = {
@@ -40,6 +41,12 @@ static void map_init(void *data) {
         bool has_cleared_level = *((bool *) data);
         if(has_cleared_level && level == levels_cleared)
             levels_cleared++;
+
+        // Only the level calls this function passing a non-null 'data'
+        // pointer. And since the level plays music, the 'map' music has
+        // to be restarted. The 'start' scene, instead, plays the same
+        // music as the map, therefore it should not be restarted.
+        MUSIC_PLAY(music_map);
     }
 
     // TODO set level and page

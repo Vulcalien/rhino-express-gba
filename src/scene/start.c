@@ -22,6 +22,7 @@
 #include <memory.h>
 
 #include "screen.h"
+#include "music.h"
 
 #define PAGE_COUNT 9
 
@@ -60,6 +61,9 @@ static void start_init(void *data) {
 
     // clear the display with the backdrop color
     memset32((vu32 *) display_get_raster(0), 0, 240 * 160);
+
+    // play music
+    MUSIC_PLAY(music_map);
 }
 
 static inline void update_fading(void) {
