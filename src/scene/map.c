@@ -24,6 +24,7 @@
 #include "level.h"
 #include "screen.h"
 #include "crosshair.h"
+#include "storage.h"
 #include "music.h"
 
 #define PAGE_COUNT 3
@@ -39,8 +40,10 @@ static i8 level;
 static void map_init(void *data) {
     if(data) {
         bool has_cleared_level = *((bool *) data);
-        if(has_cleared_level && level == levels_cleared)
+        if(has_cleared_level && level == levels_cleared) {
             levels_cleared++;
+            storage_save();
+        }
 
         // Only the level calls this function passing a non-null 'data'
         // pointer. And since the level plays music, the 'map' music has

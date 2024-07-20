@@ -22,6 +22,7 @@
 #include "screen.h"
 #include "performance.h"
 #include "scene.h"
+#include "storage.h"
 
 u32 tick_count = 0;
 u32 levels_cleared = 0;
@@ -57,6 +58,8 @@ int AgbMain(void) {
 
     screen_init();
     scene_set(&scene_start, NULL);
+
+    storage_load();
 
     while(true) {
         tick();
