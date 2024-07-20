@@ -116,9 +116,9 @@ static void map_tick(void) {
     }
 
     // move left/right by one level
-    if(input_pressed(KEY_LEFT))
+    if(input_pressed(KEY_LEFT) || input_pressed(KEY_UP))
         level--;
-    if(input_pressed(KEY_RIGHT))
+    if(input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN))
         level++;
 
     validate_bounds_i8(&level, 0, levels_cleared);
