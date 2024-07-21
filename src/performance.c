@@ -16,6 +16,7 @@
 #include "performance.h"
 
 #include <gba/display.h>
+#include <gba/input.h>
 #include <debug/mgba.h>
 
 #define PRINT_TO_MGBA
@@ -32,6 +33,11 @@ static bool should_refresh = false;
 void performance_tick(void) {
     tick_vcount = display_get_vcount();
     ticks++;
+
+    if(input_down(KEY_L) && input_down(KEY_R) &&
+       input_pressed(KEY_SELECT)) {
+        show_performance = !show_performance;
+    }
 }
 
 void performance_draw(void) {
