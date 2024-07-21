@@ -18,56 +18,68 @@
 #include <gba/display.h>
 #include <math.h>
 
-#include "screen.h"
+// it's best if this value is a power of 2, to avoid division
+#define TRANSITION_HALFTIME 32
 
-#define TRANSITION_TIME 64
+static u32 time;
 
-static u32 transition_time = 0;
-static struct scene_Transition transition_data;
+static const struct Scene *previous_scene;
+static const struct Scene *next_scene;
+static void *next_init_data;
 
+THUMB
 static void transition_init(void *data) {
-    // make sure that there are not multiple transitions
-    if(transition_time != 0)
-        return;
-
-    transition_data = *(struct scene_Transition *) data;
+    time = 0;
 }
 
+THUMB
 static void transition_tick(void) {
-    transition_time++;
+    if(time < TRANSITION_HALFTIME)
+        previous_scene->tick();
+    else if(time == TRANSITION_HALFTIME)
+        next_scene->init(next_init_data);
+    else if(time > TRANSITION_HALFTIME)
+        next_scene->tick();
 
-    if(transition_time < TRANSITION_TIME / 2) {
-        transition_data.previous_scene->tick();
-    } else if(transition_time == TRANSITION_TIME / 2) {
-        if(transition_data.next_scene->init)
-            transition_data.next_scene->init(transition_data.init_data);
-    } else if(transition_time > TRANSITION_TIME / 2) {
-        transition_data.next_scene->tick();
-    }
+    time++;
 
-    if(transition_time > TRANSITION_TIME) {
-        scene = transition_data.next_scene;
-
-        // reset the transition time to mark its end
-        transition_time = 0;
+    // if the transition time is over, set the next scene
+    if(time > 2 * TRANSITION_HALFTIME) {
+        // set the scene directly: 'scene_set' would call 'init' again
+        scene = next_scene;
     }
 }
 
+THUMB
 static void transition_draw(void) {
-    if(transition_time < TRANSITION_TIME / 2)
-        transition_data.previous_scene->draw();
-    else if(transition_time > TRANSITION_TIME / 2)
-        transition_data.next_scene->draw();
+    if(time < TRANSITION_HALFTIME)
+        previous_scene->draw();
+    else if(time > TRANSITION_HALFTIME)
+        next_scene->draw();
 
-    // apply fade effect
+    // calculate how much to fade
     u32 fade = math_sin(
-        transition_time * MATH_PI / TRANSITION_TIME
+        time * MATH_PI / (2 * TRANSITION_HALFTIME)
     ) * 20 / 0x4000;
+
     display_darken(NULL, fade);
 }
 
-const struct Scene scene_transition = {
+static const struct Scene scene_transition = {
     .init = transition_init,
     .tick = transition_tick,
     .draw = transition_draw
 };
+
+THUMB
+void scene_transition_to(const struct Scene *next, void *data) {
+    // if already transitioning, ignore this request
+    if(scene == &scene_transition)
+        return;
+
+    previous_scene = scene;
+    next_scene     = next;
+    next_init_data = data;
+
+    scene_set(&scene_transition, NULL);
+}

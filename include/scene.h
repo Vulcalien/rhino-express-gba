@@ -28,25 +28,10 @@ INLINE void scene_set(const struct Scene *new_scene, void *data) {
     scene->init(data);
 }
 
+extern void scene_transition_to(const struct Scene *next, void *data);
+
 // Scenes
 extern const struct Scene
     scene_start,
     scene_map,
-    scene_game,
-    scene_transition;
-
-// data structs
-struct scene_Transition {
-    const struct Scene *previous_scene;
-    const struct Scene *next_scene;
-
-    void *init_data;
-};
-
-INLINE void scene_transition_to(const struct Scene *next, void *data) {
-    scene_set(&scene_transition, &(struct scene_Transition) {
-        .previous_scene = scene,
-        .next_scene = next,
-        .init_data = data
-    });
-}
+    scene_game;
