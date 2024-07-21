@@ -153,25 +153,25 @@ static void map_draw(void) {
         i16 x;
         i16 y;
     } level_buttons[LEVEL_COUNT] = {
-        { 75,  39  },
-        { 75,  79  },
-        { 91,  123 },
-        { 131, 103 },
-        { 143, 55  },
-        { 175, 87  },
+        { 76,  40  },
+        { 76,  80  },
+        { 92,  124 },
+        { 132, 104 },
+        { 144, 56  },
+        { 176, 88  },
 
-        { 315, 37  },
-        { 323, 89  },
-        { 363, 125 },
-        { 391, 85  },
-        { 395, 41  },
+        { 316, 38  },
+        { 324, 90  },
+        { 364, 126 },
+        { 392, 86  },
+        { 396, 42  },
 
-        { 547, 36  },
-        { 579, 60  },
-        { 555, 92  },
-        { 587, 128 },
-        { 622, 96  },
-        { 631, 52  }
+        { 548, 37  },
+        { 580, 61  },
+        { 556, 93  },
+        { 588, 129 },
+        { 623, 97  },
+        { 632, 53  }
     };
 
     // ID of the first crosshair sprite
@@ -205,7 +205,7 @@ static void map_draw(void) {
             crosshair_draw(crosshair_sprites, xc, yc);
 
         // calculate the top-left corner
-        const i32 corner_x = xc- 8;
+        const i32 corner_x = xc - 8;
         const i32 corner_y = yc - 8;
 
         if(corner_x < -16 || corner_x >= 240)
