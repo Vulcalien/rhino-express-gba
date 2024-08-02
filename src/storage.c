@@ -21,22 +21,22 @@
 #include "level.h"
 
 bool storage_load(void) {
-    if(backup_sram_read(0) != 'Z' ||
-       backup_sram_read(1) != 'R' ||
-       backup_sram_read(2) != 'E' ||
-       backup_sram_read(3) != 'E')
+    if(backup_sram_read_byte(0) != 'Z' ||
+       backup_sram_read_byte(1) != 'R' ||
+       backup_sram_read_byte(2) != 'E' ||
+       backup_sram_read_byte(3) != 'E')
         return false;
 
-    levels_cleared = math_min(backup_sram_read(4), LEVEL_COUNT);
+    levels_cleared = math_min(backup_sram_read_byte(4), LEVEL_COUNT);
 
     return true;
 }
 
 void storage_save(void) {
-    backup_sram_write(0, 'Z');
-    backup_sram_write(1, 'R');
-    backup_sram_write(2, 'E');
-    backup_sram_write(3, 'E');
+    backup_sram_write_byte(0, 'Z');
+    backup_sram_write_byte(1, 'R');
+    backup_sram_write_byte(2, 'E');
+    backup_sram_write_byte(3, 'E');
 
-    backup_sram_write(4, levels_cleared);
+    backup_sram_write_byte(4, levels_cleared);
 }
