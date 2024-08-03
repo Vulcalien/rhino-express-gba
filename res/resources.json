@@ -84,14 +84,12 @@
             "input": "music/game.raw",
             "output": "music/game.c"
         },
-
         {
             "name": "music_map",
 
             "input": "music/map.raw",
             "output": "music/map.c"
         },
-
         {
             "name": "music_editing",
 
