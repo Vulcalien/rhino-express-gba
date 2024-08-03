@@ -423,19 +423,6 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
     return 1 + letter_sprites;
 }
 
-IWRAM_SECTION
-static bool player_touch_entity(struct Level *level,
-                                struct entity_Data *data,
-                                struct entity_Data *touched_data) {
-    if(touched_data->type != ENTITY_MAILBOX)
-        return true;
-
-    // TODO check if a letter has to be removed
-    // (should that be done here or in 'mailbox.c' ?)
-
-    return false;
-}
-
 const struct entity_Type entity_player = {
     .xr = 8,
     .yr = 8,
@@ -444,8 +431,6 @@ const struct entity_Type entity_player = {
 
     .tick = player_tick,
     .draw = player_draw,
-
-    .touch_entity = player_touch_entity
 };
 
 // initialize data used to draw letters
