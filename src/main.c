@@ -28,7 +28,7 @@ u32 tick_count = 0;
 u32 levels_cleared = 0;
 
 static inline void tick(void) {
-    input_tick();
+    input_update();
     scene->tick();
 
     performance_tick();
