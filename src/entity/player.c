@@ -253,7 +253,7 @@ static inline bool move_full_pixels(struct Level *level,
                 player_data->xm = -math_sign(player_data->xm);
                 player_data->ym = -math_sign(player_data->ym);
 
-                SOUND_DMA_PLAY(sfx_hit_obstacle, false, SOUND_DMA_A);
+                SFX_PLAY(sfx_hit_obstacle);
                 break;
             }
         }

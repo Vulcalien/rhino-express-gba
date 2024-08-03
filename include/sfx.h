@@ -1,4 +1,4 @@
-/* Copyright _year_ Vulcalien
+/* Copyright 2024 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,9 @@
 
 #include "main.h"
 
-// include the direct sound driver needed to play music
 #include <gba/sound.h>
+
+#define SFX_PLAY(sound) SOUND_DMA_PLAY(sound, false, SOUND_DMA_A)
 
 extern const u8 sfx_place_obstacle[1906];
 extern const u8 sfx_hit_obstacle[887];
