@@ -148,3 +148,6 @@ extern bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt);
 
 extern bool level_add_decor_house(struct Level *level, u32 xt, u32 yt,
                                   bool lower);
+
+extern bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
+                                     enum tile_TypeID block);

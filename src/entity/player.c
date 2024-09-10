@@ -172,25 +172,28 @@ static inline void enter_tile(struct Level *level,
         case TILE_WOOD:
             if(speed >= BREAK_WOOD_SPEED) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
-                // TODO play break sound and add particles
+                // TODO play break sound
             } else {
                 player_data->hit_obstacle = true;
             }
+            level_add_particle_block(level, xt, yt, TILE_WOOD);
             break;
 
         case TILE_ROCK:
             if(speed >= BREAK_ROCK_SPEED) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
-                // TODO play break sound and add particles
+                // TODO play break sound
             } else {
                 player_data->hit_obstacle = true;
             }
+            level_add_particle_block(level, xt, yt, TILE_ROCK);
             break;
 
         case TILE_WATER:
             player_data->xm = player_data->ym = 0;
             player_data->stored_xm = player_data->stored_ym = 0;
-            // TODO add block particle
+
+            level_add_particle_block(level, xt, yt, TILE_WATER);
             SFX_PLAY(sfx_water);
             break;
 
