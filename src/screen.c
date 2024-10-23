@@ -113,6 +113,8 @@ void screen_draw_fog_particles(u32 first_sprite_id) {
             .x = (particles[i].x / 256) % 256 - 4,
             .y = (particles[i].y / 256) % 256 - 4,
 
+            .size = SPRITE_SIZE_8x8,
+
             .tile = 512 + 112 + 2 * particles[i].tile,
             .colors = 1
         });

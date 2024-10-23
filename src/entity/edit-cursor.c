@@ -166,7 +166,7 @@ static u32 cursor_draw(struct Level *level,
         .x = x - 8,
         .y = y - 8,
 
-        .size = 1,
+        .size = SPRITE_SIZE_16x16,
         .flip = cursor_data->flip,
 
         .tile = 512 + 40 + cursor_data->selected * 8,

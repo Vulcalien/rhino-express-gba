@@ -36,7 +36,7 @@ static u32 house_draw(struct Level *level, struct entity_Data *data,
         .x = x - 8,
         .y = y - 8 - 4,
 
-        .size = 1,
+        .size = SPRITE_SIZE_16x16,
 
         .tile = 512 + 24,
         .colors = 1

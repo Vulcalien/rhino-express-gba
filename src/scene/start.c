@@ -170,7 +170,7 @@ static void start_draw(void) {
         // set mode to semi-transparent or normal
         .mode = (transparency.element == FADING_IMAGE ? 1 : 0),
 
-        .size = 3, // 64x64
+        .size = SPRITE_SIZE_64x64,
 
         .tile = 512 + 256,
         .colors = 1
@@ -188,8 +188,7 @@ static void start_draw(void) {
             // set mode to semi-transparent or normal
             .mode = (transparency.element == FADING_TEXT ? 1 : 0),
 
-            .shape = 1, // horizontal
-            .size = 1, // 32x8
+            .size = SPRITE_SIZE_32x8,
 
             .tile = 512 + 384 + i * 8,
             .colors = 1
