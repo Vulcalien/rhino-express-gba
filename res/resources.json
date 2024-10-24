@@ -13,7 +13,7 @@
             "tile_height": 1,
 
             "palette": "res/img/palette.png",
-            "transparent": "#ff00ff",
+            "colors": { "#ff00ff": 0 },
             "bpp": 8,
 
             "static": true
@@ -29,7 +29,7 @@
             "tile_height": 2,
 
             "palette": "res/img/palette.png",
-            "transparent": "#ff00ff",
+            "colors": { "#ff00ff": 0 },
             "bpp": 8,
 
             "static": true
