@@ -414,12 +414,10 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
         .double_size = 1
     });
 
-    // set OBJ parameter
-    vu16 *parameters = &OAM[3];
-    parameters[0]  = 256 * (player_data->sprite_flip ? -1 : +1);
-    parameters[4]  = 0;
-    parameters[8]  = 0;
-    parameters[12] = inverse_y_scale;
+    sprite_affine(0, (i16 [4]) {
+        256 * (player_data->sprite_flip ? -1 : +1), 0,
+        0, inverse_y_scale
+    });
 
     const u32 letter_sprites = draw_letters(
         level->letters_to_deliver, x, y, used_sprites

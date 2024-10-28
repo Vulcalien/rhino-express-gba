@@ -113,8 +113,8 @@ void level_tick(struct Level *level) {
 static inline void draw_tiles(struct Level *level) {
     const struct level_Metadata *metadata = level->metadata;
 
-    background_set_offset(BG2, level->offset.x, level->offset.y + 5);
-    background_set_offset(BG3, level->offset.x, level->offset.y);
+    background_offset(BG2, level->offset.x, level->offset.y + 5);
+    background_offset(BG3, level->offset.x, level->offset.y);
 
     for(u32 y = 0; y < metadata->size.h; y++) {
         for(u32 x = 0; x < metadata->size.w; x++) {

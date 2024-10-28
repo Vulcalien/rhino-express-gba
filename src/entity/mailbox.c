@@ -60,11 +60,10 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
     });
 
     // DEBUG
-    vu16 *parameters = &OAM[16 + 3];
-    parameters[0]  = 256;
-    parameters[4]  = 0;
-    parameters[8]  = 0;
-    parameters[12] = 256;
+    sprite_affine(1, (i16 [4]) {
+        256, 0,
+        0, 256
+    });
 
     return 1;
 }
