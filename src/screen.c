@@ -115,7 +115,7 @@ void screen_draw_fog_particles(u32 first_sprite_id) {
 
             .size = SPRITE_SIZE_8x8,
 
-            .tile = 512 + 112 + 2 * particles[i].tile,
+            .tile = 256 + 56 + particles[i].tile,
             .colors = 1
         });
     }

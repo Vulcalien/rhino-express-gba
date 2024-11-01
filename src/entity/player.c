@@ -385,7 +385,7 @@ static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
 
             .size = SPRITE_SIZE_8x8,
 
-            .tile = 512 + 104,
+            .tile = 256 + 52,
             .colors = 1
         });
     }
@@ -406,7 +406,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
 
         .size = SPRITE_SIZE_16x16,
 
-        .tile = 512 + 0,
+        .tile = 256 + 0,
         .colors = 1,
 
         .affine = 1,

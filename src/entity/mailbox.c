@@ -51,7 +51,7 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
 
         .size = SPRITE_SIZE_16x16,
 
-        .tile = 512 + 8 + mailbox_data->has_letter * 8,
+        .tile = 256 + 4 + mailbox_data->has_letter * 4,
         .colors = 1,
 
         .affine = 1,

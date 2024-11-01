@@ -172,7 +172,7 @@ static void start_draw(void) {
 
         .size = SPRITE_SIZE_64x64,
 
-        .tile = 512 + 256,
+        .tile = 256 + 128,
         .colors = 1
     });
 
@@ -190,7 +190,7 @@ static void start_draw(void) {
 
             .size = SPRITE_SIZE_32x8,
 
-            .tile = 512 + 384 + i * 8,
+            .tile = 256 + 192 + i * 4,
             .colors = 1
         });
     }
