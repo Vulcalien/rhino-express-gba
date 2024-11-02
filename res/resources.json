@@ -9,8 +9,7 @@
             "input": "img/tileset.png",
             "output": "img/tileset.c",
 
-            "tile_width": 1,
-            "tile_height": 1,
+            "tile_size": 1,
 
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
@@ -25,8 +24,7 @@
             "input": "img/sprites.png",
             "output": "img/sprites.c",
 
-            "tile_width": 2,
-            "tile_height": 2,
+            "tile_size": 2,
 
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
@@ -41,8 +39,7 @@
             "input": "img/cutscenes.png",
             "output": "img/cutscenes.c",
 
-            "tile_width": 8,
-            "tile_height": 8,
+            "tile_size": 8,
 
             "palette": "res/img/palette.png",
             "bpp": 8,
@@ -56,8 +53,7 @@
             "input": "img/cutscenes-text.png",
             "output": "img/cutscenes-text.c",
 
-            "tile_width": 4,
-            "tile_height": 1,
+            "tile_size": [ 4, 1 ],
 
             "palette": "res/img/palette.png",
             "bpp": 8,
