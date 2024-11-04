@@ -142,14 +142,14 @@ static void start_draw(void) {
     dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_32_BIT });
     dma_transfer(
         DMA3,
-        display_get_charblock(5) + 64 * 64,
+        display_charblock(5) + 64 * 64,
         cutscenes + (64 * 64) * image,
         64 * 64 / 4
     );
 
     dma_transfer(
         DMA3,
-        display_get_charblock(5) + 96 * 64,
+        display_charblock(5) + 96 * 64,
         cutscenes_text + (24 * 64) * text,
         24 * 64 / 4
     );

@@ -31,7 +31,7 @@ static bool show_performance = false;
 static bool should_refresh = false;
 
 void performance_tick(void) {
-    tick_vcount = display_get_vcount();
+    tick_vcount = display_vcount();
     ticks++;
 
     if(input_down(KEY_L) && input_down(KEY_R) &&
@@ -41,7 +41,7 @@ void performance_tick(void) {
 }
 
 void performance_draw(void) {
-    draw_vcount = display_get_vcount();
+    draw_vcount = display_vcount();
     frames++;
 
     if(!should_refresh)

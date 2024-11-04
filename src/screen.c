@@ -72,7 +72,7 @@ void screen_init(void) {
     });
 
     // load spritesheet
-    LOAD_TILESET(display_get_charblock(5), sprites);
+    LOAD_TILESET(display_charblock(5), sprites);
 
     // load palette
     LOAD_PALETTE(DISPLAY_BG_PALETTE,  palette);
@@ -134,7 +134,7 @@ void screen_mode_0(void) {
         .enable_obj = 1
     });
 
-    LOAD_TILESET(display_get_charblock(3), tileset);
+    LOAD_TILESET(display_charblock(3), tileset);
 
     sprite_hide_all();
 }
