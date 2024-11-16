@@ -27,6 +27,9 @@
 #include "storage.h"
 #include "music.h"
 
+#include "../res/img/map.c"
+#include "../res/img/level-buttons.c"
+
 #define PAGE_COUNT 3
 static u8 first_level_in_pages[PAGE_COUNT + 1] = {
     0, 6, 11, 17
@@ -57,6 +60,13 @@ static void map_init(void *data) {
     draw_offset = page * 240;
 
     screen_mode_4();
+
+    // load level selection button images
+    memcpy32(
+        (vu8 *) display_charblock(5) + 128 * 64,
+        level_button_images,
+        68 * 64
+    );
 
     // draw now to prevent showing garbage on the first frame
     scene_map.draw();
@@ -144,11 +154,9 @@ static void map_tick(void) {
     }
 }
 
-#include "../res/img/map.c"
-#include "../res/img/level-buttons.c"
-
 IWRAM_SECTION
 static void map_draw(void) {
+    // TODO check if these values are correct
     struct {
         i16 x;
         i16 y;
@@ -174,9 +182,6 @@ static void map_draw(void) {
         { 632, 53  }
     };
 
-    // ID of the first crosshair sprite
-    const u32 crosshair_sprites = SCREEN_FOG_PARTICLE_COUNT;
-
     // draw bitmap
     vu8 *raster = (vu8 *) display_get_raster(0);
     for(u32 y = 0; y < 160; y++) {
@@ -193,50 +198,43 @@ static void map_draw(void) {
         );
     }
 
+    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
+
     // draw level selection buttons
-    // FIXME the buttons are a few pixels off
     for(u32 i = 0; i < math_min(levels_cleared + 1, LEVEL_COUNT); i++) {
-        // calculate the button's center
-        const i32 xc = level_buttons[i].x - draw_offset;
-        const i32 yc = level_buttons[i].y;
+        // calculate the button's top-left corner
+        const i32 x = level_buttons[i].x - draw_offset - 8;
+        const i32 y = level_buttons[i].y - 8;
 
-        // draw the crosshair
-        if(i == level)
-            crosshair_draw(crosshair_sprites, xc, yc);
-
-        // calculate the top-left corner
-        const i32 corner_x = xc - 8;
-        const i32 corner_y = yc - 8;
-
-        if(corner_x < -16 || corner_x >= 240)
+        if(x < -16 || x >= 240)
             continue;
 
-        const i32 x0 = math_max(0, -corner_x);
-        const i32 x1 = math_min(16, 240 - corner_x);
+        if(i == level) {
+            // load the active button image
+            memcpy32(
+                (vu8 *) display_charblock(5) + 196 * 64,
+                level_button_images + (72 + i * 4) * 64,
+                4 * 64
+            );
 
-        for(u32 y = 0; y < 16; y++) {
-            const u32 ypix = corner_y + y;
-
-            for(u32 x = x0; x < x1; x++) {
-                const u32 xpix = corner_x + x;
-
-                const u8 pixel = level_button_images[
-                    (x + (i == level) * 16) + (y + i * 16) * 32
-                ];
-
-                vu16 *pixels = (vu16 *) &raster[
-                    (xpix & ~1) + ypix * 240
-                ];
-                if(xpix & 1)
-                    *pixels = (*pixels & 0x00ff) | pixel << 8;
-                else
-                    *pixels = (*pixels & 0xff00) | pixel << 0;
-            }
+            // draw crosshair
+            crosshair_draw(used_sprites, x + 8, y + 8);
+            used_sprites += 4;
         }
+
+        // draw button sprite
+        sprite_config(used_sprites++, &(struct Sprite) {
+            .x = x,
+            .y = y,
+
+            .size = SPRITE_SIZE_16x16,
+
+            .tile = 256 + (i == level ? 196 : 128 + i * 4),
+            .colors = 1
+        });
     }
 
-    if(level == LEVEL_COUNT)
-        sprite_hide_range(crosshair_sprites, crosshair_sprites + 4);
+    sprite_hide_range(used_sprites, SPRITE_COUNT);
 }
 
 const struct Scene scene_map = {

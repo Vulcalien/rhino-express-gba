@@ -59,6 +59,20 @@
             "bpp": 8,
 
             "static": true
+        },
+
+        {
+            "name": "level_button_images",
+
+            "input": "img/level-buttons.png",
+            "output": "img/level-buttons.c",
+
+            "tile_size": 2,
+            "palette": "res/img/palette.png",
+            "colors": { "#ff00ff": 0 },
+            "bpp": 8,
+
+            "static": true
         }
     ],
 
@@ -119,18 +133,6 @@
 
             "input": "img/map.png",
             "output": "img/map.c",
-
-            "palette": "res/img/palette.png",
-            "bpp": 8,
-
-            "static": true
-        },
-
-        {
-            "name": "level_button_images",
-
-            "input": "img/level-buttons.png",
-            "output": "img/level-buttons.c",
 
             "palette": "res/img/palette.png",
             "bpp": 8,
