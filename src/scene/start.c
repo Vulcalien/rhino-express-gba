@@ -60,7 +60,7 @@ static void start_init(void *data) {
     screen_mode_4();
 
     // clear the display with the backdrop color
-    memset32((vu32 *) display_get_raster(0), 0, 240 * 160);
+    memset32(display_get_raster(0), 0, DISPLAY_W * DISPLAY_H);
 
     // play music
     MUSIC_PLAY(music_map);
@@ -154,11 +154,11 @@ static void start_draw(void) {
         24 * 64 / 4
     );
 
-    const u32 image_x0 = (240 - 64) / 2;
-    const u32 image_y0 = (160 - 64) / 2 - 32;
+    const u32 image_x0 = (DISPLAY_W - 64) / 2;
+    const u32 image_y0 = (DISPLAY_H - 64) / 2 - 32;
 
-    const u32 text_x0 = (240 - 32 * TEXT_SPRITES) / 2;
-    const u32 text_y0 = (160 - 8) / 2 + 48;
+    const u32 text_x0 = (DISPLAY_W - 32 * TEXT_SPRITES) / 2;
+    const u32 text_y0 = (DISPLAY_H - 8) / 2 + 48;
 
     const u32 first_sprite = SCREEN_FOG_PARTICLE_COUNT;
 
