@@ -348,12 +348,6 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
     }
 }
 
-static inline u32 calculate_inverse_y_scale(u32 arg) {
-    arg *= MATH_PI / 32;
-    u32 val = math_max(math_sin(arg), 0) * 43 / 0x4000;
-    return 256 - val;
-}
-
 // draw 'count' letters around the center (xc, yc)
 static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
                                u32 used_sprites) {
@@ -397,17 +391,19 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    // 8-bit fixed point decimal (1 = 256)
-    u32 inverse_y_scale = calculate_inverse_y_scale(tick_count);
+    // fixed point number: 1 = 0x4000
+    u32 yscale = 0x4000 + math_max(
+        math_sin(tick_count * MATH_PI / 32) / 5, 0
+    );
 
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 16,
-        .y = y - 4 - (256 * 16) / inverse_y_scale,
+        .y = y - 4 - 16,
 
         .size = SPRITE_SIZE_16x16,
 
         .tile = 256 + 0,
-        .colors = 1,
+        .colors = SPRITE_COLORS_256,
 
         .affine = 1,
         .affine_parameter = 0,
@@ -416,7 +412,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
 
     sprite_affine(0, (i16 [4]) {
         256 * (player_data->sprite_flip ? -1 : +1), 0,
-        0, inverse_y_scale
+        0, 256 * 0x4000 / yscale
     });
 
     const u32 letter_sprites = draw_letters(
