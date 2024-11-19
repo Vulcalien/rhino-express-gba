@@ -154,8 +154,7 @@ static void map_tick(void) {
     }
 }
 
-IWRAM_SECTION
-static void map_draw(void) {
+static inline void draw_level_buttons(u32 *used_sprites) {
     // TODO check if these values are correct
     struct {
         i16 x;
@@ -182,26 +181,8 @@ static void map_draw(void) {
         { 632, 53  }
     };
 
-    // draw bitmap
-    vu8 *raster = (vu8 *) display_get_raster(0);
-    for(u32 y = 0; y < 160; y++) {
-        // 'draw_offset' is always a multiple of two,
-        // so 16-bit chunks work well
-        dma_config(DMA3, &(struct DMA) {
-            .chunk = DMA_CHUNK_16_BIT
-        });
-        dma_transfer(
-            DMA3,
-            (vu16 *) &raster[y * 240],
-            (vu16 *) &map[draw_offset + y * 240 * 4],
-            240 / 2
-        );
-    }
-
-    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
-
-    // draw level selection buttons
-    for(u32 i = 0; i < math_min(levels_cleared + 1, LEVEL_COUNT); i++) {
+    const u32 buttons = math_min(levels_cleared + 1, LEVEL_COUNT);
+    for(u32 i = 0; i < buttons; i++) {
         // calculate the button's top-left corner
         const i32 x = level_buttons[i].x - draw_offset - 8;
         const i32 y = level_buttons[i].y - 8;
@@ -218,12 +199,11 @@ static void map_draw(void) {
             );
 
             // draw crosshair
-            crosshair_draw(used_sprites, x + 8, y + 8);
-            used_sprites += 4;
+            crosshair_draw(*used_sprites, x + 8, y + 8);
+            *used_sprites += 4;
         }
 
-        // draw button sprite
-        sprite_config(used_sprites++, &(struct Sprite) {
+        sprite_config((*used_sprites)++, &(struct Sprite) {
             .x = x,
             .y = y,
 
@@ -233,8 +213,28 @@ static void map_draw(void) {
             .colors = 1
         });
     }
+}
 
+IWRAM_SECTION
+static void map_draw(void) {
+    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
+
+    draw_level_buttons(&used_sprites);
     sprite_hide_range(used_sprites, SPRITE_COUNT);
+
+    // draw bitmap
+    vu8 *raster = (vu8 *) display_get_raster(0);
+    for(u32 y = 0; y < 160; y++) {
+        // 'draw_offset' is always a multiple of two,
+        // so 16-bit chunks work well
+        dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_16_BIT });
+        dma_transfer(
+            DMA3,
+            &raster[y * 240],
+            &map[draw_offset + y * 240 * 4],
+            240 / 2
+        );
+    }
 }
 
 const struct Scene scene_map = {
