@@ -30,8 +30,8 @@
 #include "../res/img/map.c"
 #include "../res/img/level-buttons.c"
 
-#define PAGE_COUNT 3
-static u8 first_level_in_pages[PAGE_COUNT + 1] = {
+#define PAGE_COUNT 4
+static u8 first_level_in_pages[PAGE_COUNT] = {
     0, 6, 11, 17
 };
 
@@ -116,7 +116,7 @@ static void map_tick(void) {
     }
 
     if(page_change_dir != 0) {
-        validate_bounds_i8(&page, 0, PAGE_COUNT - 1);
+        validate_bounds_i8(&page, 0, PAGE_COUNT - 2);
 
         // update the selected level based on page change direction
         if(page_change_dir < 0)
