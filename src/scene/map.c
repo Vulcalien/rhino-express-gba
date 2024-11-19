@@ -116,7 +116,7 @@ static void map_tick(void) {
     }
 
     if(page_change_dir != 0) {
-        validate_bounds_i8(&page, 0, PAGE_COUNT - 2);
+        validate_bounds_i8(&page, 0, PAGE_COUNT - 1);
 
         // update the selected level based on page change direction
         if(page_change_dir < 0)
