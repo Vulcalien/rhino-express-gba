@@ -393,7 +393,7 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
 
     // fixed point number: 1 = 0x4000
     u32 yscale = 0x4000 + math_max(
-        math_sin(tick_count * MATH_PI / 32) / 5, 0
+        math_sin(tick_count * math_brad(90) / 16) / 5, 0
     );
 
     sprite_config(used_sprites++, &(struct Sprite) {
@@ -435,7 +435,7 @@ const struct entity_Type entity_player = {
 // initialize data used to draw letters
 static inline void init_letter_draw_data(void) {
     for(u32 i = 0; i < LETTERS_LIMIT; i++) {
-        letters[i].angle = (MATH_PI * 2) * i / LETTERS_LIMIT;
+        letters[i].angle = math_brad(360) * i / LETTERS_LIMIT;
 
         letters[i].radius = 7 + random(3);
     }
