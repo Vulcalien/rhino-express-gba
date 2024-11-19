@@ -72,13 +72,6 @@ static void map_init(void *data) {
     scene_map.draw();
 }
 
-static inline void validate_bounds_i8(i8 *val, i8 min, i8 max) {
-    if(*val < min)
-        *val = min;
-    if(*val > max)
-        *val = max;
-}
-
 static inline void update_draw_offset(void) {
     if(draw_offset != page * 240) {
         u32 diff = page * 240 - draw_offset;
@@ -102,42 +95,40 @@ static inline void update_draw_offset(void) {
 }
 
 static void map_tick(void) {
-    // 0 = none, -1 = right-to-left, +1 = left-to-right
-    i32 page_change_dir = 0;
-
     // move left/right by one page
     if(input_pressed(KEY_L)) {
         page--;
-        page_change_dir = -1;
+
+        if(page < 0) {
+            page = 0;
+            level = 0;
+        } else {
+            level = first_level_in_pages[page + 1] - 1;
+        }
     }
     if(input_pressed(KEY_R)) {
         page++;
-        page_change_dir = +1;
-    }
 
-    if(page_change_dir != 0) {
-        validate_bounds_i8(&page, 0, PAGE_COUNT - 1);
-
-        // update the selected level based on page change direction
-        if(page_change_dir < 0)
-            level = first_level_in_pages[page + 1] - 1;
-        else
+        if(page > PAGE_COUNT - 1) {
+            page = PAGE_COUNT - 1;
+            level = levels_cleared;
+        } else {
             level = first_level_in_pages[page];
+        }
     }
 
     // move left/right by one level
-    if(input_pressed(KEY_LEFT) || input_pressed(KEY_UP))
-        level--;
-    if(input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN))
-        level++;
+    level -= (input_pressed(KEY_LEFT) || input_pressed(KEY_UP));
+    level += (input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN));
 
-    validate_bounds_i8(&level, 0, levels_cleared);
+    if(level < 0)
+        level = 0;
+    if(level > levels_cleared)
+        level = levels_cleared;
 
     // adjust the selected page
-    if(level < first_level_in_pages[page])
-        page--;
-    if(level >= first_level_in_pages[page + 1])
-        page++;
+    page -= (level < first_level_in_pages[page]);
+    page += (level >= first_level_in_pages[page + 1]);
 
     update_draw_offset();
 
@@ -240,6 +231,8 @@ static inline void draw_page_arrows(u32 *used_sprites) {
 
         if(x < -16 || x >= 240 + 16)
             continue;
+
+        // TODO do not draw if next page is not unlocked
 
         sprite_config((*used_sprites)++, &(struct Sprite) {
             .x = x - 16,
