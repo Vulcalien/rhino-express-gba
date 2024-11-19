@@ -215,11 +215,56 @@ static inline void draw_level_buttons(u32 *used_sprites) {
     }
 }
 
+static inline void draw_page_arrows(u32 *used_sprites) {
+    // fixed point number: 1 = 0x4000
+    // scale = 1.25 + sin(t) / 4   --->   range [1, 1.5]
+    i32 scale = 0x5000 + math_sin(tick_count * math_brad(90) / 16) / 4;
+
+    // left arrows
+    sprite_affine(0, (i16 [4]) {
+        -256 * 0x4000 / scale, 0,
+        0, 256 * 0x4000 / scale
+    });
+
+    // right arrows
+    sprite_affine(1, (i16 [4]) {
+        256 * 0x4000 / scale, 0,
+        0, 256 * 0x4000 / scale
+    });
+
+    for(u32 i = 1; i < PAGE_COUNT * 2 - 1; i++) {
+        const i32 y = 24;
+        const i32 x = (i / 2) * 240 + 120
+                      + (i % 2 ? +1 : -1) * 96
+                      - draw_offset;
+
+        if(x < -16 || x >= 240 + 16)
+            continue;
+
+        sprite_config((*used_sprites)++, &(struct Sprite) {
+            .x = x - 16,
+            .y = y - 16,
+
+            .size = SPRITE_SIZE_16x16,
+
+            .tile = 256 + 32,
+            .colors = 1,
+
+            .affine = 1,
+            .affine_parameter = i % 2,
+            .double_size = 1
+        });
+    }
+}
+
 IWRAM_SECTION
 static void map_draw(void) {
+    // draw sprites
     u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
 
     draw_level_buttons(&used_sprites);
+    draw_page_arrows(&used_sprites);
+
     sprite_hide_range(used_sprites, SPRITE_COUNT);
 
     // draw bitmap
