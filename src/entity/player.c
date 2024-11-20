@@ -34,6 +34,8 @@
 #define ANIMATION_FALL  2
 #define ANIMATION_WIN   3
 
+#define FALL_ANIMATION_TIME 60
+
 struct player_Data {
     // subpixel coordinates (128:1)
     i16 subx;
@@ -101,7 +103,7 @@ static inline void handle_animation(struct Level *level,
 
         case ANIMATION_FALL:
             player_data->animation_stage++;
-            if(player_data->animation_stage > 60) {
+            if(player_data->animation_stage > FALL_ANIMATION_TIME) {
                 // TODO find a way to keep obstacles and other things
                 // from changing orientation
                 level_load(level, level->metadata);
@@ -391,11 +393,6 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
     struct player_Data *player_data = (struct player_Data *) &data->data;
 
-    // fixed point number: 1 = 0x4000
-    u32 yscale = 0x4000 + math_max(
-        math_sin(tick_count * math_brad(90) / 16) / 4, 0
-    );
-
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 16,
         .y = y - 29,
@@ -410,9 +407,28 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
         .double_size = 1
     });
 
+    // fixed point numbers: 1 = 0x4000
+    i32 scale_x, scale_y;
+
+    if(player_data->animation != ANIMATION_FALL) {
+        // scale vertically
+        scale_x = 0x4000;
+        scale_y = 0x4000 + math_max(
+            math_sin(tick_count * math_brad(90) / 16) / 4, 0
+        );
+    } else {
+        // shrink
+        scale_x = scale_y = 0x4000 - (
+            0x3fff * player_data->animation_stage / FALL_ANIMATION_TIME
+        );
+    }
+
+    if(player_data->sprite_flip)
+        scale_x *= -1;
+
     sprite_affine(0, (i16 [4]) {
-        256 * (player_data->sprite_flip ? -1 : +1), 0,
-        0, 256 * 0x4000 / yscale
+        256 * 0x4000 / scale_x, 0,
+        0, 256 * 0x4000 / scale_y
     });
 
     const u32 letter_sprites = draw_letters(
