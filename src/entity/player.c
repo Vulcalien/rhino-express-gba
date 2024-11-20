@@ -393,14 +393,14 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
 
     // fixed point number: 1 = 0x4000
     u32 yscale = 0x4000 + math_max(
-        math_sin(tick_count * math_brad(90) / 16) / 5, 0
+        math_sin(tick_count * math_brad(90) / 16) / 4, 0
     );
 
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 16,
-        .y = y - 4 - 16,
+        .y = y - 29,
 
-        .size = SPRITE_SIZE_16x16,
+        .size = SPRITE_SIZE_16x32,
 
         .tile = 256 + 0,
         .colors = SPRITE_COLORS_256,
