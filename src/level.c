@@ -257,7 +257,11 @@ void level_load(struct Level *level,
 
     // enter editing mode
     level->is_editing = true;
-    level_add_edit_cursor(level, 8, 5); // TODO set real coordinates
+    level_add_edit_cursor(
+        level,
+        metadata->size.w / 2,
+        metadata->size.h / 2
+    );
     MUSIC_PLAY(music_editing);
 
     // add player
