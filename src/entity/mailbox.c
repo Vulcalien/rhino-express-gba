@@ -16,8 +16,11 @@
 #include "entity.h"
 
 #include <gba/sprite.h>
+#include <math.h>
 
 #include "level.h"
+
+#define ANIMATION_TIME 14
 
 struct mailbox_Data {
     u16 animation;
@@ -36,7 +39,8 @@ IWRAM_SECTION
 static void mailbox_tick(struct Level *level, struct entity_Data *data) {
     struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
 
-    // TODO
+    if(mailbox_data->animation)
+        mailbox_data->animation--;
 }
 
 IWRAM_SECTION
@@ -44,26 +48,38 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
                         i32 x, i32 y, u32 used_sprites) {
     struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
 
+    const bool has_letter = mailbox_data->has_letter;
+    const u32 animation = mailbox_data->animation;
+
+    // TODO add sprite flipping
+
+    const bool big_sprite = has_letter && animation > 0;
     sprite_config(used_sprites++, &(struct Sprite) {
-        // TODO better adjust the coordinates to match the original
-        .x = x - 16,
-        .y = y - 16,
+        .x = x - 8 - 8 * big_sprite,
+        .y = y - 20 - 16 * big_sprite,
 
-        .size = SPRITE_SIZE_16x16,
+        .size = big_sprite ? SPRITE_SIZE_16x32 : SPRITE_SIZE_16x16,
 
-        .tile = 256 + 16 - mailbox_data->has_letter * 8,
+        .tile = 256 + 16 - has_letter * 8,
         .colors = 1,
 
-        .affine = 1,
-        .affine_parameter = 1, // TODO
+        .affine = big_sprite,
+        .affine_parameter = 1,
         .double_size = 1
     });
 
-    // DEBUG
-    sprite_affine(1, (i16 [4]) {
-        256, 0,
-        0, 256
-    });
+    // fixed point number: 1 = 0x4000
+    if(animation > 0) {
+        const u32 t = animation * math_brad(180) / ANIMATION_TIME;
+
+        // fixed point number: 1 = 0x4000
+        const u32 yscale = 0x4000 + math_sin(t);
+
+        sprite_affine(1, (i16 [4]) {
+            256, 0,
+            0, 256 * 0x4000 / yscale
+        });
+    }
 
     return 1;
 }
@@ -78,7 +94,7 @@ static bool mailbox_touched_by(struct Level *level,
         return false;
 
     mailbox_data->has_letter = true;
-    mailbox_data->animation = 0; // TODO animation
+    mailbox_data->animation = ANIMATION_TIME;
 
     level->letters_to_deliver--;
 
