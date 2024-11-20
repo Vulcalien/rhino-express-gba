@@ -213,13 +213,13 @@ static inline void draw_page_arrows(u32 *used_sprites) {
 
     // left arrows
     sprite_affine(0, (i16 [4]) {
-        -256 * 0x4000 / scale, 0,
+        256 * 0x4000 / scale, 0,
         0, 256 * 0x4000 / scale
     });
 
     // right arrows
     sprite_affine(1, (i16 [4]) {
-        256 * 0x4000 / scale, 0,
+        -256 * 0x4000 / scale, 0,
         0, 256 * 0x4000 / scale
     });
 
@@ -240,7 +240,7 @@ static inline void draw_page_arrows(u32 *used_sprites) {
 
             .size = SPRITE_SIZE_16x16,
 
-            .tile = 256 + 32,
+            .tile = 256 + 28,
             .colors = 1,
 
             .affine = 1,
