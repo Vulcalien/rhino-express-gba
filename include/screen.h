@@ -17,13 +17,12 @@
 
 #include "main.h"
 
-#define SCREEN_W (240)
-#define SCREEN_H (160)
+#include <gba/display.h>
 
-#define BG0_TILEMAP ((vu16 *) 0x06000000)
-#define BG1_TILEMAP ((vu16 *) 0x06001000)
-#define BG2_TILEMAP ((vu16 *) 0x06002000)
-#define BG3_TILEMAP ((vu16 *) 0x06003000)
+#define BG0_TILEMAP display_screenblock(0)
+#define BG1_TILEMAP display_screenblock(2)
+#define BG2_TILEMAP display_screenblock(4)
+#define BG3_TILEMAP display_screenblock(6)
 
 #define SCREEN_FOG_PARTICLE_COUNT 10
 

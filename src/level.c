@@ -15,6 +15,7 @@
  */
 #include "level.h"
 
+#include <gba/display.h>
 #include <gba/background.h>
 #include <gba/sprite.h>
 #include <memory.h>
@@ -61,8 +62,8 @@ static inline void update_offset(struct Level *level) {
     const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
     const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
 
-    level->offset.x = -(SCREEN_W - width_pixels) / 2;
-    level->offset.y = -(SCREEN_H - height_pixels) / 2;
+    level->offset.x = -(DISPLAY_W - width_pixels) / 2;
+    level->offset.y = -(DISPLAY_H - height_pixels) / 2;
 
     // apply shaking effect
     if(level->shake && (tick_count & 1))
