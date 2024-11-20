@@ -232,7 +232,10 @@ static inline void draw_page_arrows(u32 *used_sprites) {
         if(x < -16 || x >= 240 + 16)
             continue;
 
-        // TODO do not draw if next page is not unlocked
+        // if next page is not unlocked, do not draw right arrow
+        if(i % 2 == 1)
+            if(levels_cleared < first_level_in_pages[i / 2 + 1])
+                break;
 
         sprite_config((*used_sprites)++, &(struct Sprite) {
             .x = x - 16,
