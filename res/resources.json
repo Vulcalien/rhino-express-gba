@@ -62,6 +62,19 @@
         },
 
         {
+            "name": "tutorial_text",
+            "input": "img/tutorial-text.png",
+            "output": "img/tutorial-text.c",
+            "static": true,
+
+            "tile_size": [ 16, 3 ],
+            "palette": "res/img/palette.png",
+            "bpp": 8,
+
+            "static": true
+        },
+
+        {
             "name": "level_button_images",
 
             "input": "img/level-buttons.png",
