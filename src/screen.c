@@ -124,33 +124,17 @@ void screen_draw_fog_particles(u32 first_sprite_id) {
 void screen_mode_0(void) {
     vsync();
 
-    display_config(&(struct Display) {
-        .mode = 0,
-
-        .obj_mapping = 1,
-
-        .enable_bg2 = 1,
-        .enable_bg3 = 1,
-        .enable_obj = 1
-    });
+    display_config(0);
+    background_toggle(BG2, true);
+    background_toggle(BG3, true);
+    sprite_hide_all();
 
     LOAD_TILESET(display_charblock(3), tileset);
-
-    sprite_hide_all();
 }
 
 void screen_mode_4(void) {
     vsync();
 
-    display_config(&(struct Display) {
-        .mode = 4,
-
-        .obj_mapping = 1,
-
-        .enable_bg2 = 1,
-        .enable_obj = 1
-    });
-    display_set_page(0);
-
+    display_config(4);
     sprite_hide_all();
 }
