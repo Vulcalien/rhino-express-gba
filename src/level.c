@@ -333,7 +333,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .houses = {
             { 5, 1 }
-        }
+        },
+
+        .tutorial = true,
+        .tutorial_text = 0
     },
 
     // Level 2
@@ -423,7 +426,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 7
     {
-        // TODO this is a tutorial level
         .size = { 6, 3 },
         .spawn = { 1, 1 },
         .tile_data = level_7,
@@ -431,7 +433,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 3, 1 }
         },
-        .obstacles_to_add = { 1, 0, 0 }
+        .obstacles_to_add = { 1, 0, 0 },
+
+        .tutorial = true,
+        .tutorial_text = 1
     },
 
     // Level 8
@@ -508,7 +513,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 12
     {
-        // TODO this is a tutorial level
         .size = { 10, 4 },
         .spawn = { 4, 2 },
         .tile_data = level_12,
@@ -519,7 +523,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .houses = {
             { 1, 1 }
-        }
+        },
+
+        .tutorial = true,
+        .tutorial_text = 2
     },
 
     // Level 13
@@ -551,7 +558,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .houses = {
             { 4, 1 }
-        }
+        },
+
+        .tutorial = true,
+        .tutorial_text = 3
     },
 
     // Level 15
