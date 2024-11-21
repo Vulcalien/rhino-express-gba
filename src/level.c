@@ -26,6 +26,8 @@
 #include "tile.h"
 #include "music.h"
 
+#include "res/img/tutorial-text.c"
+
 static inline void insert_solid_entity(struct Level *level,
                                        struct entity_Data *data,
                                        level_EntityID id,
@@ -66,8 +68,15 @@ static inline void update_offset(struct Level *level) {
     level->offset.y = -(DISPLAY_H - height_pixels) / 2;
 
     // apply shaking effect
-    if(level->shake)
+    if(level->shake) {
         level->offset.y += (-2 + random(4));
+
+        // shake tutorial text
+        background_mosaic(random(2), random(2));
+    } else {
+        // disable shaking of tutorial text
+        background_mosaic(0, 0);
+    }
 }
 
 static inline void tick_tiles(struct Level *level) {
@@ -154,8 +163,11 @@ static inline void draw_entities(struct Level *level) {
 IWRAM_SECTION
 void level_draw(struct Level *level) {
     // clear the tilemap before redrawing
-    memset32((vu32 *) BG2_TILEMAP, 0, 32 * 32 * 2);
-    memset32((vu32 *) BG3_TILEMAP, 0, 32 * 32 * 2);
+    memset32(BG2_TILEMAP, 0, 32 * 32 * 2);
+    memset32(BG3_TILEMAP, 0, 32 * 32 * 2);
+
+    // toggle tutorial text's background
+    background_toggle(BG1, level->metadata->tutorial);
 
     draw_tiles(level);
     draw_entities(level);
@@ -251,6 +263,15 @@ void level_load(struct Level *level,
     load_tiles(level);
     load_mailboxes(level);
     load_decor_houses(level);
+
+    // load tutorial text
+    if(metadata->tutorial) {
+        memcpy32(
+            (vu8 *) display_charblock(2) + 64,
+            (vu8 *) tutorial_text + metadata->tutorial_text * 48 * 64,
+            48 * 64
+        );
+    }
 
     // copy 'obstacles_to_add'
     for(u32 i = 0; i < 3; i++)

@@ -55,7 +55,17 @@ static inline void init_fog_particles(void) {
     memcpy16((dest), (vu16 *) (palette), sizeof(palette))
 
 void screen_init(void) {
-    // configure backgrounds
+    // tutorial text
+    background_config(BG1, &(struct Background) {
+        .priority = 1,
+        .tileset  = 2,
+        .tilemap  = 2,
+
+        .mosaic = 1,
+        .colors = 1
+    });
+
+    // level's higher tiles
     background_config(BG2, &(struct Background) {
         .priority = 2,
         .tileset  = 3,
@@ -63,6 +73,8 @@ void screen_init(void) {
 
         .colors = 1
     });
+
+    // level's lower tiles
     background_config(BG3, &(struct Background) {
         .priority = 3,
         .tileset  = 3,
@@ -130,6 +142,19 @@ void screen_mode_0(void) {
     sprite_hide_all();
 
     LOAD_TILESET(display_charblock(3), tileset);
+
+    // === tutorial text background ===
+
+    // clear first tile of tileset
+    memset32(display_charblock(2), 0, 64);
+
+    // clear visible tiles of tilemap
+    memset32(BG1_TILEMAP, 0, 32 * 20 * 2);
+
+    // set tiles of tilemap
+    for(u32 y = 0; y < 3; y++)
+        for(u32 x = 0; x < 16; x++)
+            BG1_TILEMAP[(7 + x) + (15 + y) * 32] = 1 + x + y * 16;
 }
 
 void screen_mode_4(void) {
