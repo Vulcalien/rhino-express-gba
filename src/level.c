@@ -66,7 +66,7 @@ static inline void update_offset(struct Level *level) {
     level->offset.y = -(DISPLAY_H - height_pixels) / 2;
 
     // apply shaking effect
-    if(level->shake && (tick_count & 1))
+    if(level->shake)
         level->offset.y += (-2 + random(4));
 }
 
