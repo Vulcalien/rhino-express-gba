@@ -179,6 +179,7 @@ static inline void enter_tile(struct Level *level,
                 player_data->hit_obstacle = true;
             }
             level_add_particle_block(level, xt, yt, TILE_WOOD);
+            level->shake = true;
             break;
 
         case TILE_ROCK:
@@ -189,6 +190,7 @@ static inline void enter_tile(struct Level *level,
                 player_data->hit_obstacle = true;
             }
             level_add_particle_block(level, xt, yt, TILE_ROCK);
+            level->shake = true;
             break;
 
         case TILE_WATER:
@@ -306,8 +308,6 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
             level, data,
             player_data->xm * 2, player_data->ym * 2
         );
-
-        level->shake = true;
 
         // if the center was reached, stop going back and the rumbling
         if(is_tile_center(data->x, data->y)) {
