@@ -344,7 +344,7 @@ void level_add_entity(struct Level *level,
 const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 1
     {
-        .size = { 7, 6 },
+        .size = { 7, 3 },
         .spawn = { 1, 1 },
         .tile_data = level_1,
 
