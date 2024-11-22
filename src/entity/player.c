@@ -208,17 +208,10 @@ static inline void enter_tile(struct Level *level,
 static inline void leave_tile(struct Level *level,
                               struct entity_Data *data,
                               i32 xt, i32 yt) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
-
-    switch(level_get_tile(level, xt, yt)) {
-        case TILE_FALL_PLATFORM:
-            level_set_tile(level, xt, yt, TILE_HOLE);
-            // TODO add falling platform particle
-            // TODO add falling platform sound
-            break;
-
-        default:
-            break;
+    if(level_get_tile(level, xt, yt) == TILE_FALL_PLATFORM) {
+        level_set_tile(level, xt, yt, TILE_HOLE);
+        level_add_particle_platform(level, xt, yt);
+        // TODO add falling platform sound
     }
 }
 

@@ -15,21 +15,66 @@
  */
 #include "entity.h"
 
+#include <gba/sprite.h>
+
+#include "level.h"
+
+#define LIFETIME 60 // DEBUG
+
+struct falling_platform_Data {
+    u32 age;
+
+    u8 unused[12];
+};
+
+static_assert(
+    sizeof(struct falling_platform_Data) == ENTITY_EXTRA_DATA_SIZE,
+    "struct falling_platform_Data is of wrong size"
+);
+
 IWRAM_SECTION
 static void falling_platform_tick(struct Level *level,
                                   struct entity_Data *data) {
-    // TODO
+    struct falling_platform_Data *platform_data =
+        (struct falling_platform_Data *) &data->data;
+
+    platform_data->age++;
+    if(platform_data->age >= LIFETIME)
+        data->should_remove = true;
 }
 
 IWRAM_SECTION
 static u32 falling_platform_draw(struct Level *level,
                                  struct entity_Data *data,
                                  i32 x, i32 y, u32 used_sprites) {
-    // TODO
+    struct falling_platform_Data *platform_data =
+        (struct falling_platform_Data *) &data->data;
+
+    sprite_config(used_sprites++, &(struct Sprite) {
+        .x = x - 8,
+        .y = y - 8,
+
+        .size = SPRITE_SIZE_16x16,
+
+        .tile = 256 + 24,
+        .colors = 1,
+
+        .affine = 1,
+        .affine_parameter = 2 // DEBUG use many affine parameters
+    });
+
+    // TODO check if this works well
+    const u32 scale = 0x4000 - 0x3fff * platform_data->age / LIFETIME;
+
+    // DEBUG use many affine parameters
+    sprite_affine(2, (i16 [4]) {
+        256 * 0x4000 / scale, 0,
+        0, 256 * 0x4000 / scale
+    });
+
     return 1;
 }
 
-// TODO
 const struct entity_Type entity_particle_falling_platform = {
     .xr = 0,
     .yr = 0,
@@ -39,3 +84,22 @@ const struct entity_Type entity_particle_falling_platform = {
     .tick = falling_platform_tick,
     .draw = falling_platform_draw
 };
+
+bool level_add_particle_platform(struct Level *level, u32 xt, u32 yt) {
+    level_EntityID id = level_new_entity(level);
+    if(id == LEVEL_NO_ENTITY)
+        return false;
+
+    struct entity_Data *data = &level->entities[id];
+
+    data->x = (xt << LEVEL_TILE_SIZE) + 8;
+    data->y = (yt << LEVEL_TILE_SIZE) + 8;
+
+    struct falling_platform_Data *platform_data =
+        (struct falling_platform_Data *) &data->data;
+
+    platform_data->age = 0;
+
+    level_add_entity(level, ENTITY_PARTICLE_FALLING_PLATFORM, id);
+    return true;
+}
