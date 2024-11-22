@@ -19,12 +19,13 @@
 
 #include "level.h"
 
-#define LIFETIME 60 // DEBUG
+#define LIFETIME 20
 
 struct falling_platform_Data {
-    u32 age;
+    u8 age;
+    u8 affine_parameter;
 
-    u8 unused[12];
+    u8 unused[14];
 };
 
 static_assert(
@@ -60,14 +61,11 @@ static u32 falling_platform_draw(struct Level *level,
         .colors = 1,
 
         .affine = 1,
-        .affine_parameter = 2 // DEBUG use many affine parameters
+        .affine_parameter = platform_data->affine_parameter
     });
 
-    // TODO check if this works well
     const u32 scale = 0x4000 - 0x3fff * platform_data->age / LIFETIME;
-
-    // DEBUG use many affine parameters
-    sprite_affine(2, (i16 [4]) {
+    sprite_affine(platform_data->affine_parameter, (i16 [4]) {
         256 * 0x4000 / scale, 0,
         0, 256 * 0x4000 / scale
     });
@@ -99,6 +97,11 @@ bool level_add_particle_platform(struct Level *level, u32 xt, u32 yt) {
         (struct falling_platform_Data *) &data->data;
 
     platform_data->age = 0;
+
+    // assign affine parameter in range [2, 9]
+    static u8 last_affine_parameter = 0;
+    platform_data->affine_parameter = 2 + last_affine_parameter;
+    last_affine_parameter = (last_affine_parameter + 1) % 8;
 
     level_add_entity(level, ENTITY_PARTICLE_FALLING_PLATFORM, id);
     return true;
