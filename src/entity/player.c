@@ -96,7 +96,6 @@ static inline void handle_animation(struct Level *level,
                 level->shake = true;
             } else {
                 player_data->animation = 0;
-                level->shake = false;
             }
             break;
         }
@@ -313,7 +312,6 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
         if(is_tile_center(data->x, data->y)) {
             player_data->xm = player_data->ym = 0;
             player_data->hit_obstacle = false;
-            level->shake = false;
         }
     } else {
         i32 xm_sign = math_sign(player_data->xm);

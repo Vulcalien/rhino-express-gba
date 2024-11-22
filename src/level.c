@@ -68,7 +68,9 @@ static inline void update_offset(struct Level *level) {
     level->offset.y = -(DISPLAY_H - height_pixels) / 2;
 
     // apply shaking effect
-    if(level->shake) {
+    if(level->shake_time > 0) {
+        level->shake_time--;
+
         level->offset.y += (-2 + random(4));
 
         // shake tutorial text
@@ -118,6 +120,12 @@ void level_tick(struct Level *level) {
 
     tick_tiles(level);
     tick_entities(level);
+
+    // update shaking status
+    if(level->shake) {
+        level->shake_time = 15;
+        level->shake = false;
+    }
 }
 
 static inline void draw_tiles(struct Level *level) {

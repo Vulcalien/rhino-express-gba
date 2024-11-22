@@ -58,6 +58,7 @@ struct Level {
     } offset;
 
     bool shake;
+    u8 shake_time;
 };
 
 struct level_Metadata {
