@@ -29,11 +29,7 @@ struct mailbox_Data {
 
     u8 unused[13];
 };
-
-static_assert(
-    sizeof(struct mailbox_Data) == ENTITY_EXTRA_DATA_SIZE,
-    "struct mailbox_Data is of wrong size"
-);
+ASSERT_SIZE(struct mailbox_Data, ENTITY_EXTRA_DATA_SIZE);
 
 IWRAM_SECTION
 static void mailbox_tick(struct Level *level, struct entity_Data *data) {

@@ -29,11 +29,7 @@ struct sidebar_Data {
 
     u8 unused[13];
 };
-
-static_assert(
-    sizeof(struct sidebar_Data) == ENTITY_EXTRA_DATA_SIZE,
-    "struct sidebar_Data is of wrong size"
-);
+ASSERT_SIZE(struct sidebar_Data, ENTITY_EXTRA_DATA_SIZE);
 
 IWRAM_SECTION
 static void sidebar_tick(struct Level *level, struct entity_Data *data) {

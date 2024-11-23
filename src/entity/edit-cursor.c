@@ -32,12 +32,7 @@ struct cursor_Data {
 
     u8 unused[14];
 };
-
-
-static_assert(
-    sizeof(struct cursor_Data) == ENTITY_EXTRA_DATA_SIZE,
-    "struct cursor_Data is of wrong size"
-);
+ASSERT_SIZE(struct cursor_Data, ENTITY_EXTRA_DATA_SIZE);
 
 static inline bool any_obstacle_left(struct Level *level) {
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)

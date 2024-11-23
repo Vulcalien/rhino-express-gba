@@ -30,11 +30,7 @@ struct particle_block_Data {
 
     u8 unused[12];
 };
-
-static_assert(
-    sizeof(struct particle_block_Data) == ENTITY_EXTRA_DATA_SIZE,
-    "struct particle_block_Data is of wrong size"
-);
+ASSERT_SIZE(struct particle_block_Data, ENTITY_EXTRA_DATA_SIZE);
 
 IWRAM_SECTION
 static void block_tick(struct Level *level, struct entity_Data *data) {

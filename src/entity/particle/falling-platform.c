@@ -27,11 +27,7 @@ struct falling_platform_Data {
 
     u8 unused[14];
 };
-
-static_assert(
-    sizeof(struct falling_platform_Data) == ENTITY_EXTRA_DATA_SIZE,
-    "struct falling_platform_Data is of wrong size"
-);
+ASSERT_SIZE(struct falling_platform_Data, ENTITY_EXTRA_DATA_SIZE);
 
 IWRAM_SECTION
 static void falling_platform_tick(struct Level *level,

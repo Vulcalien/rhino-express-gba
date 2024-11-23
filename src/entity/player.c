@@ -55,11 +55,7 @@ struct player_Data {
 
     u8 unused[3];
 };
-
-static_assert(
-    sizeof(struct player_Data) == ENTITY_EXTRA_DATA_SIZE,
-    "struct player_Data is of wrong size"
-);
+ASSERT_SIZE(struct player_Data, ENTITY_EXTRA_DATA_SIZE);
 
 #define LETTERS_LIMIT (8)
 
