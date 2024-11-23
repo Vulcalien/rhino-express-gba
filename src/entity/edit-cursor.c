@@ -110,12 +110,13 @@ static inline void move_cursor(struct Level *level,
     i32 new_x = data->x + (xm << LEVEL_TILE_SIZE);
     i32 new_y = data->y + (ym << LEVEL_TILE_SIZE);
 
-    // if the cursor is not going outside the level, move it
-    if(new_x >= 0 && new_x < (LEVEL_W << LEVEL_TILE_SIZE) &&
-       new_y >= 0 && new_y < (LEVEL_H << LEVEL_TILE_SIZE)) {
-        data->x = new_x;
-        data->y = new_y;
-    }
+    // check if cursor is moving out of level bounds
+    if(new_x < 0 || new_x >= level->metadata->size.w << LEVEL_TILE_SIZE ||
+       new_y < 0 || new_y >= level->metadata->size.h << LEVEL_TILE_SIZE)
+        return;
+
+    data->x = new_x;
+    data->y = new_y;
 }
 
 IWRAM_SECTION
