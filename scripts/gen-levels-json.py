@@ -11,7 +11,7 @@ with open(argv[3], "w") as f:
     file_list = os.listdir(argv[1])
     i = 0
     for level_file in file_list:
-        strmatch = re.fullmatch('(\d+).png', level_file)
+        strmatch = re.fullmatch(r'(\d+).png', level_file)
         if not strmatch:
             continue
         level_id = strmatch.group(1)
