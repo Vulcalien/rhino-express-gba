@@ -245,6 +245,7 @@ static inline bool move_full_pixels(struct Level *level,
 
             // check if an obstacle was hit
             if(player_data->hit_obstacle) {
+                // start moving in the opposite direction
                 player_data->xm = -math_sign(player_data->xm);
                 player_data->ym = -math_sign(player_data->ym);
 
@@ -297,7 +298,7 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
             player_data->xm * 2, player_data->ym * 2
         );
 
-        // if the center was reached, stop going back and the rumbling
+        // if the center was reached, stop going back
         if(is_tile_center(data->x, data->y)) {
             player_data->xm = player_data->ym = 0;
             player_data->hit_obstacle = false;
