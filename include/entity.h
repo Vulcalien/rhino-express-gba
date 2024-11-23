@@ -22,6 +22,7 @@ enum entity_TypeID {
     ENTITY_MAILBOX,
 
     ENTITY_EDIT_CURSOR,
+    ENTITY_EDIT_SIDEBAR,
 
     ENTITY_DECOR_GRASS,
     ENTITY_DECOR_HOUSE,
@@ -131,6 +132,7 @@ extern const struct entity_Type
     entity_mailbox,
 
     entity_edit_cursor,
+    entity_edit_sidebar,
 
     entity_decor_grass,
     entity_decor_house,

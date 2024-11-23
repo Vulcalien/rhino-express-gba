@@ -151,6 +151,7 @@ extern bool level_add_player(struct Level *level);
 extern bool level_add_mailbox(struct Level *level, u32 xt, u32 yt);
 
 extern bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt);
+extern bool level_add_edit_sidebar(struct Level *level);
 
 extern bool level_add_decor_house(struct Level *level, u32 xt, u32 yt,
                                   bool lower);
