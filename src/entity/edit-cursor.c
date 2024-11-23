@@ -156,6 +156,9 @@ static u32 cursor_draw(struct Level *level,
                        i32 x, i32 y, u32 used_sprites) {
     struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
 
+    if(!any_obstacle_left(level))
+        return 0;
+
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 8,
         .y = y - 8,
