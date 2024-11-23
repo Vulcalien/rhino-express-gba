@@ -19,6 +19,7 @@
 #include <math.h>
 
 #include "level.h"
+#include "sfx.h"
 
 #define ANIMATION_TIME 14
 
@@ -92,6 +93,7 @@ static bool mailbox_touched_by(struct Level *level,
     mailbox_data->has_letter = true;
     mailbox_data->animation = ANIMATION_TIME;
 
+    SFX_PLAY(sfx_delivery);
     level->letters_to_deliver--;
 
     return false;

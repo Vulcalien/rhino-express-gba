@@ -15,6 +15,7 @@
  */
 #include "sfx.h"
 
+#include "res/sfx/delivery.c"
 #include "res/sfx/place_obstacle.c"
 #include "res/sfx/hit_obstacle.c"
 #include "res/sfx/water.c"
