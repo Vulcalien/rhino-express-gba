@@ -126,10 +126,12 @@ static void cursor_tick(struct Level *level,
         return;
     }
 
-    if(input_pressed(KEY_L))
-        switch_item(level, data, -1);
-    if(input_pressed(KEY_R))
-        switch_item(level, data, +1);
+    // change selected obstacle if L or R pressed
+    i32 switch_step = 0;
+    switch_step -= input_pressed(KEY_L);
+    switch_step += input_pressed(KEY_R);
+    if(switch_step != 0)
+        switch_item(level, data, switch_step);
 
     if(input_pressed(KEY_A)) {
         const i32 xt = data->x >> LEVEL_TILE_SIZE;
@@ -197,12 +199,9 @@ bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt) {
     // set specific cursor data
     struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
 
-    cursor_data->selected = 0;
-    cursor_data->flip = random(2);
-
-    // if there is no obstacle of the first type, switch to others
-    if(level->obstacles_to_add[cursor_data->selected] == 0)
-        switch_item(level, data, +1);
+    // select the first available obstacle
+    cursor_data->selected = LEVEL_OBSTACLE_TYPES - 1;
+    switch_item(level, data, +1);
 
     level_add_entity(level, ENTITY_EDIT_CURSOR, id);
     return true;
