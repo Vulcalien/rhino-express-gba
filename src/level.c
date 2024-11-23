@@ -27,6 +27,7 @@
 #include "music.h"
 
 #include "res/img/tutorial-text.c"
+#include "res/img/level-sidebar.c"
 
 static inline void insert_solid_entity(struct Level *level,
                                        struct entity_Data *data,
@@ -147,8 +148,56 @@ static inline void draw_tiles(struct Level *level) {
     }
 }
 
-static inline void draw_entities(struct Level *level) {
-    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
+static inline void draw_edit_sidebar(struct Level *level,
+                                     u32 *used_sprites) {
+    u32 x = 10;
+    u32 y = (DISPLAY_H - 64) / 2;
+
+    // draw resources
+    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++) {
+        const u32 count = level->obstacles_to_add[i];
+        if(count == 0)
+            continue;
+
+        // resource count
+        if(count > 1) {
+            sprite_config((*used_sprites)++, &(struct Sprite) {
+                .x = x + 6,
+                .y = y + 13 + i * 16,
+
+                .size = SPRITE_SIZE_8x8,
+
+                .tile = 256 + 44 + (count - 2),
+                .colors = 1
+            });
+        }
+
+        // resource image
+        sprite_config((*used_sprites)++, &(struct Sprite) {
+            .x = x + 8,
+            .y = y + 8 + i * 16,
+
+            .size = SPRITE_SIZE_16x16,
+
+            .tile = 256 + 32 + i * 4,
+            .colors = 1
+        });
+    }
+
+    // draw sidebar background
+    sprite_config((*used_sprites)++, &(struct Sprite) {
+        .x = x,
+        .y = y,
+
+        .size = SPRITE_SIZE_32x64,
+
+        .tile = 256 + 128,
+        .colors = 1
+    });
+}
+
+static inline void draw_entities(struct Level *level,
+                                 u32 *used_sprites) {
     for(level_EntityID id = 0; id < LEVEL_ENTITY_LIMIT; id++) {
         struct entity_Data *data = &level->entities[id];
         const struct entity_Type *type = entity_get_type(data);
@@ -158,14 +207,13 @@ static inline void draw_entities(struct Level *level) {
         const i32 draw_x = data->x - level->offset.x;
         const i32 draw_y = data->y - level->offset.y;
 
-        used_sprites += type->draw(
-            level, data, draw_x, draw_y, used_sprites
+        *used_sprites += type->draw(
+            level, data, draw_x, draw_y, *used_sprites
         );
-        if(used_sprites >= SPRITE_COUNT)
+        if(*used_sprites >= SPRITE_COUNT)
             break;
     }
-
-    sprite_hide_range(used_sprites, SPRITE_COUNT);
+    sprite_hide_range(*used_sprites, SPRITE_COUNT);
 }
 
 IWRAM_SECTION
@@ -178,7 +226,11 @@ void level_draw(struct Level *level) {
     background_toggle(BG1, level->metadata->tutorial);
 
     draw_tiles(level);
-    draw_entities(level);
+
+    // draw sprites
+    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
+    draw_edit_sidebar(level, &used_sprites);
+    draw_entities(level, &used_sprites);
 }
 
 static inline void level_init(struct Level *level,
@@ -280,6 +332,13 @@ void level_load(struct Level *level,
             48 * 64
         );
     }
+
+    // load edit sidebar
+    memcpy32(
+        (vu8 *) display_charblock(5) + 128 * 64,
+        level_sidebar,
+        4 * 8 * 64
+    );
 
     // copy 'obstacles_to_add'
     for(u32 i = 0; i < 3; i++)

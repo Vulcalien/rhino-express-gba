@@ -34,6 +34,18 @@
         },
 
         {
+            "name": "level_sidebar",
+            "input": "img/level-sidebar.png",
+            "output": "img/level-sidebar.c",
+            "static": true,
+
+            "tile_size": [ 4, 8 ],
+            "palette": "res/img/palette.png",
+            "colors": { "#ff00ff": 0 },
+            "bpp": 8
+        },
+
+        {
             "name": "cutscenes",
 
             "input": "img/cutscenes.png",
