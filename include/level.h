@@ -36,6 +36,8 @@ typedef u8 level_EntityID;
 
 #define LEVEL_SOLID_ENTITIES_IN_TILE (4)
 
+#define LEVEL_OBSTACLE_TYPES 3
+
 struct Level {
     enum tile_TypeID tiles[LEVEL_SIZE];
     u8 data[LEVEL_SIZE];
@@ -50,7 +52,7 @@ struct Level {
     u8 letters_to_deliver;
 
     bool is_editing;
-    u8 obstacles_to_add[3];
+    u8 obstacles_to_add[LEVEL_OBSTACLE_TYPES];
 
     struct {
         i32 x;

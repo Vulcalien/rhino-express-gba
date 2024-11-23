@@ -39,10 +39,8 @@ static_assert(
     "struct cursor_Data is of wrong size"
 );
 
-#define OBSTACLE_TYPES (3)
-
 static inline bool any_obstacle_left(struct Level *level) {
-    for(u32 i = 0; i < OBSTACLE_TYPES; i++)
+    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
         if(level->obstacles_to_add[i] != 0)
             return true;
     return false;
@@ -60,8 +58,8 @@ static inline void switch_item(struct Level *level,
         cursor_data->selected += step;
 
         if(cursor_data->selected < 0)
-            cursor_data->selected = OBSTACLE_TYPES - 1;
-        else if(cursor_data->selected >= OBSTACLE_TYPES)
+            cursor_data->selected = LEVEL_OBSTACLE_TYPES - 1;
+        else if(cursor_data->selected >= LEVEL_OBSTACLE_TYPES)
             cursor_data->selected = 0;
     } while(level->obstacles_to_add[cursor_data->selected] == 0);
 
