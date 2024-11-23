@@ -82,10 +82,6 @@ static inline void update_offset(struct Level *level) {
     }
 }
 
-static inline void tick_tiles(struct Level *level) {
-    // ...
-}
-
 static inline void tick_entities(struct Level *level) {
     for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++) {
         struct entity_Data *data = &level->entities[i];
@@ -119,7 +115,6 @@ IWRAM_SECTION
 void level_tick(struct Level *level) {
     update_offset(level);
 
-    tick_tiles(level);
     tick_entities(level);
 
     // update shaking status
