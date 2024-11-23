@@ -21,19 +21,56 @@
 
 #include "level.h"
 
+#define ANIMATION_TIME 55
+
+struct sidebar_Data {
+    i16 animation;
+    i8 animation_dir;
+
+    u8 unused[13];
+};
+
+static_assert(
+    sizeof(struct sidebar_Data) == ENTITY_EXTRA_DATA_SIZE,
+    "struct sidebar_Data is of wrong size"
+);
+
 IWRAM_SECTION
 static void sidebar_tick(struct Level *level, struct entity_Data *data) {
+    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
 
+    if(!level->is_editing)
+        sidebar_data->animation_dir = -1;
+
+    sidebar_data->animation += sidebar_data->animation_dir;
+    switch(sidebar_data->animation_dir) {
+        case +1:
+            // sidebar reached its point: stop moving
+            if(sidebar_data->animation >= ANIMATION_TIME)
+                sidebar_data->animation_dir = 0;
+            break;
+        case -1:
+            // empty sidebar disappeared: remove it
+            if(sidebar_data->animation <= 0)
+                data->should_remove = true;
+            break;
+    }
 }
 
 IWRAM_SECTION
 static u32 sidebar_draw(struct Level *level, struct entity_Data *data,
                         i32 x, i32 y, u32 used_sprites) {
+    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
+
     u32 old_used_sprites = used_sprites;
 
-    // ignore the actual sprite location
-    x = 10;
-    y = (DISPLAY_H - 64) / 2;
+    // calculate x and y (ignore the entity position)
+    {
+        i32 t = sidebar_data->animation * math_brad(120) / ANIMATION_TIME;
+
+        x = -32 + math_sin(t) * 48 / 0x4000;
+        y = (DISPLAY_H - 64) / 2;
+    }
 
     // draw resources
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++) {
@@ -95,10 +132,12 @@ bool level_add_edit_sidebar(struct Level *level) {
     if(id == LEVEL_NO_ENTITY)
         return false;
 
-    // set generic entity data
     struct entity_Data *data = &level->entities[id];
-
     data->x = data->y = 0;
+
+    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
+    sidebar_data->animation = 0;
+    sidebar_data->animation_dir = 1;
 
     level_add_entity(level, ENTITY_EDIT_SIDEBAR, id);
     return true;
