@@ -61,13 +61,6 @@ static void map_init(void *data) {
 
     screen_mode_4();
 
-    // load level selection button images
-    memcpy32(
-        (vu8 *) display_charblock(5) + 128 * 64,
-        level_button_images,
-        68 * 64
-    );
-
     // draw now to prevent showing garbage on the first frame
     scene_map.draw();
 }
@@ -181,14 +174,18 @@ static inline void draw_level_buttons(u32 *used_sprites) {
         if(x < -16 || x >= 240)
             continue;
 
-        if(i == level) {
-            // load the active button image
-            memcpy32(
-                (vu8 *) display_charblock(5) + 196 * 64,
-                level_button_images + (72 + i * 4) * 64,
-                4 * 64
-            );
+        // load button image
+        u32 image = i * 4;
+        image += 68  * (i == level);          // selected level
+        image += 136 * (i == levels_cleared); // uncleared level
 
+        memcpy32(
+            (vu8 *) display_charblock(5) + (128 + i * 4) * 64,
+            level_button_images + image * 64,
+            4 * 64
+        );
+
+        if(i == level) {
             // draw crosshair
             crosshair_draw(*used_sprites, x + 8, y + 8);
             *used_sprites += 4;
@@ -200,7 +197,7 @@ static inline void draw_level_buttons(u32 *used_sprites) {
 
             .size = SPRITE_SIZE_16x16,
 
-            .tile = 256 + (i == level ? 196 : 128 + i * 4),
+            .tile = 256 + 128 + i * 4,
             .colors = 1
         });
     }
