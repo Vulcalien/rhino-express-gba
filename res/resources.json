@@ -13,7 +13,7 @@
 
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 8,
+            "bpp": 4,
 
             "static": true
         },
@@ -28,7 +28,7 @@
 
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 8,
+            "bpp": 4,
 
             "static": true
         },
@@ -42,7 +42,7 @@
             "tile_size": [ 4, 8 ],
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 8
+            "bpp": 4
         },
 
         {
@@ -54,7 +54,7 @@
             "tile_size": 8,
 
             "palette": "res/img/palette.png",
-            "bpp": 8,
+            "bpp": 4,
 
             "static": true
         },
@@ -68,7 +68,7 @@
             "tile_size": [ 4, 1 ],
 
             "palette": "res/img/palette.png",
-            "bpp": 8,
+            "bpp": 4,
 
             "static": true
         },
@@ -81,7 +81,7 @@
 
             "tile_size": [ 16, 3 ],
             "palette": "res/img/palette.png",
-            "bpp": 8,
+            "bpp": 4,
 
             "static": true
         },
@@ -95,7 +95,7 @@
             "tile_size": 2,
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 8,
+            "bpp": 4,
 
             "static": true
         }
