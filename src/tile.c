@@ -176,50 +176,41 @@ DRAW_FUNC(water_draw) {
 const struct tile_Type tile_type_list[TILE_TYPES] = {
     [TILE_VOID] = {
         .is_solid = false,
-
         .draw = NULL
     },
 
     [TILE_GROUND] = {
         .is_solid = false,
-
         .draw = ground_draw
     },
     [TILE_HIGH_GROUND] = {
         .is_solid = true,
-
         .draw = high_ground_draw
     },
 
     [TILE_PLATFORM] = {
         .is_solid = false,
-
         .draw = platform_draw
     },
     [TILE_FALL_PLATFORM] = {
         .is_solid = false,
-
         .draw = fall_platform_draw
     },
     [TILE_HOLE] = {
         .is_solid = false,
-
         .draw = hole_draw
     },
 
     [TILE_WOOD] = {
         .is_solid = false,
-
         .draw = wood_draw
     },
     [TILE_ROCK] = {
         .is_solid = false,
-
         .draw = rock_draw
     },
     [TILE_WATER] = {
         .is_solid = false,
-
         .draw = water_draw
     }
 };
