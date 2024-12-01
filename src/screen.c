@@ -49,10 +49,10 @@ static inline void init_fog_particles(void) {
 }
 
 #define LOAD_TILESET(dest, tileset)\
-    memcpy16((dest), (vu16 *) (tileset), sizeof(tileset))
+    memcpy32((dest), (tileset), sizeof(tileset))
 
 #define LOAD_PALETTE(dest, palette)\
-    memcpy16((dest), (vu16 *) (palette), sizeof(palette))
+    memcpy32((dest), (palette), sizeof(palette))
 
 void screen_init(void) {
     // tutorial text
@@ -61,26 +61,21 @@ void screen_init(void) {
         .tileset  = 2,
         .tilemap  = 2,
 
-        .mosaic = 1,
-        .colors = 1
+        .mosaic = 1
     });
 
     // level's higher tiles
     background_config(BG2, &(struct Background) {
         .priority = 2,
         .tileset  = 3,
-        .tilemap  = 4,
-
-        .colors = 1
+        .tilemap  = 4
     });
 
     // level's lower tiles
     background_config(BG3, &(struct Background) {
         .priority = 3,
         .tileset  = 3,
-        .tilemap  = 6,
-
-        .colors = 1
+        .tilemap  = 6
     });
 
     // load spritesheet
@@ -127,8 +122,8 @@ void screen_draw_fog_particles(u32 first_sprite_id) {
 
             .size = SPRITE_SIZE_8x8,
 
-            .tile = 256 + 56 + particles[i].tile,
-            .colors = 1
+            .tile = 512 + 56 + particles[i].tile,
+            .palette = 1
         });
     }
 }
@@ -146,7 +141,7 @@ void screen_mode_0(void) {
     // === tutorial text background ===
 
     // clear first tile of tileset
-    memset32(display_charblock(2), 0, 64);
+    memset32(display_charblock(2), 0, 32);
 
     // clear visible tiles of tilemap
     memset32(BG1_TILEMAP, 0, 32 * 20 * 2);

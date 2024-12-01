@@ -82,8 +82,8 @@ static u32 sidebar_draw(struct Level *level, struct entity_Data *data,
 
                 .size = SPRITE_SIZE_8x8,
 
-                .tile = 256 + 44 + (count - 2),
-                .colors = 1
+                .tile = 512 + 44 + (count - 2),
+                .palette = 0
             });
         }
 
@@ -94,8 +94,8 @@ static u32 sidebar_draw(struct Level *level, struct entity_Data *data,
 
             .size = SPRITE_SIZE_16x16,
 
-            .tile = 256 + 32 + i * 4,
-            .colors = 1
+            .tile = 512 + 32 + i * 4,
+            .palette = (i == 0)
         });
     }
 
@@ -106,8 +106,8 @@ static u32 sidebar_draw(struct Level *level, struct entity_Data *data,
 
         .size = SPRITE_SIZE_32x64,
 
-        .tile = 256 + 128,
-        .colors = 1
+        .tile = 512 + 128,
+        .palette = 0
     });
 
     return used_sprites - old_used_sprites;

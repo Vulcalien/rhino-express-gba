@@ -270,17 +270,17 @@ void level_load(struct Level *level,
     // load tutorial text
     if(metadata->tutorial) {
         memcpy32(
-            (vu8 *) display_charblock(2) + 64,
-            (vu8 *) tutorial_text + metadata->tutorial_text * 48 * 64,
-            48 * 64
+            (vu8 *) display_charblock(2) + 1 * 32,
+            (vu8 *) tutorial_text + metadata->tutorial_text * 48 * 32,
+            48 * 32
         );
     }
 
     // load edit sidebar
     memcpy32(
-        (vu8 *) display_charblock(5) + 128 * 64,
+        (vu8 *) display_charblock(5) + 128 * 32,
         level_sidebar,
-        4 * 8 * 64
+        4 * 8 * 32
     );
 
     // copy 'obstacles_to_add'
