@@ -19,6 +19,7 @@
 #include <random.h>
 
 #include "level.h"
+#include "sfx.h"
 
 #define ANIMATION_PHASES 6
 
@@ -113,5 +114,9 @@ bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
 
         level_add_entity(level, ENTITY_PARTICLE_BLOCK, id);
     }
+
+    if(block == TILE_WATER)
+        SFX_PLAY(sfx_water);
+
     return true;
 }
