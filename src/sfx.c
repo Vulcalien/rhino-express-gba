@@ -18,4 +18,5 @@
 #include "res/sfx/delivery.c"
 #include "res/sfx/obstacle-placed.c"
 #include "res/sfx/obstacle-hit.c"
+#include "res/sfx/obstacle-broken.c"
 #include "res/sfx/water.c"

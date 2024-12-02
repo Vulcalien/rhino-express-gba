@@ -169,7 +169,7 @@ static inline void enter_tile(struct Level *level,
         case TILE_WOOD:
             if(speed >= BREAK_WOOD_SPEED) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
-                // TODO play break sound
+                SFX_PLAY(sfx_obstacle_broken);
             } else {
                 player_data->hit_obstacle = true;
             }
@@ -180,7 +180,7 @@ static inline void enter_tile(struct Level *level,
         case TILE_ROCK:
             if(speed >= BREAK_ROCK_SPEED) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
-                // TODO play break sound
+                SFX_PLAY(sfx_obstacle_broken);
             } else {
                 player_data->hit_obstacle = true;
             }

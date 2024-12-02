@@ -140,6 +140,10 @@
             "input": "sfx/obstacle-hit.raw",
             "output": "sfx/obstacle-hit.c"
         }, {
+            "name": "sfx_obstacle_broken",
+            "input": "sfx/obstacle-broken.raw",
+            "output": "sfx/obstacle-broken.c"
+        }, {
             "name": "sfx_water",
             "input": "sfx/water.raw",
             "output": "sfx/water.c"
