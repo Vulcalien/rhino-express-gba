@@ -16,6 +16,7 @@
 #include "sfx.h"
 
 #include "res/sfx/delivery.c"
+#include "res/sfx/falling-platform.c"
 #include "res/sfx/obstacle-placed.c"
 #include "res/sfx/obstacle-hit.c"
 #include "res/sfx/obstacle-broken.c"

@@ -132,6 +132,10 @@
             "input": "sfx/delivery.raw",
             "output": "sfx/delivery.c"
         }, {
+            "name": "sfx_falling_platform",
+            "input": "sfx/falling-platform.raw",
+            "output": "sfx/falling-platform.c"
+        }, {
             "name": "sfx_obstacle_placed",
             "input": "sfx/obstacle-placed.raw",
             "output": "sfx/obstacle-placed.c"

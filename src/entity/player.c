@@ -207,7 +207,6 @@ static inline void leave_tile(struct Level *level,
     if(level_get_tile(level, xt, yt) == TILE_FALL_PLATFORM) {
         level_set_tile(level, xt, yt, TILE_HOLE);
         level_add_particle_platform(level, xt, yt);
-        // TODO add falling platform sound
     }
 }
 
