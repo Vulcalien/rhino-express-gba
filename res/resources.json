@@ -132,13 +132,13 @@
             "input": "sfx/delivery.raw",
             "output": "sfx/delivery.c"
         }, {
-            "name": "sfx_place_obstacle",
-            "input": "sfx/place_obstacle.raw",
-            "output": "sfx/place_obstacle.c"
+            "name": "sfx_obstacle_placed",
+            "input": "sfx/obstacle-placed.raw",
+            "output": "sfx/obstacle-placed.c"
         }, {
-            "name": "sfx_hit_obstacle",
-            "input": "sfx/hit_obstacle.raw",
-            "output": "sfx/hit_obstacle.c"
+            "name": "sfx_obstacle_hit",
+            "input": "sfx/obstacle-hit.raw",
+            "output": "sfx/obstacle-hit.c"
         }, {
             "name": "sfx_water",
             "input": "sfx/water.raw",
