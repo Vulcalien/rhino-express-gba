@@ -53,7 +53,7 @@ int AgbMain(void) {
     interrupt_init();
     sound_init();
 
-    interrupt_enable(IRQ_VBLANK);
+    interrupt_toggle(IRQ_VBLANK, true);
     interrupt_set_isr(IRQ_VBLANK, vblank);
 
     screen_init();
