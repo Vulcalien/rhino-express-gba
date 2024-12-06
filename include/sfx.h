@@ -22,6 +22,9 @@
 #define SFX_PLAY(sound) SOUND_DMA_PLAY(sound, false, SOUND_DMA_A)
 
 extern const u8 sfx_delivery[5429];
+extern const u8 sfx_player_spawn[8144];
+extern const u8 sfx_player_fall[8096];
+extern const u8 sfx_player_win[11264];
 extern const u8 sfx_falling_platform[9420];
 extern const u8 sfx_obstacle_placed[1906];
 extern const u8 sfx_obstacle_hit[887];

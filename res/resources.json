@@ -132,6 +132,18 @@
             "input": "sfx/delivery.raw",
             "output": "sfx/delivery.c"
         }, {
+            "name": "sfx_player_spawn",
+            "input": "sfx/player-spawn.raw",
+            "output": "sfx/player-spawn.c"
+        }, {
+            "name": "sfx_player_fall",
+            "input": "sfx/player-fall.raw",
+            "output": "sfx/player-fall.c"
+        }, {
+            "name": "sfx_player_win",
+            "input": "sfx/player-win.raw",
+            "output": "sfx/player-win.c"
+        }, {
             "name": "sfx_falling_platform",
             "input": "sfx/falling-platform.raw",
             "output": "sfx/falling-platform.c"
