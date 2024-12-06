@@ -92,6 +92,7 @@ static inline void handle_animation(struct Level *level,
                 level->shake = true;
             } else {
                 player_data->animation = 0;
+                SFX_PLAY(sfx_player_spawn);
             }
             break;
         }
@@ -107,9 +108,17 @@ static inline void handle_animation(struct Level *level,
 
         case ANIMATION_WIN:
             player_data->animation_stage++;
+
+            // play the victory sound effect
+            if(player_data->animation_stage == 60)
+                SFX_PLAY(sfx_player_win);
+
+            // move the player up
             if(player_data->animation_stage > 60 && data->y > -64)
                 data->y -= 4;
-            if(player_data->animation_stage > 120) {
+
+            // after some time, start transitioning to the map
+            if(player_data->animation_stage == 120) {
                 static bool map_scene_arg = true;
                 scene_transition_to(&scene_map, &map_scene_arg);
             }
@@ -164,6 +173,7 @@ static inline void enter_tile(struct Level *level,
         case TILE_VOID:
         case TILE_HOLE:
             set_animation(data, ANIMATION_FALL);
+            SFX_PLAY(sfx_player_fall);
             break;
 
         case TILE_WOOD:
