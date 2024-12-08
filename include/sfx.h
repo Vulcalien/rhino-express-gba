@@ -19,7 +19,7 @@
 
 #include <gba/sound.h>
 
-#define SFX_PLAY(sound) SOUND_DMA_PLAY(sound, false, SOUND_DMA_A)
+#define SFX_PLAY(sound) sound_play(0, sound, sizeof(sound))
 
 extern const u8 sfx_delivery[5429];
 extern const u8 sfx_player_spawn[8144];

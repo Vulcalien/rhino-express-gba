@@ -19,7 +19,10 @@
 
 #include <gba/sound.h>
 
-#define MUSIC_PLAY(sound) SOUND_DMA_PLAY(sound, true, SOUND_DMA_B)
+#define MUSIC_PLAY(sound) do {           \
+    sound_play(1, sound, sizeof(sound)); \
+    sound_loop(1, sizeof(sound));        \
+} while(0)
 
 extern const u8 music_game[260624];
 extern const u8 music_map[130312];
