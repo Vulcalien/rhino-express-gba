@@ -17,11 +17,11 @@
 
 #include "main.h"
 
-#include <gba/sound.h>
+#include <gba/audio.h>
 
 #define MUSIC_PLAY(sound) do {           \
-    sound_play(1, sound, sizeof(sound)); \
-    sound_loop(1, sizeof(sound));        \
+    audio_play(1, sound, sizeof(sound)); \
+    audio_loop(1, sizeof(sound));        \
 } while(0)
 
 extern const u8 music_game[260624];

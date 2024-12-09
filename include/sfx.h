@@ -17,9 +17,9 @@
 
 #include "main.h"
 
-#include <gba/sound.h>
+#include <gba/audio.h>
 
-#define SFX_PLAY(sound) sound_play(0, sound, sizeof(sound))
+#define SFX_PLAY(sound) audio_play(0, sound, sizeof(sound))
 
 extern const u8 sfx_delivery[5429];
 extern const u8 sfx_player_spawn[8144];

@@ -16,7 +16,7 @@
 #include "main.h"
 
 #include <gba/interrupt.h>
-#include <gba/sound.h>
+#include <gba/audio.h>
 #include <gba/input.h>
 
 #include "screen.h"
@@ -51,7 +51,7 @@ static void vblank(void) {
 int AgbMain(void) {
     // initialize drivers
     interrupt_init();
-    sound_init();
+    audio_init();
 
     interrupt_toggle(IRQ_VBLANK, true);
     interrupt_set_isr(IRQ_VBLANK, vblank);
