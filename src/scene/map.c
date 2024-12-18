@@ -198,7 +198,7 @@ static inline void draw_level_buttons(u32 *used_sprites) {
             .size = SPRITE_SIZE_16x16,
 
             .tile = 512 + 128 + i * 4,
-            .palette = 1
+            .palette = 2
         });
     }
 }
