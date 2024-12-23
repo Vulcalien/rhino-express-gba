@@ -54,7 +54,7 @@ static u32 falling_platform_draw(struct Level *level,
 
         .size = SPRITE_SIZE_16x16,
 
-        .tile = 512 + 24,
+        .tile = 24,
         .palette = 1,
 
         .affine = 1,

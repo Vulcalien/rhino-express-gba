@@ -184,7 +184,7 @@ static inline void draw_level_buttons(u32 *used_sprites) {
         image += 136 * (i == levels_cleared); // uncleared level
 
         memcpy32(
-            (vu8 *) display_charblock(5) + (128 + i * 4) * 32,
+            (vu8 *) display_charblock(4) + (128 + i * 4) * 32,
             level_button_images + image * 32,
             4 * 32
         );
@@ -201,7 +201,7 @@ static inline void draw_level_buttons(u32 *used_sprites) {
 
             .size = SPRITE_SIZE_16x16,
 
-            .tile = 512 + 128 + i * 4,
+            .tile = 128 + i * 4,
             .palette = 2
         });
     }
@@ -244,7 +244,7 @@ static inline void draw_page_arrows(u32 *used_sprites) {
 
             .size = SPRITE_SIZE_16x16,
 
-            .tile = 512 + 28,
+            .tile = 28,
             .palette = 2,
 
             .affine = 1,

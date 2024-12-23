@@ -127,11 +127,8 @@ static void start_tick(void) {
 
 IWRAM_SECTION
 static void start_draw(void) {
-    if(page == PAGE_COUNT) {
-        sprite_hide_all();
-
+    if(page == PAGE_COUNT)
         return;
-    }
 
     const u32 image = image_in_page[page];
     const u32 text = page;
@@ -140,14 +137,14 @@ static void start_draw(void) {
     dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_32_BIT });
     dma_transfer(
         DMA3,
-        (vu8 *) display_charblock(5) + 128 * 32,
+        (vu8 *) display_charblock(4) + 128 * 32,
         cutscenes + (64 * 32) * image,
         64 * 32 / 4
     );
 
     dma_transfer(
         DMA3,
-        (vu8 *) display_charblock(5) + 192 * 32,
+        (vu8 *) display_charblock(4) + 192 * 32,
         cutscenes_text + (24 * 32) * text,
         24 * 32 / 4
     );
@@ -170,7 +167,7 @@ static void start_draw(void) {
 
         .size = SPRITE_SIZE_64x64,
 
-        .tile = 512 + 128,
+        .tile = 128,
         .palette = (image == 1 ? 0 : 2)
     });
 
@@ -188,7 +185,7 @@ static void start_draw(void) {
 
             .size = SPRITE_SIZE_32x8,
 
-            .tile = 512 + 192 + i * 4,
+            .tile = 192 + i * 4,
             .palette = 0
         });
     }

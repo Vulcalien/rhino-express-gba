@@ -56,6 +56,7 @@ static inline void init_fog_particles(void) {
 
 void screen_init(void) {
     display_config(0);
+    sprite_hide_all();
 
     // tutorial text and map
     background_config(BG1, &(struct Background) {
@@ -82,7 +83,7 @@ void screen_init(void) {
 
     // load tileset and spritesheet
     LOAD_TILESET(display_charblock(3), tileset);
-    LOAD_TILESET(display_charblock(5), sprites);
+    LOAD_TILESET(display_charblock(4), sprites);
 
     // load palette
     LOAD_PALETTE(DISPLAY_BG_PALETTE,  palette);
@@ -125,7 +126,7 @@ void screen_draw_fog_particles(u32 first_sprite_id) {
 
             .size = SPRITE_SIZE_8x8,
 
-            .tile = 512 + 56 + particles[i].tile,
+            .tile = 56 + particles[i].tile,
             .palette = 1
         });
     }

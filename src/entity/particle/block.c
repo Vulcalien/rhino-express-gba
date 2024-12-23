@@ -62,7 +62,7 @@ static u32 block_draw(struct Level *level, struct entity_Data *data,
 
         .size = SPRITE_SIZE_8x8,
 
-        .tile = 512 + 64 + particle_data->spriteset * 8 + phase,
+        .tile = 64 + particle_data->spriteset * 8 + phase,
         .palette = (particle_data->spriteset == 0)
     });
     return 1;

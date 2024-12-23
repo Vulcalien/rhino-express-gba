@@ -24,7 +24,7 @@
 // returns the sprites it drew
 INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
     const u32 distance = ((tick_count / 32) & 1) ? 1 : 3;
-    const u32 tile = 512 + 88;
+    const u32 tile = 88;
 
     sprite_config(id++, &(struct Sprite) {
         .x = xc - distance - 8,
