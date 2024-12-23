@@ -270,7 +270,7 @@ void level_load(struct Level *level,
     // load tutorial text
     if(metadata->tutorial) {
         memcpy32(
-            (vu8 *) display_charblock(2) + 1 * 32,
+            (vu8 *) display_charblock(1) + 1 * 32,
             (vu8 *) tutorial_text + metadata->tutorial_text * 48 * 32,
             48 * 32
         );

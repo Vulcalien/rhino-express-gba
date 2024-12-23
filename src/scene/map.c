@@ -16,6 +16,7 @@
 #include "scene.h"
 
 #include <gba/display.h>
+#include <gba/background.h>
 #include <gba/input.h>
 #include <gba/dma.h>
 #include <memory.h>
@@ -35,7 +36,7 @@ static u8 first_level_in_pages[PAGE_COUNT] = {
     0, 6, 11, 17
 };
 
-static u16 draw_offset; // this value should always be a multiple of two
+static u16 draw_offset;
 
 static i8 page;
 static i8 level;
@@ -59,7 +60,10 @@ static void map_init(void *data) {
 
     draw_offset = page * 240;
 
-    screen_mode_4();
+    // set tilemap tiles
+    for(u32 y = 0; y < 20; y++)
+        for(u32 x = 0; x < 31; x++)
+            BG1_TILEMAP[x + y * 32] = (x + y * 31) | 1 << 12;
 
     // draw now to prevent showing garbage on the first frame
     scene_map.draw();
@@ -252,6 +256,10 @@ static inline void draw_page_arrows(u32 *used_sprites) {
 
 IWRAM_SECTION
 static void map_draw(void) {
+    background_toggle(BG1, true);  // map
+    background_toggle(BG2, false); // level's higher tiles
+    background_toggle(BG3, false); // level's lower tiles
+
     // draw sprites
     u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
 
@@ -260,19 +268,19 @@ static void map_draw(void) {
 
     sprite_hide_range(used_sprites, SPRITE_COUNT);
 
-    // draw bitmap
-    vu8 *raster = (vu8 *) display_get_raster(0);
-    for(u32 y = 0; y < 160; y++) {
-        // 'draw_offset' is always a multiple of two,
-        // so 16-bit chunks work well
-        dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_16_BIT });
-        dma_transfer(
-            DMA3,
-            &raster[y * 240],
-            &map[draw_offset + y * 240 * 4],
-            240 / 2
-        );
+    // draw tilemap
+    u32 x0 = draw_offset / 8;
+    for(u32 y = 0; y < 20; y++) {
+        // select the y-th tilemap row
+        vu8 *dest = (vu8 *) display_charblock(1) + (y * 31) * 32;
+
+        // select the left-most tile (rows are 120 tiles long)
+        vu8 *src = (vu8 *) map + (y * 120 + x0) * 32;
+
+        dma_config(DMA3, &(struct DMA) { .chunk = DMA_CHUNK_32_BIT });
+        dma_transfer(DMA3, dest, src, 31 * 32 / 4);
     }
+    background_offset(BG1, draw_offset % 8, 0);
 }
 
 const struct Scene scene_map = {

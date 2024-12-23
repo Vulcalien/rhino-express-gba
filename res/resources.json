@@ -34,6 +34,15 @@
             "colors": { "#ff00ff": 0 },
             "bpp": 4
         }, {
+            "name": "map",
+            "input": "img/map.png",
+            "output": "img/map.c",
+            "static": true,
+
+            "tile_size": 1,
+            "palette": "res/img/palette.png",
+            "bpp": 4
+        }, {
             "name": "cutscenes",
             "input": "img/cutscenes.png",
             "output": "img/cutscenes.c",
@@ -133,18 +142,6 @@
             "name": "sfx_water",
             "input": "sfx/water.raw",
             "output": "sfx/water.c"
-        }
-    ],
-
-    "images": [
-        {
-            "name": "map",
-            "input": "img/map.png",
-            "output": "img/map.c",
-            "static": true,
-
-            "palette": "res/img/palette.png",
-            "bpp": 8
         }
     ]
 }

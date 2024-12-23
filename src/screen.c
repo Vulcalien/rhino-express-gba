@@ -55,10 +55,12 @@ static inline void init_fog_particles(void) {
     memcpy32((dest), (palette), sizeof(palette))
 
 void screen_init(void) {
-    // tutorial text
+    display_config(0);
+
+    // tutorial text and map
     background_config(BG1, &(struct Background) {
         .priority = 1,
-        .tileset  = 2,
+        .tileset  = 1,
         .tilemap  = 2,
 
         .mosaic = 1
@@ -78,17 +80,18 @@ void screen_init(void) {
         .tilemap  = 6
     });
 
-    // load spritesheet
+    // load tileset and spritesheet
+    LOAD_TILESET(display_charblock(3), tileset);
     LOAD_TILESET(display_charblock(5), sprites);
 
     // load palette
     LOAD_PALETTE(DISPLAY_BG_PALETTE,  palette);
     LOAD_PALETTE(DISPLAY_OBJ_PALETTE, palette);
 
+    init_fog_particles();
+
     // disable forced blank
     display_force_blank(false);
-
-    init_fog_particles();
 }
 
 IWRAM_SECTION
@@ -126,35 +129,4 @@ void screen_draw_fog_particles(u32 first_sprite_id) {
             .palette = 1
         });
     }
-}
-
-void screen_mode_0(void) {
-    vsync();
-
-    display_config(0);
-    background_toggle(BG2, true);
-    background_toggle(BG3, true);
-    sprite_hide_all();
-
-    LOAD_TILESET(display_charblock(3), tileset);
-
-    // === tutorial text background ===
-
-    // clear first tile of tileset
-    memset32(display_charblock(2), 0, 32);
-
-    // clear visible tiles of tilemap
-    memset32(BG1_TILEMAP, 0, 32 * 20 * 2);
-
-    // set tiles of tilemap
-    for(u32 y = 0; y < 3; y++)
-        for(u32 x = 0; x < 16; x++)
-            BG1_TILEMAP[(7 + x) + (15 + y) * 32] = 1 + x + y * 16;
-}
-
-void screen_mode_4(void) {
-    vsync();
-
-    display_config(4);
-    sprite_hide_all();
 }

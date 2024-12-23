@@ -15,16 +15,36 @@
  */
 #include "scene.h"
 
+#include <memory.h>
+#include <gba/display.h>
+#include <gba/background.h>
+
 #include "level.h"
 #include "screen.h"
 
 static struct Level level;
 
+static inline void setup_tutorial_text(void) {
+    // clear first tile of tileset
+    memset32(display_charblock(1), 0, 32);
+
+    // clear visible tiles of tilemap
+    memset32(BG1_TILEMAP, 0, 32 * 20 * 2);
+
+    // set tiles of tilemap
+    for(u32 y = 0; y < 3; y++)
+        for(u32 x = 0; x < 16; x++)
+            BG1_TILEMAP[(7 + x) + (15 + y) * 32] = 1 + x + y * 16;
+}
+
 static void game_init(void *data) {
     u32 selected_level = *((u32 *) data);
     level_load(&level, &level_metadata[selected_level]);
 
-    screen_mode_0();
+    background_toggle(BG2, true); // level's higher tiles
+    background_toggle(BG3, true); // level's lower tiles
+
+    setup_tutorial_text();
 
     // draw now to prevent showing garbage on the first frame
     scene_game.draw();

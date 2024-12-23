@@ -29,6 +29,3 @@
 extern void screen_init(void);
 
 extern void screen_draw_fog_particles(u32 first_sprite_id);
-
-extern void screen_mode_0(void);
-extern void screen_mode_4(void);

@@ -57,8 +57,6 @@ static void start_init(void *data) {
     transparency.dir = +1;
     transparency.val = 0;
 
-    screen_mode_4();
-
     // clear the display with the backdrop color
     memset32(display_get_raster(0), 0, DISPLAY_W * DISPLAY_H);
 
