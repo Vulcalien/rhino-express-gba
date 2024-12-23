@@ -5,35 +5,25 @@
     "tilesets": [
         {
             "name": "tileset",
-
             "input": "img/tileset.png",
             "output": "img/tileset.c",
+            "static": true,
 
             "tile_size": 1,
-
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 4,
-
-            "static": true
-        },
-
-        {
+            "bpp": 4
+        }, {
             "name": "sprites",
-
             "input": "img/sprites.png",
             "output": "img/sprites.c",
+            "static": true,
 
             "tile_size": 2,
-
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 4,
-
-            "static": true
-        },
-
-        {
+            "bpp": 4
+        }, {
             "name": "level_sidebar",
             "input": "img/level-sidebar.png",
             "output": "img/level-sidebar.c",
@@ -43,37 +33,25 @@
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
             "bpp": 4
-        },
-
-        {
+        }, {
             "name": "cutscenes",
-
             "input": "img/cutscenes.png",
             "output": "img/cutscenes.c",
+            "static": true,
 
             "tile_size": 8,
-
             "palette": "res/img/palette.png",
-            "bpp": 4,
-
-            "static": true
-        },
-
-        {
+            "bpp": 4
+        }, {
             "name": "cutscenes_text",
-
             "input": "img/cutscenes-text.png",
             "output": "img/cutscenes-text.c",
+            "static": true,
 
             "tile_size": [ 4, 1 ],
-
             "palette": "res/img/palette.png",
-            "bpp": 4,
-
-            "static": true
-        },
-
-        {
+            "bpp": 4
+        }, {
             "name": "tutorial_text",
             "input": "img/tutorial-text.png",
             "output": "img/tutorial-text.c",
@@ -81,33 +59,25 @@
 
             "tile_size": [ 16, 3 ],
             "palette": "res/img/palette.png",
-            "bpp": 4,
-
-            "static": true
-        },
-
-        {
+            "bpp": 4
+        }, {
             "name": "level_button_images",
-
             "input": "img/level-buttons.png",
             "output": "img/level-buttons.c",
+            "static": true,
 
             "tile_size": 2,
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 4,
-
-            "static": true
+            "bpp": 4
         }
     ],
 
     "palettes": [
         {
             "name": "palette",
-
             "input": "img/palette.png",
             "output": "img/palette.c",
-
             "static": true
         }
     ],
@@ -169,14 +139,12 @@
     "images": [
         {
             "name": "map",
-
             "input": "img/map.png",
             "output": "img/map.c",
+            "static": true,
 
             "palette": "res/img/palette.png",
-            "bpp": 8,
-
-            "static": true
+            "bpp": 8
         }
     ]
 }
