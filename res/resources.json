@@ -43,6 +43,15 @@
             "palette": "res/img/palette.png",
             "bpp": 4
         }, {
+            "name": "map_paths",
+            "input": "img/map-paths.png",
+            "output": "img/map-paths.c",
+            "static": true,
+
+            "tile_size": [2, 4],
+            "palette": "res/img/palette.png",
+            "bpp": 4
+        }, {
             "name": "cutscenes",
             "input": "img/cutscenes.png",
             "output": "img/cutscenes.c",
