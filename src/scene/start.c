@@ -129,6 +129,9 @@ static void start_tick(void) {
 
 THUMB
 static void start_draw(void) {
+    // hide all sprites, so that they are not shown when transitioning
+    sprite_hide_all();
+
     if(page == PAGE_COUNT)
         return;
 
