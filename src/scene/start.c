@@ -49,6 +49,7 @@ static struct {
     u16 val;
 } transparency;
 
+THUMB
 static void start_init(u32 data) {
     page = 0;
 
@@ -104,6 +105,7 @@ static inline void update_fading(void) {
     }
 }
 
+THUMB
 static void start_tick(void) {
     if(tick_count % 2 == 0)
         update_fading();
@@ -125,7 +127,7 @@ static void start_tick(void) {
 #include "../res/img/cutscenes.c"
 #include "../res/img/cutscenes-text.c"
 
-IWRAM_SECTION
+THUMB
 static void start_draw(void) {
     if(page == PAGE_COUNT)
         return;

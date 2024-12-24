@@ -41,6 +41,7 @@ static u16 draw_offset;
 static i8 page;
 static i8 level;
 
+THUMB
 static void map_init(u32 data) {
     bool has_cleared_level = (data & BIT(0));
     bool play_music        = (data & BIT(1));
@@ -88,6 +89,7 @@ static inline void update_draw_offset(void) {
     }
 }
 
+THUMB
 static void map_tick(void) {
     // move left/right by one page
     if(input_pressed(KEY_L)) {
@@ -244,7 +246,7 @@ static inline void draw_page_arrows(u32 *used_sprites) {
     }
 }
 
-IWRAM_SECTION
+THUMB
 static void map_draw(void) {
     background_toggle(BG1, true);  // map
     background_toggle(BG2, false); // level's higher tiles
