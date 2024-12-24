@@ -41,20 +41,17 @@ static u16 draw_offset;
 static i8 page;
 static i8 level;
 
-static void map_init(void *data) {
-    if(data) {
-        bool has_cleared_level = *((bool *) data);
-        if(has_cleared_level && level == levels_cleared) {
-            levels_cleared++;
-            storage_save();
-        }
+static void map_init(u32 data) {
+    bool has_cleared_level = (data & BIT(0));
+    bool play_music        = (data & BIT(1));
 
-        // Only the level calls this function passing a non-null 'data'
-        // pointer. And since the level plays music, the 'map' music has
-        // to be restarted. The 'start' scene, instead, plays the same
-        // music as the map, therefore it should not be restarted.
-        MUSIC_PLAY(music_map);
+    if(has_cleared_level && level == levels_cleared) {
+        levels_cleared++;
+        storage_save();
     }
+
+    if(play_music)
+        MUSIC_PLAY(music_map);
 
     // TODO set level and page
 
@@ -130,16 +127,9 @@ static void map_tick(void) {
     update_draw_offset();
 
     // check if the player has chosen a level
-    if(input_pressed(KEY_A) || input_pressed(KEY_START)) {
-        if(level < LEVEL_COUNT) {
-            // when calling 'scene_transition_to', the data passed is
-            // not used immediately (it needs static storage duration)
-            static u32 game_scene_arg;
-            game_scene_arg = level;
-
-            scene_transition_to(&scene_game, &game_scene_arg);
-        }
-    }
+    if(input_pressed(KEY_A) || input_pressed(KEY_START))
+        if(level < LEVEL_COUNT)
+            scene_transition_to(&scene_game, level);
 }
 
 static inline void draw_level_buttons(u32 *used_sprites) {

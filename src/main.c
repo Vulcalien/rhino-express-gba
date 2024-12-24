@@ -57,7 +57,7 @@ int AgbMain(void) {
     interrupt_set_isr(IRQ_VBLANK, vblank);
 
     screen_init();
-    scene_set(&scene_start, NULL);
+    scene_set(&scene_start, 0);
 
     storage_load();
 

@@ -49,7 +49,7 @@ static struct {
     u16 val;
 } transparency;
 
-static void start_init(void *data) {
+static void start_init(u32 data) {
     page = 0;
 
     // DEBUG
@@ -110,7 +110,7 @@ static void start_tick(void) {
 
     // if all pages have been shown, transition to the map scene
     if(page == PAGE_COUNT)
-        scene_transition_to(&scene_map, NULL);
+        scene_transition_to(&scene_map, 0);
 
     if(transparency.element == FADING_NONE) {
         if(input_pressed(KEY_A) || input_pressed(KEY_B) ||

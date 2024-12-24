@@ -118,10 +118,8 @@ static inline void handle_animation(struct Level *level,
                 data->y -= 4;
 
             // after some time, start transitioning to the map
-            if(player_data->animation_stage == 120) {
-                static bool map_scene_arg = true;
-                scene_transition_to(&scene_map, &map_scene_arg);
-            }
+            if(player_data->animation_stage == 120)
+                scene_transition_to(&scene_map, BIT(0) | BIT(1));
             break;
 
         default:

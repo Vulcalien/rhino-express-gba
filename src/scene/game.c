@@ -37,8 +37,7 @@ static inline void setup_tutorial_text(void) {
             BG1_TILEMAP[(7 + x) + (15 + y) * 32] = 1 + x + y * 16;
 }
 
-static void game_init(void *data) {
-    u32 selected_level = *((u32 *) data);
+static void game_init(u32 selected_level) {
     level_load(&level, &level_metadata[selected_level]);
 
     background_toggle(BG2, true); // level's higher tiles
