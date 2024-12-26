@@ -278,7 +278,7 @@ void level_load(struct Level *level,
 
     // load edit sidebar
     memcpy32(
-        (vu8 *) display_charblock(5) + 128 * 32,
+        (vu8 *) display_charblock(4) + 128 * 32,
         level_sidebar,
         4 * 8 * 32
     );
