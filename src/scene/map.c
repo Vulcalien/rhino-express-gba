@@ -46,6 +46,7 @@ THUMB
 static void map_init(u32 data) {
     bool has_cleared_level = (data & BIT(0));
     bool play_music        = (data & BIT(1));
+    bool select_next_level = (data & BIT(2));
 
     if(has_cleared_level && level == levels_cleared) {
         levels_cleared++;
@@ -55,9 +56,25 @@ static void map_init(u32 data) {
     if(play_music)
         MUSIC_PLAY(music_map);
 
-    // TODO set level and page
+    if(select_next_level) {
+        level = levels_cleared;
 
-    draw_offset = page * 240;
+        // select page
+        if(levels_cleared < LEVEL_COUNT) {
+            level = levels_cleared;
+            for(u32 i = 0; i < PAGE_COUNT - 1; i++) {
+                if(first_level_in_pages[i + 1] > level) {
+                    page = i;
+                    break;
+                }
+            }
+        } else {
+            level = 0;
+            page = 0;
+        }
+
+        draw_offset = page * 240;
+    }
 
     // set tilemap tiles
     for(u32 y = 0; y < 20; y++)

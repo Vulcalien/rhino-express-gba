@@ -112,7 +112,7 @@ static void start_tick(void) {
 
     // if all pages have been shown, transition to the map scene
     if(page == PAGE_COUNT)
-        scene_transition_to(&scene_map, 0);
+        scene_transition_to(&scene_map, BIT(2));
 
     if(transparency.element == FADING_NONE) {
         if(input_pressed(KEY_A) || input_pressed(KEY_B) ||
