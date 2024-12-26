@@ -29,6 +29,7 @@
 #include "music.h"
 
 #include "../res/img/map.c"
+#include "../res/img/map-paths.c"
 #include "../res/img/level-buttons.c"
 
 #define PAGE_COUNT 4
@@ -62,6 +63,9 @@ static void map_init(u32 data) {
     for(u32 y = 0; y < 20; y++)
         for(u32 x = 0; x < 31; x++)
             BG1_TILEMAP[x + y * 32] = (x + y * 31) | 1 << 12;
+
+    // load paths tileset
+    memcpy32(display_charblock(5), map_paths, sizeof(map_paths));
 
     // draw now to prevent showing garbage on the first frame
     scene_map.draw();
@@ -198,6 +202,87 @@ static inline void draw_level_buttons(u32 *used_sprites) {
     }
 }
 
+static inline void draw_paths(u32 *used_sprites) {
+    const struct {
+        u8 level;
+        i16 x;
+        i16 y;
+    } paths[] = {
+        { 1, 71, 48 },
+
+        { 2, 73, 88 },
+
+        { 3, 100, 107 },
+        { 3, 116, 107 },
+
+        { 4, 133, 62 },
+        { 4, 133, 94 },
+
+        { 5, 149, 55 },
+        { 5, 165, 55 },
+
+        { 6, },
+        { 6, },
+        { 6, },
+        { 6, },
+
+        { 7, 315, 46 },
+        { 7, 315, 78 },
+
+        { 8, 329, 94 },
+        { 8, 345, 94 },
+
+        { 9, 366, 92 },
+        { 9, 382, 92 },
+
+        { 10, 389, 49 },
+
+        { 11, },
+        { 11, },
+        { 11, },
+        { 11, },
+        { 11, },
+
+        { 12, 550, 41 },
+        { 12, 566, 41 },
+
+        { 13, 557, 69 },
+        { 13, 573, 69 },
+
+        { 14, 558, 99 },
+        { 14, 574, 99 },
+
+        { 15, 595, 100 },
+        { 15, 611, 100 },
+
+        { 16, 623, 60 },
+
+        { 17, },
+    };
+
+    for(u32 i = 0; i < sizeof(paths) / sizeof(paths[0]); i++) {
+        if(paths[i].level > levels_cleared)
+            break;
+
+        const i32 x = paths[i].x - draw_offset;
+        const i32 y = paths[i].y;
+
+        // check if sprite would be inside display area
+        if(x < -16 || x >= 240)
+            continue;
+
+        sprite_config((*used_sprites)++, &(struct Sprite) {
+            .x = x,
+            .y = y,
+
+            .size = SPRITE_SIZE_16x32,
+
+            .tile = 512 + i * 8,
+            .palette = 0
+        });
+    }
+}
+
 static inline void draw_page_arrows(u32 *used_sprites) {
     // fixed point number: 1 = 0x4000
     // scale = 1.25 + sin(t) / 4   --->   range [1, 1.5]
@@ -255,6 +340,7 @@ static void map_draw(void) {
     u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
 
     draw_level_buttons(&used_sprites);
+    draw_paths(&used_sprites);
     draw_page_arrows(&used_sprites);
 
     sprite_hide_range(used_sprites, SPRITE_COUNT);
