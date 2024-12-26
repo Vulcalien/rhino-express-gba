@@ -290,11 +290,9 @@ void level_load(struct Level *level,
     // enter editing mode
     level->is_editing = true;
     level_add_edit_sidebar(level);
-    level_add_edit_cursor(
-        level,
-        metadata->size.w / 2,
-        metadata->size.h / 2
-    );
+    level_add_edit_cursor(level);
+    level->editor.xt = metadata->size.w / 2;
+    level->editor.yt = metadata->size.h / 2;
     MUSIC_PLAY(music_editing);
 
     // add player

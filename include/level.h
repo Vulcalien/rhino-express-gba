@@ -51,9 +51,15 @@ struct Level {
 
     u8 letters_to_deliver;
 
+    // editing
     bool is_editing;
     u8 obstacles_to_add[LEVEL_OBSTACLE_TYPES];
+    struct {
+        i32 xt;
+        i32 yt;
+    } editor;
 
+    // visual properties
     struct {
         i32 x;
         i32 y;
@@ -150,7 +156,7 @@ extern const struct level_Metadata level_metadata[LEVEL_COUNT];
 extern bool level_add_player(struct Level *level);
 extern bool level_add_mailbox(struct Level *level, u32 xt, u32 yt);
 
-extern bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt);
+extern bool level_add_edit_cursor(struct Level *level);
 extern bool level_add_edit_sidebar(struct Level *level);
 
 extern bool level_add_decor_house(struct Level *level, u32 xt, u32 yt,

@@ -96,22 +96,29 @@ static inline bool try_to_place(struct Level *level,
     return true;
 }
 
-static inline void move_cursor(struct Level *level,
-                               struct entity_Data *data,
-                               i32 xm, i32 ym) {
-    if(xm == 0 && ym == 0)
-        return;
+static inline void move_cursor(struct Level *level) {
+    i32 xt = level->editor.xt;
+    i32 yt = level->editor.yt;
 
-    i32 new_x = data->x + (xm << LEVEL_TILE_SIZE);
-    i32 new_y = data->y + (ym << LEVEL_TILE_SIZE);
+    if(input_pressed(KEY_LEFT )) xt--;
+    if(input_pressed(KEY_RIGHT)) xt++;
+    if(input_pressed(KEY_UP   )) yt--;
+    if(input_pressed(KEY_DOWN )) yt++;
 
-    // check if cursor is moving out of level bounds
-    if(new_x < 0 || new_x >= level->metadata->size.w << LEVEL_TILE_SIZE ||
-       new_y < 0 || new_y >= level->metadata->size.h << LEVEL_TILE_SIZE)
-        return;
+    // check if 'xt' is out of bounds
+    if(xt < 0)
+        xt = 0;
+    if(xt >= level->metadata->size.w)
+        xt = level->metadata->size.w - 1;
 
-    data->x = new_x;
-    data->y = new_y;
+    // check if 'yt' is out of bounds
+    if(yt < 0)
+        yt = 0;
+    if(yt >= level->metadata->size.h)
+        yt = level->metadata->size.h - 1;
+
+    level->editor.xt = xt;
+    level->editor.yt = yt;
 }
 
 IWRAM_SECTION
@@ -127,29 +134,18 @@ static void cursor_tick(struct Level *level,
     }
 
     // change selected obstacle if L or R pressed
-    i32 switch_step = 0;
-    switch_step -= input_pressed(KEY_L);
-    switch_step += input_pressed(KEY_R);
-    if(switch_step != 0)
-        switch_item(level, data, switch_step);
-
-    if(input_pressed(KEY_A)) {
-        const i32 xt = data->x >> LEVEL_TILE_SIZE;
-        const i32 yt = data->y >> LEVEL_TILE_SIZE;
-
-        try_to_place(level, data, xt, yt);
+    {
+        i32 switch_step = 0;
+        switch_step -= input_pressed(KEY_L);
+        switch_step += input_pressed(KEY_R);
+        if(switch_step != 0)
+            switch_item(level, data, switch_step);
     }
 
-    // cursor movement
-    i32 xm = 0;
-    i32 ym = 0;
+    if(input_pressed(KEY_A))
+        try_to_place(level, data, level->editor.xt, level->editor.yt);
 
-    if(input_pressed(KEY_LEFT))  xm--;
-    if(input_pressed(KEY_RIGHT)) xm++;
-    if(input_pressed(KEY_UP))    ym--;
-    if(input_pressed(KEY_DOWN))  ym++;
-
-    move_cursor(level, data, xm, ym);
+    move_cursor(level);
 }
 
 IWRAM_SECTION
@@ -157,6 +153,9 @@ static u32 cursor_draw(struct Level *level,
                        struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
     struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+
+    x = (level->editor.xt << LEVEL_TILE_SIZE) - level->offset.x + 8;
+    y = (level->editor.yt << LEVEL_TILE_SIZE) - level->offset.y + 8;
 
     if(!any_obstacle_left(level))
         return 0;
@@ -185,18 +184,14 @@ const struct entity_Type entity_edit_cursor = {
     .draw = cursor_draw
 };
 
-bool level_add_edit_cursor(struct Level *level, u32 xt, u32 yt) {
+bool level_add_edit_cursor(struct Level *level) {
     level_EntityID id = level_new_entity(level);
     if(id == LEVEL_NO_ENTITY)
         return false;
 
-    // set generic entity data
     struct entity_Data *data = &level->entities[id];
+    data->x = data->y = 0;
 
-    data->x = (xt << LEVEL_TILE_SIZE) + 8;
-    data->y = (yt << LEVEL_TILE_SIZE) + 8;
-
-    // set specific cursor data
     struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
 
     // select the first available obstacle
