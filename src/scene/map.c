@@ -358,9 +358,9 @@ static void map_draw(void) {
     // draw sprites
     u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
 
+    draw_page_arrows(&used_sprites);
     draw_level_buttons(&used_sprites);
     draw_paths(&used_sprites);
-    draw_page_arrows(&used_sprites);
 
     sprite_hide_range(used_sprites, SPRITE_COUNT);
 
