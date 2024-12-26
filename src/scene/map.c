@@ -135,8 +135,7 @@ static void map_tick(void) {
 }
 
 static inline void draw_level_buttons(u32 *used_sprites) {
-    // TODO check if these values are correct
-    struct {
+    const struct {
         i16 x;
         i16 y;
     } level_buttons[LEVEL_COUNT] = {
@@ -157,7 +156,7 @@ static inline void draw_level_buttons(u32 *used_sprites) {
         { 580, 61  },
         { 556, 93  },
         { 588, 129 },
-        { 623, 97  },
+        { 624, 97  },
         { 632, 53  }
     };
 
