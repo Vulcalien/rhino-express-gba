@@ -114,7 +114,8 @@ DRAW_FUNC(platform_draw) {
 
     u32 tile    = 3;
     u32 palette = 0;
-    if(level->editor.xt == xt && level->editor.yt == yt) {
+    if(level->is_editing &&
+       level->editor.xt == xt && level->editor.yt == yt) {
         // green color
         tile    = 9;
         palette = 1;
@@ -146,7 +147,8 @@ DRAW_FUNC(fall_platform_draw) {
 
     u32 tile    = 4;
     u32 palette = 1;
-    if(level->editor.xt == xt && level->editor.yt == yt) {
+    if(level->is_editing &&
+       level->editor.xt == xt && level->editor.yt == yt) {
         tile    = 10;
         palette = 0;
     }
@@ -181,7 +183,8 @@ static INLINE void draw_obstacle(struct Level *level, i32 xt, i32 yt,
     if(platform) {
         base += 12;
 
-        if(level->editor.xt == xt && level->editor.yt == yt) {
+        if(level->is_editing &&
+           level->editor.xt == xt && level->editor.yt == yt) {
             // TODO check if red color should be used
         }
     }
