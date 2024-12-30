@@ -112,10 +112,31 @@ DRAW_FUNC(high_ground_draw) {
 DRAW_FUNC(platform_draw) {
     vu16 *low = GET_LOW(level, xt, yt);
 
-    low[0]  = TILE(3, 0, 0);
-    low[1]  = TILE(3, 1, 0);
-    low[32] = TILE(3, 2, 0);
-    low[33] = TILE(3, 3, 0);
+    u32 tile    = 3;
+    u32 palette = 0;
+    if(level->editor.xt == xt && level->editor.yt == yt) {
+        // green color
+        tile    = 11;
+        palette = 1;
+
+        // check if there is a solid entity (player or mailbox) on tile
+        for(u32 i = 0; i < LEVEL_SOLID_ENTITIES_IN_TILE; i++) {
+            const u32 t = xt + yt * LEVEL_W;
+            const level_EntityID id = level->solid_entities[t][i];
+
+            if(id < LEVEL_ENTITY_LIMIT) {
+                // red color
+                tile    = 12;
+                palette = 0;
+                break;
+            }
+        }
+    }
+
+    low[0]  = TILE(tile, 0, palette);
+    low[1]  = TILE(tile, 1, palette);
+    low[32] = TILE(tile, 2, palette);
+    low[33] = TILE(tile, 3, palette);
 
     draw_outer_borders(level, xt, yt);
 }
@@ -123,10 +144,17 @@ DRAW_FUNC(platform_draw) {
 DRAW_FUNC(fall_platform_draw) {
     vu16 *low = GET_LOW(level, xt, yt);
 
-    low[0]  = TILE(4, 0, 1);
-    low[1]  = TILE(4, 1, 1);
-    low[32] = TILE(4, 2, 1);
-    low[33] = TILE(4, 3, 1);
+    u32 tile    = 4;
+    u32 palette = 1;
+    if(level->editor.xt == xt && level->editor.yt == yt) {
+        tile    = 12;
+        palette = 0;
+    }
+
+    low[0]  = TILE(tile, 0, palette);
+    low[1]  = TILE(tile, 1, palette);
+    low[32] = TILE(tile, 2, palette);
+    low[33] = TILE(tile, 3, palette);
 
     draw_outer_borders(level, xt, yt);
 }
@@ -150,8 +178,13 @@ static INLINE void draw_obstacle(struct Level *level, i32 xt, i32 yt,
     bool platform = data & BIT(0);
     bool flip     = data & BIT(1);
 
-    if(platform)
+    if(platform) {
         base += 16;
+
+        if(level->editor.xt == xt && level->editor.yt == yt) {
+            // TODO check if red color should be used
+        }
+    }
 
     low[0]  = TILE(base     + flip, flip, palette);
     low[1]  = TILE(base + 1 - flip, flip, palette);
