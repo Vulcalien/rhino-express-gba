@@ -49,41 +49,41 @@ static void draw_outer_borders(struct Level *level, i32 xt, i32 yt) {
     bool top_right = level_get_tile(level, xt + 1, yt - 1) == TILE_VOID;
 
     if(down) {
-        low[64] = TILE(16, 0, 0);
-        low[65] = TILE(16, 0, 0);
+        low[64] = TILE(12, 0, 0);
+        low[65] = TILE(12, 0, 0);
 
         if(left)
-            low[63] = TILE(17, 1, 0);
+            low[63] = TILE(13, 1, 0);
         if(right)
-            low[66] = TILE(17, 0, 0);
+            low[66] = TILE(13, 0, 0);
     }
 
     if(left) {
-        low[31] = TILE(down ? 9 : 25, 1, 0);
+        low[31] = TILE(down ? 7 : 19, 1, 0);
 
         if(up)
             low[-1] = TILE(1, 1, 0);
         else
-            low[-1] = TILE(top_left ? 25 : 24, 1, 0);
+            low[-1] = TILE(top_left ? 19 : 18, 1, 0);
     }
 
     if(right) {
-        low[34] = TILE(down ? 9 : 25, 0, 0);
+        low[34] = TILE(down ? 7 : 19, 0, 0);
 
         if(up)
             low[2] = TILE(1, 0, 0);
         else
-            low[2] = TILE(top_right ? 25 : 24, 0, 0);
+            low[2] = TILE(top_right ? 19 : 18, 0, 0);
     }
 }
 
 DRAW_FUNC(ground_draw) {
     vu16 *low = GET_LOW(level, xt, yt);
 
-    low[0]  = TILE(8, 0, 0);
-    low[1]  = TILE(8, 0, 0);
-    low[32] = TILE(8, 0, 0);
-    low[33] = TILE(8, 0, 0);
+    low[0]  = TILE(6, 0, 0);
+    low[1]  = TILE(6, 0, 0);
+    low[32] = TILE(6, 0, 0);
+    low[33] = TILE(6, 0, 0);
 
     draw_outer_borders(level, xt, yt);
 }
@@ -98,14 +98,14 @@ DRAW_FUNC(high_ground_draw) {
     bool up    = level_get_tile(level, xt, yt - 1) != TILE_HIGH_GROUND;
     bool down  = level_get_tile(level, xt, yt + 1) != TILE_HIGH_GROUND;
 
-    high[0]  = TILE((left  && up) ? 2 : 10, 1, 0);
-    high[1]  = TILE((right && up) ? 2 : 10, 0, 0);
-    high[32] = TILE((left  && down) ? 18 : 10, 1, 0);
-    high[33] = TILE((right && down) ? 18 : 10, 0, 0);
+    high[0]  = TILE((left  && up) ? 2 : 8, 1, 0);
+    high[1]  = TILE((right && up) ? 2 : 8, 0, 0);
+    high[32] = TILE((left  && down) ? 14 : 8, 1, 0);
+    high[33] = TILE((right && down) ? 14 : 8, 0, 0);
 
     if(down) {
-        high[64] = TILE(left  ? 26 : 16, 1, 0);
-        high[65] = TILE(right ? 26 : 16, 0, 0);
+        high[64] = TILE(left  ? 20 : 12, 1, 0);
+        high[65] = TILE(right ? 20 : 12, 0, 0);
     }
 }
 
@@ -116,7 +116,7 @@ DRAW_FUNC(platform_draw) {
     u32 palette = 0;
     if(level->editor.xt == xt && level->editor.yt == yt) {
         // green color
-        tile    = 11;
+        tile    = 9;
         palette = 1;
 
         // check if there is a solid entity (player or mailbox) on tile
@@ -126,7 +126,7 @@ DRAW_FUNC(platform_draw) {
 
             if(id < LEVEL_ENTITY_LIMIT) {
                 // red color
-                tile    = 12;
+                tile    = 10;
                 palette = 0;
                 break;
             }
@@ -147,7 +147,7 @@ DRAW_FUNC(fall_platform_draw) {
     u32 tile    = 4;
     u32 palette = 1;
     if(level->editor.xt == xt && level->editor.yt == yt) {
-        tile    = 12;
+        tile    = 10;
         palette = 0;
     }
 
@@ -179,7 +179,7 @@ static INLINE void draw_obstacle(struct Level *level, i32 xt, i32 yt,
     bool flip     = data & BIT(1);
 
     if(platform) {
-        base += 16;
+        base += 12;
 
         if(level->editor.xt == xt && level->editor.yt == yt) {
             // TODO check if red color should be used
@@ -188,22 +188,22 @@ static INLINE void draw_obstacle(struct Level *level, i32 xt, i32 yt,
 
     low[0]  = TILE(base     + flip, flip, palette);
     low[1]  = TILE(base + 1 - flip, flip, palette);
-    low[32] = TILE(base + 8 + flip, flip, palette);
-    low[33] = TILE(base + 9 - flip, flip, palette);
+    low[32] = TILE(base + 6 + flip, flip, palette);
+    low[33] = TILE(base + 7 - flip, flip, palette);
 
     draw_outer_borders(level, xt, yt);
 }
 
 DRAW_FUNC(wood_draw) {
-    draw_obstacle(level, xt, yt, 32, 1);
+    draw_obstacle(level, xt, yt, 24, 1);
 }
 
 DRAW_FUNC(rock_draw) {
-    draw_obstacle(level, xt, yt, 34, 0);
+    draw_obstacle(level, xt, yt, 26, 0);
 }
 
 DRAW_FUNC(water_draw) {
-    draw_obstacle(level, xt, yt, 36, 0);
+    draw_obstacle(level, xt, yt, 28, 0);
 }
 
 const struct tile_Type tile_type_list[TILE_TYPES] = {
