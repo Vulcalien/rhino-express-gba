@@ -92,6 +92,7 @@ static inline bool try_to_place(struct Level *level,
     if(level->obstacles_to_add[cursor_data->selected] == 0)
         switch_item(level, data, +1);
 
+    level_add_particle_block(level, xt, yt, tile);
     SFX_PLAY(sfx_obstacle_placed);
     return true;
 }
