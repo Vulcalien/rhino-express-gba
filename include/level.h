@@ -1,4 +1,4 @@
-/* Copyright 2023-2024 Vulcalien
+/* Copyright 2023-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,10 @@ struct Level {
 
     u8 letters_to_deliver;
 
-    // editing
-    bool is_editing;
-    u8 obstacles_to_add[LEVEL_OBSTACLE_TYPES];
     struct {
+        bool active;
+        u8 obstacles[LEVEL_OBSTACLE_TYPES];
+
         i32 xt;
         i32 yt;
     } editor;
@@ -82,13 +82,13 @@ struct level_Metadata {
         u8 y : 4;
     } spawn;
 
+    u8 obstacles[LEVEL_OBSTACLE_TYPES];
+
     // list terminated by (0, 0)
     struct {
         u8 x : 4;
         u8 y : 4;
     } mailboxes[9];
-
-    u8 obstacles_to_add[3];
 
     // list terminated by (0, 0)
     struct {

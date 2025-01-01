@@ -283,12 +283,12 @@ void level_load(struct Level *level,
         4 * 8 * 32
     );
 
-    // copy 'obstacles_to_add'
+    // copy 'obstacles' array
     for(u32 i = 0; i < 3; i++)
-        level->obstacles_to_add[i] = metadata->obstacles_to_add[i];
+        level->editor.obstacles[i] = metadata->obstacles[i];
 
     // enter editing mode
-    level->is_editing = true;
+    level->editor.active = true;
     level_add_edit_sidebar(level);
     level_add_edit_cursor(level);
     level->editor.xt = metadata->size.w / 2;
@@ -353,14 +353,13 @@ void level_add_entity(struct Level *level,
 const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 1
     {
+        .tile_data = level_1,
         .size = { 7, 3 },
         .spawn = { 1, 1 },
-        .tile_data = level_1,
 
         .mailboxes = {
             { 4, 1 }
         },
-
         .houses = {
             { 5, 1 }
         },
@@ -371,15 +370,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 2
     {
+        .tile_data = level_2,
         .size = { 7, 8 },
         .spawn = { 5, 3 },
-        .tile_data = level_2,
 
         .mailboxes = {
             { 3, 2 },
             { 3, 5 }
         },
-
         .houses = {
             { 1, 6 }
         }
@@ -387,15 +385,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 3
     {
+        .tile_data = level_3,
         .size = { 6, 8 },
         .spawn = { 1, 4 },
-        .tile_data = level_3,
 
         .mailboxes = {
             { 2, 2 },
             { 3, 4 }
         },
-
         .houses = {
             { 1, 1 },
             { 4, 3 }
@@ -404,14 +401,13 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 4
     {
+        .tile_data = level_4,
         .size = { 7, 5 },
         .spawn = { 5, 1 },
-        .tile_data = level_4,
 
         .mailboxes = {
             { 2, 2 }
         },
-
         .houses = {
             { 1, 1, true }
         }
@@ -419,15 +415,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 5
     {
+        .tile_data = level_5,
         .size = { 7, 8 },
         .spawn = { 5, 4 },
-        .tile_data = level_5,
 
         .mailboxes = {
             { 3, 2 },
             { 2, 4 }
         },
-
         .houses = {
             { 1, 1 },
             { 4, 2 },
@@ -437,16 +432,15 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 6
     {
+        .tile_data = level_6,
         .size = { 10, 7 },
         .spawn = { 4, 3 },
-        .tile_data = level_6,
 
         .mailboxes = {
             { 5, 2 },
             { 7, 3 },
             { 3, 4 }
         },
-
         .houses = {
             { 6, 1 },
             { 8, 3 },
@@ -456,14 +450,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 7
     {
+        .tile_data = level_7,
         .size = { 6, 3 },
         .spawn = { 1, 1 },
-        .tile_data = level_7,
+        .obstacles = { 1, 0, 0 },
 
         .mailboxes = {
             { 3, 1 }
         },
-        .obstacles_to_add = { 1, 0, 0 },
 
         .tutorial = true,
         .tutorial_text = 1
@@ -471,15 +465,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 8
     {
+        .tile_data = level_8,
         .size = { 6, 6 },
         .spawn = { 2, 4 },
-        .tile_data = level_8,
+        .obstacles = { 2, 0, 0 },
 
         .mailboxes = {
             { 2, 2 }
         },
-        .obstacles_to_add = { 2, 0, 0 },
-
         .houses = {
             { 1, 1 }
         }
@@ -487,16 +480,15 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 9
     {
+        .tile_data = level_9,
         .size = { 8, 7 },
         .spawn = { 2, 5 },
-        .tile_data = level_9,
+        .obstacles = { 0, 2, 0 },
 
         .mailboxes = {
             { 2, 2 },
             { 5, 5 }
         },
-        .obstacles_to_add = { 0, 2, 0 },
-
         .houses = {
             { 1, 3 },
             { 1, 4, true }
@@ -505,16 +497,15 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 10
     {
+        .tile_data = level_10,
         .size = { 11, 6 },
         .spawn = { 5, 4 },
-        .tile_data = level_10,
+        .obstacles = { 0, 1, 0 },
 
         .mailboxes = {
             { 2, 2 },
             { 8, 3 }
         },
-        .obstacles_to_add = { 0, 1, 0 },
-
         .houses = {
             { 1, 1 },
             { 9, 2, true }
@@ -523,17 +514,16 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 11
     {
+        .tile_data = level_11,
         .size = { 7, 7 },
         .spawn = { 2, 3 },
-        .tile_data = level_11,
+        .obstacles = { 0, 3, 0 },
 
         .mailboxes = {
             { 3, 2 },
             { 4, 3 },
             { 2, 4 }
         },
-        .obstacles_to_add = { 0, 3, 0 },
-
         .houses = {
             { 3, 1 },
             { 1, 2 },
@@ -543,14 +533,13 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 12
     {
+        .tile_data = level_12,
         .size = { 10, 4 },
         .spawn = { 4, 2 },
-        .tile_data = level_12,
 
         .mailboxes = {
             { 2, 2 }
         },
-
         .houses = {
             { 1, 1 }
         },
@@ -562,14 +551,13 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
     // Level 13
     {
         // TODO this is a tutorial level
+        .tile_data = level_13,
         .size = { 6, 11 },
         .spawn = { 1, 6 },
-        .tile_data = level_13,
 
         .mailboxes = {
             { 3, 2 }
         },
-
         .houses = {
             { 2, 1 }
         }
@@ -577,15 +565,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 14
     {
+        .tile_data = level_14,
         .size = { 8, 7 },
         .spawn = { 1, 5 },
-        .tile_data = level_14,
+        .obstacles = { 1, 1, 0 },
 
         .mailboxes = {
             { 5, 2 }
         },
-        .obstacles_to_add = { 1, 1, 0 },
-
         .houses = {
             { 4, 1 }
         },
@@ -596,16 +583,15 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 15
     {
+        .tile_data = level_15,
         .size = { 9, 5 },
         .spawn = { 4, 3 },
-        .tile_data = level_15,
+        .obstacles = { 1, 0, 1 },
 
         .mailboxes = {
             { 2, 3 },
             { 7, 2 }
         },
-        .obstacles_to_add = { 1, 0, 1 },
-
         .houses = {
             { 1, 1 },
             { 1, 2 }
@@ -614,9 +600,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 16
     {
+        .tile_data = level_16,
         .size = { 9, 9 },
         .spawn = { 4, 4 },
-        .tile_data = level_16,
+        .obstacles = { 2, 1, 1 },
 
         .mailboxes = {
             { 3, 2 },
@@ -624,8 +611,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 6 },
             { 6, 6 }
         },
-        .obstacles_to_add = { 2, 1, 1 },
-
         .houses = {
             { 1, 1 },
             { 2, 1 },
@@ -636,9 +621,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
     // Level 17
     {
+        .tile_data = level_17,
         .size = { 11, 7 },
         .spawn = { 1, 1 },
-        .tile_data = level_17,
+        .obstacles = { 3, 1, 2 },
 
         .mailboxes = {
             { 5, 1 },
@@ -647,8 +633,6 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 8, 3 },
             { 4, 4 }
         },
-        .obstacles_to_add = { 3, 1, 2 },
-
         .houses = {
             { 1, 4 },
             { 1, 5 }

@@ -78,7 +78,7 @@ static void draw_outer_borders(struct Level *level, i32 xt, i32 yt) {
 }
 
 static INLINE bool editor_on_top(struct Level *level, i32 xt, i32 yt) {
-    return level->is_editing      &&
+    return level->editor.active   &&
            level->editor.xt == xt &&
            level->editor.yt == yt;
 }

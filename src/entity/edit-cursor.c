@@ -36,7 +36,7 @@ ASSERT_SIZE(struct cursor_Data, ENTITY_EXTRA_DATA_SIZE);
 
 static inline bool any_obstacle_left(struct Level *level) {
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
-        if(level->obstacles_to_add[i] != 0)
+        if(level->editor.obstacles[i] > 0)
             return true;
     return false;
 }
@@ -56,7 +56,7 @@ static inline void switch_item(struct Level *level,
             cursor_data->selected = LEVEL_OBSTACLE_TYPES - 1;
         else if(cursor_data->selected >= LEVEL_OBSTACLE_TYPES)
             cursor_data->selected = 0;
-    } while(level->obstacles_to_add[cursor_data->selected] == 0);
+    } while(level->editor.obstacles[cursor_data->selected] == 0);
 
     cursor_data->flip = random(2);
 }
@@ -79,7 +79,7 @@ static inline bool try_to_place(struct Level *level,
     }
 
     enum tile_TypeID tile = TILE_WOOD + cursor_data->selected;
-    level->obstacles_to_add[cursor_data->selected]--;
+    level->editor.obstacles[cursor_data->selected]--;
 
     // place tile and set its data
     level_set_tile(level, xt, yt, tile);
@@ -89,7 +89,7 @@ static inline bool try_to_place(struct Level *level,
         cursor_data->flip << 1   // flip
     );
 
-    if(level->obstacles_to_add[cursor_data->selected] == 0)
+    if(level->editor.obstacles[cursor_data->selected] == 0)
         switch_item(level, data, +1);
 
     level_add_particle_block(level, xt, yt, tile);
@@ -127,7 +127,7 @@ static void cursor_tick(struct Level *level,
                         struct entity_Data *data) {
     if(!any_obstacle_left(level) || input_pressed(KEY_SELECT)) {
         // exit editing mode
-        level->is_editing = false;
+        level->editor.active = false;
         MUSIC_PLAY(music_game);
 
         data->should_remove = true;

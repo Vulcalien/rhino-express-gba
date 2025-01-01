@@ -35,7 +35,7 @@ IWRAM_SECTION
 static void sidebar_tick(struct Level *level, struct entity_Data *data) {
     struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
 
-    if(!level->is_editing)
+    if(!level->editor.active)
         sidebar_data->animation_dir = -1;
 
     sidebar_data->animation += sidebar_data->animation_dir;
@@ -70,7 +70,7 @@ static u32 sidebar_draw(struct Level *level, struct entity_Data *data,
 
     // draw resources
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++) {
-        const u32 count = level->obstacles_to_add[i];
+        const u32 count = level->editor.obstacles[i];
         if(count == 0)
             continue;
 
