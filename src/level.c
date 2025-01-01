@@ -166,8 +166,8 @@ static inline void draw_entities(struct Level *level) {
 IWRAM_SECTION
 void level_draw(struct Level *level) {
     // clear the tilemap before redrawing
-    memset32(BG2_TILEMAP, 0, 32 * 32 * 2);
-    memset32(BG3_TILEMAP, 0, 32 * 32 * 2);
+    memory_clear_32(BG2_TILEMAP, 32 * 32 * 2);
+    memory_clear_32(BG3_TILEMAP, 32 * 32 * 2);
 
     // toggle tutorial text's background
     background_toggle(BG1, level->metadata->tutorial);
@@ -269,7 +269,7 @@ void level_load(struct Level *level,
 
     // load tutorial text
     if(metadata->tutorial) {
-        memcpy32(
+        memory_copy_32(
             (vu8 *) display_charblock(1) + 1 * 32,
             (vu8 *) tutorial_text + metadata->tutorial_text * 48 * 32,
             48 * 32
@@ -277,7 +277,7 @@ void level_load(struct Level *level,
     }
 
     // load edit sidebar
-    memcpy32(
+    memory_copy_32(
         (vu8 *) display_charblock(4) + 128 * 32,
         level_sidebar,
         4 * 8 * 32
@@ -304,7 +304,7 @@ level_EntityID level_new_entity(struct Level *level) {
     for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++) {
         struct entity_Data *data = &level->entities[i];
         if(!entity_is_valid(data)) {
-            memset(data->data, 0, ENTITY_EXTRA_DATA_SIZE);
+            memory_clear(data->data, ENTITY_EXTRA_DATA_SIZE);
             return i;
         }
     }

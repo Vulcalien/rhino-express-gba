@@ -49,10 +49,10 @@ static inline void init_fog_particles(void) {
 }
 
 #define LOAD_TILESET(dest, tileset)\
-    memcpy32((dest), (tileset), sizeof(tileset))
+    memory_copy_32((dest), (tileset), sizeof(tileset))
 
 #define LOAD_PALETTE(dest, palette)\
-    memcpy32((dest), (palette), sizeof(palette))
+    memory_copy_32((dest), (palette), sizeof(palette))
 
 void screen_init(void) {
     display_config(0);

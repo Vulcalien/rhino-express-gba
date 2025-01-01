@@ -82,7 +82,7 @@ static void map_init(u32 data) {
             BG1_TILEMAP[x + y * 32] = (x + y * 31) | 1 << 12;
 
     // load paths tileset
-    memcpy32(display_charblock(5), map_paths, sizeof(map_paths));
+    memory_copy_32(display_charblock(5), map_paths, sizeof(map_paths));
 
     // draw now to prevent showing garbage on the first frame
     scene_map.draw();
@@ -195,7 +195,7 @@ static inline void draw_level_buttons(u32 *used_sprites) {
         image += 68  * (i == level);          // selected level
         image += 136 * (i == levels_cleared); // uncleared level
 
-        memcpy32(
+        memory_copy_32(
             (vu8 *) display_charblock(4) + (128 + i * 4) * 32,
             level_button_images + image * 32,
             4 * 32

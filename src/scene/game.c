@@ -26,10 +26,10 @@ static struct Level level;
 
 static inline void setup_tutorial_text(void) {
     // clear first tile of tileset
-    memset32(display_charblock(1), 0, 32);
+    memory_clear_32(display_charblock(1), 32);
 
     // clear visible tiles of tilemap
-    memset32(BG1_TILEMAP, 0, 32 * 20 * 2);
+    memory_clear_32(BG1_TILEMAP, 32 * 20 * 2);
 
     // set tiles of tilemap
     for(u32 y = 0; y < 3; y++)
