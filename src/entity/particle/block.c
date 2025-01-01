@@ -19,7 +19,6 @@
 #include <random.h>
 
 #include "level.h"
-#include "sfx.h"
 
 #define ANIMATION_PHASES 6
 
@@ -80,6 +79,7 @@ const struct entity_Type entity_particle_block = {
 
 bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
                               enum tile_TypeID block) {
+    // add three block particles
     for(u32 i = 0; i < 3; i++) {
         level_EntityID id = level_new_entity(level);
         if(id == LEVEL_NO_ENTITY)
@@ -114,9 +114,5 @@ bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
 
         level_add_entity(level, ENTITY_PARTICLE_BLOCK, id);
     }
-
-    if(block == TILE_WATER)
-        SFX_PLAY(sfx_water);
-
     return true;
 }

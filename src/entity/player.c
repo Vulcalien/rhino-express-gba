@@ -201,6 +201,7 @@ static inline void enter_tile(struct Level *level,
             player_data->stored_xm = player_data->stored_ym = 0;
 
             level_add_particle_block(level, xt, yt, TILE_WATER);
+            SFX_PLAY(sfx_water);
             break;
 
         default:
