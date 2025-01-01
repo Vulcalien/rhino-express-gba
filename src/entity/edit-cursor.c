@@ -1,4 +1,4 @@
-/* Copyright 2024 Vulcalien
+/* Copyright 2024-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 #include <gba/input.h>
 #include <gba/sprite.h>
+#include <memory.h>
 #include <random.h>
 
 #include "level.h"
@@ -33,6 +34,9 @@ struct cursor_Data {
     u8 unused[14];
 };
 ASSERT_SIZE(struct cursor_Data, ENTITY_EXTRA_DATA_SIZE);
+
+// keeps track of which tiles have been edited
+static bool tile_modified[LEVEL_SIZE];
 
 static inline bool any_obstacle_left(struct Level *level) {
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
@@ -88,6 +92,7 @@ static inline bool try_to_place(struct Level *level,
         1                 << 0 | // platform
         cursor_data->flip << 1   // flip
     );
+    tile_modified[xt + yt * LEVEL_W] = true;
 
     if(level->editor.obstacles[cursor_data->selected] == 0)
         switch_item(level, data, +1);
@@ -95,6 +100,27 @@ static inline bool try_to_place(struct Level *level,
     level_add_particle_block(level, xt, yt, tile);
     SFX_PLAY(sfx_obstacle_placed);
     return true;
+}
+
+static inline void remove_placed_obstacles(struct Level *level) {
+    for(u32 yt = 0; yt < level->metadata->size.h; yt++) {
+        for(u32 xt = 0; xt < level->metadata->size.w; xt++) {
+            if(!tile_modified[xt + yt * LEVEL_W])
+                continue;
+
+            // add block particle
+            const enum tile_TypeID tile = level_get_tile(level, xt, yt);
+            level_add_particle_block(level, xt, yt, tile);
+
+            // replace with platform tile
+            level_set_tile(level, xt, yt, TILE_PLATFORM);
+            tile_modified[xt + yt * LEVEL_W] = false;
+        }
+    }
+
+    // copy 'obstacles' array
+    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
+        level->editor.obstacles[i] = level->metadata->obstacles[i];
 }
 
 static inline void move_cursor(struct Level *level) {
@@ -145,6 +171,9 @@ static void cursor_tick(struct Level *level,
 
     if(input_pressed(KEY_A))
         try_to_place(level, data, level->editor.xt, level->editor.yt);
+
+    if(input_pressed(KEY_B))
+        remove_placed_obstacles(level);
 
     move_cursor(level);
 }
@@ -198,6 +227,9 @@ bool level_add_edit_cursor(struct Level *level) {
     // select the first available obstacle
     cursor_data->selected = LEVEL_OBSTACLE_TYPES - 1;
     switch_item(level, data, +1);
+
+    // clear 'tile_modified'
+    memory_clear(tile_modified, sizeof(tile_modified));
 
     level_add_entity(level, ENTITY_EDIT_CURSOR, id);
     return true;

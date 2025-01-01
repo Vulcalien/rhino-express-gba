@@ -284,7 +284,7 @@ void level_load(struct Level *level,
     );
 
     // copy 'obstacles' array
-    for(u32 i = 0; i < 3; i++)
+    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
         level->editor.obstacles[i] = metadata->obstacles[i];
 
     // enter editing mode
