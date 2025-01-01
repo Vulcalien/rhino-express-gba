@@ -125,7 +125,7 @@ static inline void move_cursor(struct Level *level) {
 IWRAM_SECTION
 static void cursor_tick(struct Level *level,
                         struct entity_Data *data) {
-    if(!any_obstacle_left(level) || input_pressed(KEY_START)) {
+    if(!any_obstacle_left(level) || input_pressed(KEY_SELECT)) {
         // exit editing mode
         level->is_editing = false;
         MUSIC_PLAY(music_game);
