@@ -30,7 +30,8 @@ const struct entity_Type * const entity_type_list[ENTITY_TYPES] = {
 
     [ENTITY_PARTICLE_BLOCK] = &entity_particle_block,
     [ENTITY_PARTICLE_STEP] = &entity_particle_step,
-    [ENTITY_PARTICLE_FALLING_PLATFORM] = &entity_particle_falling_platform
+    [ENTITY_PARTICLE_FALLING_PLATFORM] = &entity_particle_falling_platform,
+    [ENTITY_PARTICLE_TUTORIAL_BUBBLE] = &entity_particle_tutorial_bubble
 };
 
 static INLINE bool tile_blocks(struct Level *level, i32 x, i32 y,

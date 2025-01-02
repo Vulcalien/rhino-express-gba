@@ -216,6 +216,9 @@ static inline void load_tiles(struct Level *level) {
                 if(random(2) == 0)
                     data |= BIT(1);
 
+            if(tile == TILE_WOOD || tile == TILE_ROCK)
+                level_add_particle_tutorial_bubble(level, x, y, tile);
+
             level_set_tile(level, x, y, tile);
             level_set_data(level, x, y, data);
         }
@@ -545,12 +548,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         },
 
         .tutorial = true,
+        .tutorial_bubbles = true,
         .tutorial_text = 2
     },
 
     // Level 13
     {
-        // TODO this is a tutorial level
         .tile_data = level_13,
         .size = { 6, 11 },
         .spawn = { 1, 6 },
@@ -560,7 +563,9 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         },
         .houses = {
             { 2, 1 }
-        }
+        },
+
+        .tutorial_bubbles = true
     },
 
     // Level 14

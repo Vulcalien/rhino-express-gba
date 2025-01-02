@@ -99,6 +99,7 @@ struct level_Metadata {
     } houses[9];
 
     bool tutorial;
+    bool tutorial_bubbles;
     u8 tutorial_text;
 };
 
@@ -166,3 +167,6 @@ extern bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
                                      enum tile_TypeID block);
 extern bool level_add_particle_platform(struct Level *level,
                                         u32 xt, u32 yt);
+extern bool level_add_particle_tutorial_bubble(struct Level *level,
+                                               u32 xt, u32 yt,
+                                               enum tile_TypeID tile);
