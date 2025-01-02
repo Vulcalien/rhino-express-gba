@@ -21,7 +21,7 @@
 
 #define SFX_PLAY(sound) audio_play(0, sound, sizeof(sound))
 
-extern const u8 sfx_delivery[5429];
+extern const u8 sfx_delivery[4686];
 extern const u8 sfx_player_spawn[8144];
 extern const u8 sfx_player_fall[8096];
 extern const u8 sfx_player_win[11264];
@@ -29,4 +29,4 @@ extern const u8 sfx_falling_platform[9420];
 extern const u8 sfx_obstacle_placed[1906];
 extern const u8 sfx_obstacle_hit[887];
 extern const u8 sfx_obstacle_broken[3944];
-extern const u8 sfx_water[9107];
+extern const u8 sfx_water[8492];
