@@ -24,14 +24,14 @@
 // returns the sprites it drew
 INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
     const u32 distance = ((tick_count / 32) & 1) ? 1 : 3;
-    const u32 tile = 88;
+    const u32 tile = 53;
 
     sprite_config(id++, &(struct Sprite) {
         .x = xc - distance - 8,
         .y = yc - distance - 8,
 
         .tile = tile,
-        .palette = 0
+        .palette = 1
     });
 
     sprite_config(id++, &(struct Sprite) {
@@ -41,7 +41,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .flip = 1,
 
         .tile = tile,
-        .palette = 0
+        .palette = 1
     });
 
     sprite_config(id++, &(struct Sprite) {
@@ -51,7 +51,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .flip = 2,
 
         .tile = tile,
-        .palette = 0
+        .palette = 1
     });
 
     sprite_config(id++, &(struct Sprite) {
@@ -61,7 +61,7 @@ INLINE u32 crosshair_draw(u32 id, i32 xc, i32 yc) {
         .flip = 3,
 
         .tile = tile,
-        .palette = 0
+        .palette = 1
     });
 
     return 4;
