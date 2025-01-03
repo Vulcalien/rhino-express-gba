@@ -26,17 +26,17 @@ struct bubble_Data {
 
     u8 unused[14];
 };
-ASSERT_SIZE(struct bubble_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct bubble_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void bubble_tick(struct Level *level, struct entity_Data *data) {
-    struct bubble_Data *bubble_data = (struct bubble_Data *) &data->data;
+    struct bubble_Data *bubble_data = (struct bubble_Data *) &data->extra;
 }
 
 IWRAM_SECTION
 static u32 bubble_draw(struct Level *level, struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
-    struct bubble_Data *bubble_data = (struct bubble_Data *) &data->data;
+    struct bubble_Data *bubble_data = (struct bubble_Data *) &data->extra;
 
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 8,
@@ -81,7 +81,7 @@ bool level_add_particle_tutorial_bubble(struct Level *level,
     data->x = (xt << LEVEL_TILE_SIZE) + 8;
     data->y = (yt << LEVEL_TILE_SIZE) + 8;
 
-    struct bubble_Data *bubble_data = (struct bubble_Data *) &data->data;
+    struct bubble_Data *bubble_data = (struct bubble_Data *) &data->extra;
     bubble_data->obstacle = (tile - TILE_WOOD);
 
     // assign affine parameter in range [10, 17]

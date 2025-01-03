@@ -307,7 +307,7 @@ level_EntityID level_new_entity(struct Level *level) {
     for(u32 i = 0; i < LEVEL_ENTITY_LIMIT; i++) {
         struct entity_Data *data = &level->entities[i];
         if(!entity_is_valid(data)) {
-            memory_clear(data->data, ENTITY_EXTRA_DATA_SIZE);
+            memory_clear(data->extra, ENTITY_EXTRA_SIZE);
             return i;
         }
     }

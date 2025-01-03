@@ -55,7 +55,7 @@ struct player_Data {
 
     u8 unused[3];
 };
-ASSERT_SIZE(struct player_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct player_Data, ENTITY_EXTRA_SIZE);
 
 #define LETTERS_LIMIT (8)
 
@@ -70,7 +70,7 @@ static struct {
 
 static inline void set_animation(struct entity_Data *data,
                                  u8 animation) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     player_data->animation = animation;
     player_data->animation_stage = 0;
@@ -78,7 +78,7 @@ static inline void set_animation(struct entity_Data *data,
 
 static inline void handle_animation(struct Level *level,
                                     struct entity_Data *data) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     switch(player_data->animation) {
         case ANIMATION_SPAWN: {
@@ -145,7 +145,7 @@ static inline void read_input(i8 *xm, i8 *ym) {
 }
 
 static inline void update_sprite_flip(struct entity_Data *data) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     if(player_data->xm < 0)
         player_data->sprite_flip = false;
@@ -162,7 +162,7 @@ static inline bool is_tile_center(i32 x, i32 y) {
 static inline void enter_tile(struct Level *level,
                               struct entity_Data *data,
                               i32 xt, i32 yt) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     // calculate speed (only one between xm and ym is nonzero)
     const u32 speed = math_abs(player_data->xm + player_data->ym);
@@ -223,7 +223,7 @@ static inline void leave_tile(struct Level *level,
 static inline bool move_full_pixels(struct Level *level,
                                     struct entity_Data *data,
                                     i32 xm, i32 ym) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     while(xm != 0 || ym != 0) {
         bool in_center_before = is_tile_center(data->x, data->y);
@@ -269,7 +269,7 @@ static inline bool move_full_pixels(struct Level *level,
 
 IWRAM_SECTION
 static void player_tick(struct Level *level, struct entity_Data *data) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     if(player_data->animation) {
         handle_animation(level, data);
@@ -386,7 +386,7 @@ static inline u32 draw_letters(u32 count, i32 xc, i32 yc,
 IWRAM_SECTION
 static u32 player_draw(struct Level *level, struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 16,
@@ -473,7 +473,7 @@ bool level_add_player(struct Level *level) {
     data->y = 0; // TODO make it -8
 
     // set specific player data
-    struct player_Data *player_data = (struct player_Data *) &data->data;
+    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     set_animation(data, ANIMATION_SPAWN);
 

@@ -33,7 +33,7 @@ struct cursor_Data {
 
     u8 unused[14];
 };
-ASSERT_SIZE(struct cursor_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct cursor_Data, ENTITY_EXTRA_SIZE);
 
 // keeps track of which tiles have been edited
 static bool tile_modified[LEVEL_SIZE];
@@ -47,7 +47,7 @@ static inline bool any_obstacle_left(struct Level *level) {
 
 static inline void switch_item(struct Level *level,
                                struct entity_Data *data, i32 step) {
-    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->extra;
 
     // if there is no obstacle left, do nothing
     if(!any_obstacle_left(level))
@@ -68,7 +68,7 @@ static inline void switch_item(struct Level *level,
 static inline bool try_to_place(struct Level *level,
                                 struct entity_Data *data,
                                 i32 xt, i32 yt) {
-    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->extra;
 
     if(level_get_tile(level, xt, yt) != TILE_PLATFORM)
         return false;
@@ -182,7 +182,7 @@ IWRAM_SECTION
 static u32 cursor_draw(struct Level *level,
                        struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
-    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->extra;
 
     x = (level->editor.xt << LEVEL_TILE_SIZE) - level->offset.x + 8;
     y = (level->editor.yt << LEVEL_TILE_SIZE) - level->offset.y + 8;
@@ -222,7 +222,7 @@ bool level_add_edit_cursor(struct Level *level) {
     struct entity_Data *data = &level->entities[id];
     data->x = data->y = 0;
 
-    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->data;
+    struct cursor_Data *cursor_data = (struct cursor_Data *) &data->extra;
 
     // select the first available obstacle
     cursor_data->selected = LEVEL_OBSTACLE_TYPES - 1;

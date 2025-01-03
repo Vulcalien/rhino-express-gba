@@ -28,13 +28,13 @@ struct falling_platform_Data {
 
     u8 unused[14];
 };
-ASSERT_SIZE(struct falling_platform_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct falling_platform_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void falling_platform_tick(struct Level *level,
                                   struct entity_Data *data) {
     struct falling_platform_Data *platform_data =
-        (struct falling_platform_Data *) &data->data;
+        (struct falling_platform_Data *) &data->extra;
 
     platform_data->age++;
     if(platform_data->age >= LIFETIME)
@@ -46,7 +46,7 @@ static u32 falling_platform_draw(struct Level *level,
                                  struct entity_Data *data,
                                  i32 x, i32 y, u32 used_sprites) {
     struct falling_platform_Data *platform_data =
-        (struct falling_platform_Data *) &data->data;
+        (struct falling_platform_Data *) &data->extra;
 
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 8,
@@ -91,7 +91,7 @@ bool level_add_particle_platform(struct Level *level, u32 xt, u32 yt) {
     data->y = (yt << LEVEL_TILE_SIZE) + 8;
 
     struct falling_platform_Data *platform_data =
-        (struct falling_platform_Data *) &data->data;
+        (struct falling_platform_Data *) &data->extra;
 
     platform_data->age = 0;
 

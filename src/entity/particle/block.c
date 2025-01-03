@@ -30,12 +30,12 @@ struct particle_block_Data {
 
     u8 unused[12];
 };
-ASSERT_SIZE(struct particle_block_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct particle_block_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void block_tick(struct Level *level, struct entity_Data *data) {
     struct particle_block_Data *particle_data =
-        (struct particle_block_Data *) &data->data;
+        (struct particle_block_Data *) &data->extra;
 
     particle_data->time++;
     if(random(5) == 0 || particle_data->time == 8) {
@@ -51,7 +51,7 @@ IWRAM_SECTION
 static u32 block_draw(struct Level *level, struct entity_Data *data,
                       i32 x, i32 y, u32 used_sprites) {
     struct particle_block_Data *particle_data =
-        (struct particle_block_Data *) &data->data;
+        (struct particle_block_Data *) &data->extra;
 
     u32 phase = particle_data->phase;
 
@@ -93,7 +93,7 @@ bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
 
         // set specific particle data
         struct particle_block_Data *particle_data =
-            (struct particle_block_Data *) &data->data;
+            (struct particle_block_Data *) &data->extra;
 
         switch(block) {
             case TILE_WOOD:

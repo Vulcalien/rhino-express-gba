@@ -29,11 +29,11 @@ struct sidebar_Data {
 
     u8 unused[13];
 };
-ASSERT_SIZE(struct sidebar_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct sidebar_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void sidebar_tick(struct Level *level, struct entity_Data *data) {
-    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
+    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->extra;
 
     if(!level->editor.active)
         sidebar_data->animation_dir = -1;
@@ -56,7 +56,7 @@ static void sidebar_tick(struct Level *level, struct entity_Data *data) {
 IWRAM_SECTION
 static u32 sidebar_draw(struct Level *level, struct entity_Data *data,
                         i32 x, i32 y, u32 used_sprites) {
-    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
+    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->extra;
 
     u32 old_used_sprites = used_sprites;
 
@@ -131,7 +131,7 @@ bool level_add_edit_sidebar(struct Level *level) {
     struct entity_Data *data = &level->entities[id];
     data->x = data->y = 0;
 
-    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->data;
+    struct sidebar_Data *sidebar_data = (struct sidebar_Data *) &data->extra;
     sidebar_data->animation = 0;
     sidebar_data->animation_dir = 1;
 

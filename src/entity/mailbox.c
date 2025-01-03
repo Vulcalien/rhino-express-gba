@@ -30,11 +30,11 @@ struct mailbox_Data {
 
     u8 unused[13];
 };
-ASSERT_SIZE(struct mailbox_Data, ENTITY_EXTRA_DATA_SIZE);
+ASSERT_SIZE(struct mailbox_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void mailbox_tick(struct Level *level, struct entity_Data *data) {
-    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
+    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->extra;
 
     if(mailbox_data->animation)
         mailbox_data->animation--;
@@ -43,7 +43,7 @@ static void mailbox_tick(struct Level *level, struct entity_Data *data) {
 IWRAM_SECTION
 static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
                         i32 x, i32 y, u32 used_sprites) {
-    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
+    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->extra;
 
     const bool has_letter = mailbox_data->has_letter;
     const u32 animation = mailbox_data->animation;
@@ -85,7 +85,7 @@ IWRAM_SECTION
 static bool mailbox_touched_by(struct Level *level,
                                struct entity_Data *data,
                                struct entity_Data *touching_data) {
-    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
+    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->extra;
 
     if(touching_data->type != ENTITY_PLAYER || mailbox_data->has_letter)
         return false;
@@ -123,7 +123,7 @@ bool level_add_mailbox(struct Level *level, u32 xt, u32 yt) {
     data->y = (yt << LEVEL_TILE_SIZE) + 8;
 
     // set specific mailbox data
-    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->data;
+    struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->extra;
 
     mailbox_data->animation = 0;
     mailbox_data->has_letter = false;
