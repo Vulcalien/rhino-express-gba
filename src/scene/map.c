@@ -1,4 +1,4 @@
-/* Copyright 2024 Vulcalien
+/* Copyright 2024-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ static u16 draw_offset;
 static i8 page;
 static i8 level;
 
+static bool block_movement;
+
 THUMB
 static void map_init(u32 data) {
     bool has_cleared_level = (data & BIT(0));
@@ -75,6 +77,9 @@ static void map_init(u32 data) {
 
         draw_offset = page * 240;
     }
+
+    // unblock movement between level buttons
+    block_movement = false;
 
     // set tilemap tiles
     for(u32 y = 0; y < 20; y++)
@@ -112,31 +117,33 @@ static inline void update_draw_offset(void) {
 
 THUMB
 static void map_tick(void) {
-    // move left/right by one page
-    if(input_pressed(KEY_L)) {
-        page--;
+    if(!block_movement) {
+        // move left/right by one page
+        if(input_pressed(KEY_L)) {
+            page--;
 
-        if(page < 0) {
-            page = 0;
-            level = 0;
-        } else {
-            level = first_level_in_pages[page + 1] - 1;
+            if(page < 0) {
+                page = 0;
+                level = 0;
+            } else {
+                level = first_level_in_pages[page + 1] - 1;
+            }
         }
-    }
-    if(input_pressed(KEY_R)) {
-        page++;
+        if(input_pressed(KEY_R)) {
+            page++;
 
-        if(page > PAGE_COUNT - 1) {
-            page = PAGE_COUNT - 1;
-            level = levels_cleared;
-        } else {
-            level = first_level_in_pages[page];
+            if(page > PAGE_COUNT - 1) {
+                page = PAGE_COUNT - 1;
+                level = levels_cleared;
+            } else {
+                level = first_level_in_pages[page];
+            }
         }
-    }
 
-    // move left/right by one level
-    level -= (input_pressed(KEY_LEFT) || input_pressed(KEY_UP));
-    level += (input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN));
+        // move left/right by one level
+        level -= (input_pressed(KEY_LEFT) || input_pressed(KEY_UP));
+        level += (input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN));
+    }
 
     if(level < 0)
         level = 0;
@@ -150,9 +157,12 @@ static void map_tick(void) {
     update_draw_offset();
 
     // check if the player has chosen a level
-    if(input_pressed(KEY_A) || input_pressed(KEY_START))
-        if(level < LEVEL_COUNT)
+    if(input_pressed(KEY_A) || input_pressed(KEY_START)) {
+        if(level < LEVEL_COUNT) {
             scene_transition_to(&scene_game, level);
+            block_movement = true;
+        }
+    }
 }
 
 static inline void draw_level_buttons(u32 *used_sprites) {
