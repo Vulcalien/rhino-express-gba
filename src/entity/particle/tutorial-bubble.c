@@ -20,17 +20,29 @@
 #include "level.h"
 #include "tile.h"
 
+#define EXPAND_TIME 16          // ticks bubble takes to expand
+#define REMAIN_TIME 128         // ticks bubble stays fully scaled
+#define SHRINK_TIME EXPAND_TIME // ticks bubble takes to shrink
+
+#define TOTAL_TIME (EXPAND_TIME + REMAIN_TIME + SHRINK_TIME)
+
 struct bubble_Data {
+    u16 age;
+
     u8 obstacle;
     u8 affine_parameter;
 
-    u8 unused[14];
+    u8 unused[12];
 };
 ASSERT_SIZE(struct bubble_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void bubble_tick(struct Level *level, struct entity_Data *data) {
     struct bubble_Data *bubble_data = (struct bubble_Data *) &data->extra;
+
+    bubble_data->age++;
+    if(bubble_data->age > TOTAL_TIME)
+        data->should_remove = true;
 }
 
 IWRAM_SECTION
@@ -51,7 +63,18 @@ static u32 bubble_draw(struct Level *level, struct entity_Data *data,
         .affine_parameter = bubble_data->affine_parameter
     });
 
-    const u32 scale_y = 0x4000 - 0x3fff * 0; // TODO
+    // calculate scale factor based on bubble age
+    u32 scale_y;
+    if(bubble_data->age < EXPAND_TIME) {
+        scale_y = 0x4000 * bubble_data->age / EXPAND_TIME;
+    } else if(bubble_data->age < EXPAND_TIME + REMAIN_TIME) {
+        scale_y = 0x4000;
+    } else {
+        // calculate scale based on ticks since bubble started shrinking
+        u32 shrink_age = bubble_data->age - (EXPAND_TIME + REMAIN_TIME);
+        scale_y = 0x4000 - 0x3fff * shrink_age / SHRINK_TIME;
+    }
+
     sprite_affine(bubble_data->affine_parameter, (i16 [4]) {
         256, 0,
         0, 256 * 0x4000 / scale_y
