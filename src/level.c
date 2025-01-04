@@ -216,8 +216,10 @@ static inline void load_tiles(struct Level *level) {
                 if(random(2) == 0)
                     data |= BIT(1);
 
-            if(tile == TILE_WOOD || tile == TILE_ROCK)
-                level_add_particle_tutorial_bubble(level, x, y, tile);
+            if(metadata->tutorial_bubbles) {
+                if(tile == TILE_WOOD || tile == TILE_ROCK)
+                    level_add_particle_tutorial_bubble(level, x, y, tile);
+            }
 
             level_set_tile(level, x, y, tile);
             level_set_data(level, x, y, data);
