@@ -167,6 +167,7 @@ static void map_tick(void) {
 
 static inline void draw_level_buttons(u32 *used_sprites) {
     const struct {
+        // coordinates of center
         i16 x;
         i16 y;
     } level_buttons[LEVEL_COUNT] = {
@@ -232,6 +233,8 @@ static inline void draw_level_buttons(u32 *used_sprites) {
 static inline void draw_paths(u32 *used_sprites) {
     const struct {
         u8 level;
+
+        // coordinates of top-left corner
         i16 x;
         i16 y;
     } paths[] = {
@@ -329,6 +332,64 @@ static inline void draw_paths(u32 *used_sprites) {
     }
 }
 
+static inline void draw_grass(u32 *used_sprites) {
+    const struct {
+        // coordinates of top-left corner
+        i16 x;
+        i16 y;
+    } grass[] = {
+        { 84,  24  },
+        { 52,  44  },
+        { 160, 44  },
+        { 116, 60  },
+        { 96,  72  },
+        { 144, 72  },
+        { 96,  96  },
+        { 108, 96  },
+        { 72,  120 },
+
+        { 296, 18  },
+        { 400, 20  },
+        { 380, 22  },
+        { 380, 58  },
+        { 332, 62  },
+        { 308, 98  },
+        { 380, 114 },
+
+        { 576, 13  },
+        { 644, 25  },
+        { 544, 57  },
+        { 640, 61  },
+        { 552, 65  },
+        { 588, 105 },
+        { 600, 129 },
+
+        { 828, 52 },
+        { 828, 68 },
+        { 848, 72 },
+        { 824, 80 }
+    };
+
+    for(u32 i = 0; i < sizeof(grass) / sizeof(grass[0]); i++) {
+        const i32 x = grass[i].x - draw_offset;
+        const i32 y = grass[i].y;
+
+        // check if sprite would be inside display area
+        if(x < -16 || x >= 240)
+            continue;
+
+        sprite_config((*used_sprites)++, &(struct Sprite) {
+            .x = x,
+            .y = y,
+
+            .size = SPRITE_SIZE_8x8,
+
+            .tile = 48, // TODO
+            .palette = 1
+        });
+    }
+}
+
 static inline void draw_page_arrows(u32 *used_sprites) {
     // fixed point number: 1 = 0x4000
     // scale = 1.25 + sin(t) / 4   --->   range [1, 1.5]
@@ -388,6 +449,7 @@ static void map_draw(void) {
     draw_page_arrows(&used_sprites);
     draw_level_buttons(&used_sprites);
     draw_paths(&used_sprites);
+    draw_grass(&used_sprites);
 
     sprite_hide_range(used_sprites, SPRITE_COUNT);
 
