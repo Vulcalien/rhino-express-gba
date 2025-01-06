@@ -1,4 +1,4 @@
-/* Copyright 2023-2024 Vulcalien
+/* Copyright 2023-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -245,12 +245,13 @@ static inline void load_mailboxes(struct Level *level) {
     }
 }
 
-static inline void load_decor_houses(struct Level *level) {
+static inline void load_decorations(struct Level *level) {
     const struct level_Metadata *metadata = level->metadata;
 
+    // add houses
     for(u32 i = 0; true; i++) {
-        u32 x = metadata->houses[i].x;
-        u32 y = metadata->houses[i].y;
+        const u32 x = metadata->houses[i].x;
+        const u32 y = metadata->houses[i].y;
 
         bool lower = metadata->houses[i].lower;
 
@@ -259,6 +260,18 @@ static inline void load_decor_houses(struct Level *level) {
             break;
 
         level_add_decor_house(level, x, y, lower);
+    }
+
+    // add grass
+    for(u32 i = 0; true; i++) {
+        const u32 x = metadata->grass[i].x;
+        const u32 y = metadata->grass[i].y;
+
+        // the list is terminated by (0, 0)
+        if(x == 0 && y == 0)
+            break;
+
+        level_add_decor_grass(level, x, y);
     }
 }
 
@@ -270,7 +283,7 @@ void level_load(struct Level *level,
 
     load_tiles(level);
     load_mailboxes(level);
-    load_decor_houses(level);
+    load_decorations(level);
 
     // load tutorial text
     if(metadata->tutorial) {
@@ -383,6 +396,13 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 2 },
             { 3, 5 }
         },
+        .grass = {
+            { 24, 52  },
+            { 28, 64  },
+            { 20, 72  },
+            { 72, 96  },
+            { 88, 104 }
+        },
         .houses = {
             { 1, 6 }
         }
@@ -397,6 +417,14 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 2, 2 },
             { 3, 4 }
+        },
+        .grass = {
+            { 72, 20  },
+            { 72, 32  },
+            { 52, 40  },
+            { 20, 48  },
+            { 20, 100 },
+            { 76, 104 }
         },
         .houses = {
             { 1, 1 },
@@ -413,6 +441,11 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 2, 2 }
         },
+        .grass = {
+            { 80, 36 },
+            { 56, 44 },
+            { 88, 52 }
+        },
         .houses = {
             { 1, 1, true }
         }
@@ -427,6 +460,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 3, 2 },
             { 2, 4 }
+        },
+        .grass = {
+            { 40, 24  },
+            { 88, 84  },
+            { 20, 88  },
+            { 92, 100 }
         },
         .houses = {
             { 1, 1 },
@@ -445,6 +484,11 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 5, 2 },
             { 7, 3 },
             { 3, 4 }
+        },
+        .grass = {
+            { 56, 48 },
+            { 44, 84 },
+            { 92, 88 }
         },
         .houses = {
             { 6, 1 },
@@ -478,6 +522,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 2, 2 }
         },
+        .grass = {
+            { 72, 24 },
+            { 24, 56 }
+        },
         .houses = {
             { 1, 1 }
         }
@@ -493,6 +541,11 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 2, 2 },
             { 5, 5 }
+        },
+        .grass = {
+            { 20,  20 },
+            { 100, 68 },
+            { 56,  72 }
         },
         .houses = {
             { 1, 3 },
@@ -511,6 +564,13 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 2, 2 },
             { 8, 3 }
         },
+        .grass = {
+            { 52,  20 },
+            { 136, 20 },
+            { 108, 36 },
+            { 72,  64 },
+            { 120, 72 }
+        },
         .houses = {
             { 1, 1 },
             { 9, 2, true }
@@ -528,6 +588,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 2 },
             { 4, 3 },
             { 2, 4 }
+        },
+        .grass = {
+            { 88, 36 },
+            { 72, 68 },
+            { 40, 84 },
+            { 88, 84 }
         },
         .houses = {
             { 3, 1 },
@@ -563,6 +629,10 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
         .mailboxes = {
             { 3, 2 }
         },
+        .grass = {
+            { 36, 40 },
+            { 44, 52 }
+        },
         .houses = {
             { 2, 1 }
         },
@@ -579,6 +649,11 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
 
         .mailboxes = {
             { 5, 2 }
+        },
+        .grass = {
+            { 104, 20 },
+            { 108, 40 },
+            { 104,  64 }
         },
         .houses = {
             { 4, 1 }
@@ -599,6 +674,12 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 2, 3 },
             { 7, 2 }
         },
+        .grass = {
+            { 44, 20 },
+            { 80, 20 },
+            { 64, 32 },
+            { 88, 36 }
+        },
         .houses = {
             { 1, 1 },
             { 1, 2 }
@@ -617,6 +698,15 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 2, 3 },
             { 3, 6 },
             { 6, 6 }
+        },
+        .grass = {
+            { 72,  28  },
+            { 104, 68  },
+            { 76,  84  },
+            { 24,  88  },
+            { 36,  112 },
+            { 88,  116 },
+            { 120, 120 }
         },
         .houses = {
             { 1, 1 },
@@ -639,6 +729,15 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 3 },
             { 8, 3 },
             { 4, 4 }
+        },
+        .grass = {
+            { 152, 20 },
+            { 20,  36 },
+            { 88,  36 },
+            { 104, 40 },
+            { 40,  72 },
+            { 56,  84 },
+            { 120, 84 }
         },
         .houses = {
             { 1, 4 },

@@ -92,6 +92,12 @@ struct level_Metadata {
 
     // list terminated by (0, 0)
     struct {
+        u8 x;
+        u8 y;
+    } grass[8];
+
+    // list terminated by (0, 0)
+    struct {
         u8 x : 4;
         u8 y : 4;
 
