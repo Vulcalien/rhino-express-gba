@@ -194,6 +194,18 @@ static inline void level_init(struct Level *level,
             level->solid_entities[t][i] = LEVEL_NO_ENTITY;
 }
 
+static inline void enter_editing_mode(struct Level *level) {
+    level->editor.active = true;
+
+    level_add_edit_sidebar(level);
+    level_add_edit_cursor(level);
+
+    // set cursor position to the level's center
+    level->editor.xt = level->metadata->size.w / 2;
+    level->editor.yt = level->metadata->size.h / 2;
+
+    MUSIC_PLAY(music_editing);
+}
 
 static inline void load_tiles(struct Level *level) {
     const struct level_Metadata *metadata = level->metadata;
@@ -281,6 +293,10 @@ void level_load(struct Level *level,
     level_init(level, metadata);
     update_offset(level);
 
+    // the cursor entity needs to be added before any other entity, so
+    // that its sprites are drawn on top of all other level sprites
+    enter_editing_mode(level);
+
     load_tiles(level);
     load_mailboxes(level);
     load_decorations(level);
@@ -304,14 +320,6 @@ void level_load(struct Level *level,
     // copy 'obstacles' array
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
         level->editor.obstacles[i] = metadata->obstacles[i];
-
-    // enter editing mode
-    level->editor.active = true;
-    level_add_edit_sidebar(level);
-    level_add_edit_cursor(level);
-    level->editor.xt = metadata->size.w / 2;
-    level->editor.yt = metadata->size.h / 2;
-    MUSIC_PLAY(music_editing);
 
     // add player
     level_add_player(level);
