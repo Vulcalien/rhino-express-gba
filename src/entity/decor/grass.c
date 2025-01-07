@@ -15,9 +15,17 @@
  */
 #include "entity.h"
 
+#include <random.h>
 #include <gba/sprite.h>
 
 #include "level.h"
+
+struct grass_Data {
+    u8 variant;
+
+    u8 unused[15];
+};
+ASSERT_SIZE(struct grass_Data, ENTITY_EXTRA_SIZE);
 
 IWRAM_SECTION
 static void grass_tick(struct Level *level, struct entity_Data *data) {
@@ -26,13 +34,15 @@ static void grass_tick(struct Level *level, struct entity_Data *data) {
 IWRAM_SECTION
 static u32 grass_draw(struct Level *level, struct entity_Data *data,
                       i32 x, i32 y, u32 used_sprites) {
+    struct grass_Data *grass_data = (struct grass_Data *) &data->extra;
+
     sprite_config(used_sprites++, &(struct Sprite) {
         .x = x - 4,
         .y = y - 4,
 
         .size = SPRITE_SIZE_8x8,
 
-        .tile = 48, // TODO
+        .tile = 48 + grass_data->variant,
         .palette = 1
     });
 
@@ -57,6 +67,9 @@ bool level_add_decor_grass(struct Level *level, u32 x, u32 y) {
     struct entity_Data *data = &level->entities[id];
     data->x = x;
     data->y = y;
+
+    struct grass_Data *grass_data = (struct grass_Data *) &data->extra;
+    grass_data->variant = random(4);
 
     level_add_entity(level, ENTITY_DECOR_GRASS, id);
     return true;
