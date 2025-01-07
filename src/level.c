@@ -195,15 +195,27 @@ static inline void level_init(struct Level *level,
 }
 
 static inline void enter_editing_mode(struct Level *level) {
-    level->editor.active = true;
+    const struct level_Metadata *metadata = level->metadata;
+
+    // load edit sidebar
+    memory_copy_32(
+        (vu8 *) display_charblock(4) + 128 * 32,
+        level_sidebar,
+        4 * 8 * 32
+    );
+
+    // copy 'obstacles' array
+    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
+        level->editor.obstacles[i] = metadata->obstacles[i];
 
     level_add_edit_sidebar(level);
     level_add_edit_cursor(level);
 
     // set cursor position to the level's center
-    level->editor.xt = level->metadata->size.w / 2;
-    level->editor.yt = level->metadata->size.h / 2;
+    level->editor.xt = metadata->size.w / 2;
+    level->editor.yt = metadata->size.h / 2;
 
+    level->editor.active = true;
     MUSIC_PLAY(music_editing);
 }
 
@@ -309,17 +321,6 @@ void level_load(struct Level *level,
             48 * 32
         );
     }
-
-    // load edit sidebar
-    memory_copy_32(
-        (vu8 *) display_charblock(4) + 128 * 32,
-        level_sidebar,
-        4 * 8 * 32
-    );
-
-    // copy 'obstacles' array
-    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
-        level->editor.obstacles[i] = metadata->obstacles[i];
 
     // add player
     level_add_player(level);
