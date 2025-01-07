@@ -16,6 +16,7 @@
 #include "entity.h"
 
 #include <gba/sprite.h>
+#include <random.h>
 #include <math.h>
 
 #include "level.h"
@@ -25,10 +26,11 @@
 
 struct mailbox_Data {
     u16 animation;
+    bool flip;
 
     bool has_letter;
 
-    u8 unused[13];
+    u8 unused[12];
 };
 ASSERT_SIZE(struct mailbox_Data, ENTITY_EXTRA_SIZE);
 
@@ -45,36 +47,35 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
                         i32 x, i32 y, u32 used_sprites) {
     struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->extra;
 
-    const bool has_letter = mailbox_data->has_letter;
-    const u32 animation = mailbox_data->animation;
+    const u32  animation   = mailbox_data->animation;
+    const bool flip        = mailbox_data->flip;
+    const bool has_letter  = mailbox_data->has_letter;
 
-    // TODO add sprite flipping
+    // TODO if sprite is flipped and scaled, horizontally off by a pixel
 
-    const bool big_sprite = has_letter && animation > 0;
+    const bool should_scale = has_letter && animation > 0;
     sprite_config(used_sprites++, &(struct Sprite) {
-        .x = x - 8 - 8 * big_sprite,
-        .y = y - 20 - 16 * big_sprite,
+        .x = x - 8 - 8 * should_scale,
+        .y = y - 20 - 16 * should_scale,
 
-        .size = big_sprite ? SPRITE_SIZE_16x32 : SPRITE_SIZE_16x16,
+        .size = should_scale ? SPRITE_SIZE_16x32 : SPRITE_SIZE_16x16,
+        .flip = flip,
 
         .tile = 16 - has_letter * 8,
         .palette = 0,
 
-        .affine = big_sprite,
+        .affine = should_scale,
         .affine_parameter = 1,
         .double_size = 1
     });
 
-    // fixed point number: 1 = 0x4000
-    if(animation > 0) {
+    if(should_scale) {
         const u32 t = animation * math_brad(180) / ANIMATION_TIME;
-
-        // fixed point number: 1 = 0x4000
-        const u32 yscale = 0x4000 + math_sin(t);
+        const u32 scale_y = 0x4000 + math_sin(t);
 
         sprite_affine(1, (i16 [4]) {
-            256, 0,
-            0, 256 * 0x4000 / yscale
+            256 * (flip ? -1 : +1), 0,
+            0, 256 * 0x4000 / scale_y
         });
     }
 
@@ -116,16 +117,13 @@ bool level_add_mailbox(struct Level *level, u32 xt, u32 yt) {
     if(id == LEVEL_NO_ENTITY)
         return false;
 
-    // set generic entity data
     struct entity_Data *data = &level->entities[id];
-
     data->x = (xt << LEVEL_TILE_SIZE) + 8;
     data->y = (yt << LEVEL_TILE_SIZE) + 8;
 
-    // set specific mailbox data
     struct mailbox_Data *mailbox_data = (struct mailbox_Data *) &data->extra;
-
     mailbox_data->animation = 0;
+    mailbox_data->flip = random(2);
     mailbox_data->has_letter = false;
 
     level_add_entity(level, ENTITY_MAILBOX, id);
