@@ -51,11 +51,12 @@ static u32 mailbox_draw(struct Level *level, struct entity_Data *data,
     const bool flip        = mailbox_data->flip;
     const bool has_letter  = mailbox_data->has_letter;
 
-    // TODO if sprite is flipped and scaled, horizontally off by a pixel
-
     const bool should_scale = has_letter && animation > 0;
+
+    // Note: sprites flipped using affine transformations are shifted by
+    // one pixel horizontally, so (should_scale && flip) is subtracted.
     sprite_config(used_sprites++, &(struct Sprite) {
-        .x = x - 8 - 8 * should_scale,
+        .x = x - 8 - 8 * should_scale - (should_scale && flip),
         .y = y - 20 - 16 * should_scale,
 
         .size = should_scale ? SPRITE_SIZE_16x32 : SPRITE_SIZE_16x16,

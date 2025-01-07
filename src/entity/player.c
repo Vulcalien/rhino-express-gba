@@ -388,8 +388,10 @@ static u32 player_draw(struct Level *level, struct entity_Data *data,
                        i32 x, i32 y, u32 used_sprites) {
     struct player_Data *player_data = (struct player_Data *) &data->extra;
 
+    // Note: sprites flipped using affine transformations are shifted by
+    // one pixel horizontally, so player_data->sprite_flip is subtracted
     sprite_config(used_sprites++, &(struct Sprite) {
-        .x = x - 16,
+        .x = x - 16 - player_data->sprite_flip,
         .y = y - 29,
 
         .size = SPRITE_SIZE_16x32,
