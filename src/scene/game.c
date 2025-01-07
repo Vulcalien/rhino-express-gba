@@ -15,9 +15,10 @@
  */
 #include "scene.h"
 
-#include <memory.h>
 #include <gba/display.h>
 #include <gba/background.h>
+#include <gba/input.h>
+#include <memory.h>
 
 #include "level.h"
 #include "screen.h"
@@ -50,6 +51,10 @@ static void game_init(u32 selected_level) {
 }
 
 static void game_tick(void) {
+    // if START is pressed, transition to map without clearing level
+    if(input_pressed(KEY_START))
+        scene_transition_to(&scene_map, BIT(1));
+
     level_tick(&level);
 }
 
