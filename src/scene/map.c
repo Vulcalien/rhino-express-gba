@@ -20,6 +20,7 @@
 #include <gba/input.h>
 #include <gba/dma.h>
 #include <memory.h>
+#include <random.h>
 #include <math.h>
 
 #include "level.h"
@@ -38,6 +39,7 @@ static u8 first_level_in_pages[PAGE_COUNT] = {
 };
 
 static u16 draw_offset;
+static u32 grass_seed; // random seed used to draw grass
 
 static i8 page;
 static i8 level;
@@ -77,6 +79,9 @@ static void map_init(u32 data) {
 
         draw_offset = page * 240;
     }
+
+    // randomly choose a seed for drawing grass
+    grass_seed = random(0x10000) | random(0x10000) << 16;
 
     // unblock movement between level buttons
     block_movement = false;
@@ -333,6 +338,8 @@ static inline void draw_paths(u32 *used_sprites) {
 }
 
 static inline void draw_grass(u32 *used_sprites) {
+    const u32 old_random_seed = random_seed(grass_seed);
+
     const struct {
         // coordinates of top-left corner
         i16 x;
@@ -384,10 +391,13 @@ static inline void draw_grass(u32 *used_sprites) {
 
             .size = SPRITE_SIZE_8x8,
 
-            .tile = 48, // TODO
+            .tile = 48 + random(4),
             .palette = 1
         });
     }
+
+    // restore random seed
+    random_seed(old_random_seed);
 }
 
 static inline void draw_page_arrows(u32 *used_sprites) {
