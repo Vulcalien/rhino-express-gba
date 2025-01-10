@@ -49,14 +49,12 @@ static void vblank(void) {
 }
 
 int AgbMain(void) {
-    // initialize drivers
-    interrupt_init();
-    audio_init();
-
     interrupt_toggle(IRQ_VBLANK, true);
     interrupt_set_isr(IRQ_VBLANK, vblank);
 
+    audio_init();
     screen_init();
+
     scene_set(&scene_start, 0);
 
     storage_load();
