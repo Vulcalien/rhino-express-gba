@@ -172,6 +172,7 @@ extern bool level_add_decor_house(struct Level *level, u32 xt, u32 yt,
 
 extern bool level_add_particle_block(struct Level *level, u32 xt, u32 yt,
                                      enum tile_TypeID block);
+extern bool level_add_particle_step(struct Level *level, u32 xt, u32 yt);
 extern bool level_add_particle_platform(struct Level *level,
                                         u32 xt, u32 yt);
 extern bool level_add_particle_tutorial_bubble(struct Level *level,

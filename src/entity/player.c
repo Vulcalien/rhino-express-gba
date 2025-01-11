@@ -232,7 +232,11 @@ static inline bool move_full_pixels(struct Level *level,
             return false;
 
         if(in_center_before) {
-            // TODO add step particles
+            // note: even if player has already moved (by one pixel), it
+            // still lies within the tile it is exiting
+            i32 xt = data->x >> LEVEL_TILE_SIZE;
+            i32 yt = data->y >> LEVEL_TILE_SIZE;
+            level_add_particle_step(level, xt, yt);
         }
 
         if(is_tile_center(data->x, data->y)) {
