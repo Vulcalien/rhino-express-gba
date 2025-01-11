@@ -22,6 +22,7 @@
 #define SFX_PLAY(sound) audio_play(0, sound, sizeof(sound))
 
 extern const u8 sfx_delivery[4686];
+extern const u8 sfx_player_step[1004];
 extern const u8 sfx_player_spawn[8144];
 extern const u8 sfx_player_fall[8096];
 extern const u8 sfx_player_win[11264];

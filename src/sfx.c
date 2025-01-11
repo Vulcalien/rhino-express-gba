@@ -16,6 +16,7 @@
 #include "sfx.h"
 
 #include "res/sfx/delivery.c"
+#include "res/sfx/player-step.c"
 #include "res/sfx/player-spawn.c"
 #include "res/sfx/player-fall.c"
 #include "res/sfx/player-win.c"

@@ -120,6 +120,10 @@
             "input": "sfx/delivery.raw",
             "output": "sfx/delivery.c"
         }, {
+            "name": "sfx_player_step",
+            "input": "sfx/player-step.raw",
+            "output": "sfx/player-step.c"
+        }, {
             "name": "sfx_player_spawn",
             "input": "sfx/player-spawn.raw",
             "output": "sfx/player-spawn.c"

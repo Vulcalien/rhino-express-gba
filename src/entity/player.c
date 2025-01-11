@@ -244,6 +244,8 @@ static inline bool move_full_pixels(struct Level *level,
             i32 xt = data->x >> LEVEL_TILE_SIZE;
             i32 yt = data->y >> LEVEL_TILE_SIZE;
             level_add_particle_step(level, xt, yt);
+
+            SFX_PLAY(sfx_player_step);
         }
 
         if(is_tile_center(data->x, data->y)) {
