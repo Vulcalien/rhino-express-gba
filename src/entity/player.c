@@ -481,14 +481,9 @@ bool level_add_player(struct Level *level) {
     if(id == LEVEL_NO_ENTITY)
         return false;
 
-    // set generic entity data
     struct entity_Data *data = &level->entities[id];
-
     data->x = (level->metadata->spawn.x << LEVEL_TILE_SIZE) + 8;
     data->y = 0; // TODO make it -8
-
-    // set specific player data
-    struct player_Data *player_data = (struct player_Data *) &data->extra;
 
     set_animation(data, ANIMATION_SPAWN);
 
