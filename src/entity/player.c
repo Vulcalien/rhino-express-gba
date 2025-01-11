@@ -25,7 +25,7 @@
 #include "sfx.h"
 
 #define   MAX_SPEED (1280)
-#define START_SPEED (64)
+#define START_SPEED (96)
 
 #define BREAK_WOOD_SPEED (546)
 #define BREAK_ROCK_SPEED (660)
