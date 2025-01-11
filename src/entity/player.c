@@ -27,8 +27,8 @@
 #define   MAX_SPEED (1280)
 #define START_SPEED (96)
 
-#define BREAK_WOOD_SPEED (546)
-#define BREAK_ROCK_SPEED (660)
+#define BREAK_WOOD_DISTANCE 4
+#define BREAK_ROCK_DISTANCE 5
 
 #define ANIMATION_SPAWN 1
 #define ANIMATION_FALL  2
@@ -53,7 +53,11 @@ struct player_Data {
     u8 hit_obstacle : 1;
     u8 sprite_flip : 1;
 
-    u8 unused[3];
+    // coordinates of tile where player started moving
+    i8 start_xt;
+    i8 start_yt;
+
+    u8 unused[1];
 };
 ASSERT_SIZE(struct player_Data, ENTITY_EXTRA_SIZE);
 
@@ -171,8 +175,10 @@ static inline void enter_tile(struct Level *level,
                               i32 xt, i32 yt) {
     struct player_Data *player_data = (struct player_Data *) &data->extra;
 
-    // calculate speed (only one between xm and ym is nonzero)
-    const u32 speed = math_abs(player_data->xm + player_data->ym);
+    // calculate distance traveled since last movement
+    const u32 distance_x = math_abs(xt - player_data->start_xt);
+    const u32 distance_y = math_abs(yt - player_data->start_yt);
+    const u32 distance = distance_x + distance_y; // one of them is zero
 
     switch(level_get_tile(level, xt, yt)) {
         case TILE_VOID:
@@ -182,7 +188,7 @@ static inline void enter_tile(struct Level *level,
             break;
 
         case TILE_WOOD:
-            if(speed >= BREAK_WOOD_SPEED) {
+            if(distance >= BREAK_WOOD_DISTANCE) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
                 SFX_PLAY(sfx_obstacle_broken, 1);
             } else {
@@ -193,7 +199,7 @@ static inline void enter_tile(struct Level *level,
             break;
 
         case TILE_ROCK:
-            if(speed >= BREAK_ROCK_SPEED) {
+            if(distance >= BREAK_ROCK_DISTANCE) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
                 SFX_PLAY(sfx_obstacle_broken, 1);
             } else {
@@ -303,9 +309,16 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
             return;
         }
 
-        // set new values for (xm, ym)
-        player_data->xm = player_data->stored_xm;
-        player_data->ym = player_data->stored_ym;
+        // check if player should start moving
+        if(player_data->stored_xm != 0 || player_data->stored_ym != 0) {
+            // set new values for (xm, ym)
+            player_data->xm = player_data->stored_xm;
+            player_data->ym = player_data->stored_ym;
+
+            // save coordinates of tile
+            player_data->start_xt = (data->x >> LEVEL_TILE_SIZE);
+            player_data->start_yt = (data->y >> LEVEL_TILE_SIZE);
+        }
 
         // clear (stored_xm, stored_ym)
         player_data->stored_xm = player_data->stored_ym = 0;
