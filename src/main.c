@@ -24,6 +24,8 @@
 #include "scene.h"
 #include "storage.h"
 
+#include "res/CREDITS.c"
+
 u32 tick_count = 0;
 u32 levels_cleared = 0;
 

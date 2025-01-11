@@ -155,6 +155,12 @@
             "name": "sfx_water",
             "input": "sfx/water.raw",
             "output": "sfx/water.c"
+        },
+
+        {
+            "name": "CREDITS",
+            "input": "CREDITS",
+            "output": "CREDITS.c"
         }
     ]
 }
