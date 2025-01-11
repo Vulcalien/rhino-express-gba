@@ -1,4 +1,4 @@
-/* Copyright 2024 Vulcalien
+/* Copyright 2024-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,12 +87,15 @@ static inline void handle_animation(struct Level *level,
 
             if(data->y < target_y) {
                 data->y += 4;
-            } else if(player_data->animation_stage < 15) {
-                player_data->animation_stage++;
-                level->shake = true;
+
+                if(data->y == target_y) {
+                    level->shake = true;
+                    SFX_PLAY(sfx_player_spawn);
+                }
             } else {
-                player_data->animation = 0;
-                SFX_PLAY(sfx_player_spawn);
+                player_data->animation_stage++;
+                if(player_data->animation_stage == 15)
+                    player_data->animation = 0;
             }
             break;
         }
