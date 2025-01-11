@@ -148,7 +148,7 @@ static inline bool try_to_place(struct Level *level) {
     }
 
     level_add_particle_block(level, xt, yt, tile);
-    SFX_PLAY(sfx_obstacle_placed);
+    SFX_PLAY(sfx_obstacle_placed, 1);
     return true;
 }
 

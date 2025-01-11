@@ -1,4 +1,4 @@
-/* Copyright 2024 Vulcalien
+/* Copyright 2024-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,29 @@
 
 #include <gba/audio.h>
 
-#define SFX_PLAY(sound) audio_play(0, sound, sizeof(sound))
+extern u32 _sfx_playing_priority;
+
+INLINE void _sfx_play(const u8 *sound, u32 length, u32 priority) {
+    // This is a hack that works only if these assumptions are true:
+    // - the audio driver only has two channels
+    // - channel 1 is always busy (i.e. playing music)
+
+    if(priority >= _sfx_playing_priority) {
+        audio_play(0, sound, length);
+        _sfx_playing_priority = priority;
+    } else {
+        // try to play only if the channel is free
+        bool could_play = (audio_play(-1, sound, length) == 0);
+
+        // If the previous, higher priority sound had already stopped,
+        // then '_sfx_playing_priority' should be updated.
+        if(could_play)
+            _sfx_playing_priority = priority;
+    }
+}
+
+#define SFX_PLAY(sound, priority) \
+    _sfx_play(sound, sizeof(sound), priority)
 
 extern const u8 sfx_delivery[4686];
 extern const u8 sfx_player_step[1004];

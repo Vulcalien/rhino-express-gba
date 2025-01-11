@@ -95,7 +95,7 @@ static bool mailbox_touched_by(struct Level *level,
     mailbox_data->has_letter = true;
     mailbox_data->animation = ANIMATION_TIME;
 
-    SFX_PLAY(sfx_delivery);
+    SFX_PLAY(sfx_delivery, 1);
     level->letters_to_deliver--;
 
     return false;
