@@ -89,6 +89,10 @@ static inline void handle_animation(struct Level *level,
                 data->y += 4;
 
                 if(data->y == target_y) {
+                    const i32 xt = data->x >> LEVEL_TILE_SIZE;
+                    const i32 yt = data->y >> LEVEL_TILE_SIZE;
+                    level_add_particle_step(level, xt, yt);
+
                     level->shake = true;
                     SFX_PLAY(sfx_player_spawn);
                 }
