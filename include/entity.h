@@ -21,9 +21,6 @@ enum entity_TypeID {
     ENTITY_PLAYER,
     ENTITY_MAILBOX,
 
-    ENTITY_EDIT_CURSOR,
-    ENTITY_EDIT_SIDEBAR,
-
     ENTITY_DECOR_GRASS,
     ENTITY_DECOR_HOUSE,
 
@@ -122,9 +119,6 @@ INLINE bool entity_touches(struct entity_Data *data1,
 extern const struct entity_Type
     entity_player,
     entity_mailbox,
-
-    entity_edit_cursor,
-    entity_edit_sidebar,
 
     entity_decor_grass,
     entity_decor_house,

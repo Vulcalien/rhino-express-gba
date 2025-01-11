@@ -22,9 +22,6 @@ const struct entity_Type * const entity_type_list[ENTITY_TYPES] = {
     [ENTITY_PLAYER] = &entity_player,
     [ENTITY_MAILBOX] = &entity_mailbox,
 
-    [ENTITY_EDIT_CURSOR] = &entity_edit_cursor,
-    [ENTITY_EDIT_SIDEBAR] = &entity_edit_sidebar,
-
     [ENTITY_DECOR_GRASS] = &entity_decor_grass,
     [ENTITY_DECOR_HOUSE] = &entity_decor_house,
 

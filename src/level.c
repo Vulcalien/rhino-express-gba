@@ -24,10 +24,10 @@
 #include "screen.h"
 #include "entity.h"
 #include "tile.h"
+#include "editor.h"
 #include "music.h"
 
 #include "res/img/tutorial-text.c"
-#include "res/img/level-sidebar.c"
 
 static inline void insert_solid_entity(struct Level *level,
                                        struct entity_Data *data,
@@ -115,6 +115,11 @@ IWRAM_SECTION
 void level_tick(struct Level *level) {
     update_offset(level);
 
+    bool was_editing = level->editing;
+    editor_tick(level);
+    if(was_editing && !level->editing)
+        MUSIC_PLAY(music_game);
+
     tick_entities(level);
 
     // update shaking status
@@ -143,8 +148,7 @@ static inline void draw_tiles(struct Level *level) {
     }
 }
 
-static inline void draw_entities(struct Level *level) {
-    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
+static inline void draw_entities(struct Level *level, u32 *used_sprites) {
     for(level_EntityID id = 0; id < LEVEL_ENTITY_LIMIT; id++) {
         struct entity_Data *data = &level->entities[id];
         const struct entity_Type *type = entity_get_type(data);
@@ -154,13 +158,12 @@ static inline void draw_entities(struct Level *level) {
         const i32 draw_x = data->x - level->offset.x;
         const i32 draw_y = data->y - level->offset.y;
 
-        used_sprites += type->draw(
-            level, data, draw_x, draw_y, used_sprites
+        *used_sprites += type->draw(
+            level, data, draw_x, draw_y, *used_sprites
         );
-        if(used_sprites >= SPRITE_COUNT)
+        if(*used_sprites >= SPRITE_COUNT)
             break;
     }
-    sprite_hide_range(used_sprites, SPRITE_COUNT);
 }
 
 IWRAM_SECTION
@@ -173,7 +176,11 @@ void level_draw(struct Level *level) {
     background_toggle(BG1, level->metadata->tutorial);
 
     draw_tiles(level);
-    draw_entities(level);
+
+    u32 used_sprites = SCREEN_FOG_PARTICLE_COUNT;
+    editor_draw(level, &used_sprites);
+    draw_entities(level, &used_sprites);
+    sprite_hide_range(used_sprites, SPRITE_COUNT);
 }
 
 static inline void level_init(struct Level *level,
@@ -192,31 +199,6 @@ static inline void level_init(struct Level *level,
     for(u32 t = 0; t < LEVEL_SIZE; t++)
         for(u32 i = 0; i < LEVEL_SOLID_ENTITIES_IN_TILE; i++)
             level->solid_entities[t][i] = LEVEL_NO_ENTITY;
-}
-
-static inline void enter_editing_mode(struct Level *level) {
-    const struct level_Metadata *metadata = level->metadata;
-
-    // load edit sidebar
-    memory_copy_32(
-        (vu8 *) display_charblock(4) + 128 * 32,
-        level_sidebar,
-        4 * 8 * 32
-    );
-
-    // copy 'obstacles' array
-    for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++)
-        level->editor.obstacles[i] = metadata->obstacles[i];
-
-    level_add_edit_sidebar(level);
-    level_add_edit_cursor(level);
-
-    // set cursor position to the level's center
-    level->editor.xt = metadata->size.w / 2;
-    level->editor.yt = metadata->size.h / 2;
-
-    level->editor.active = true;
-    MUSIC_PLAY(music_editing);
 }
 
 static inline void load_tiles(struct Level *level) {
@@ -305,10 +287,6 @@ void level_load(struct Level *level,
     level_init(level, metadata);
     update_offset(level);
 
-    // the cursor entity needs to be added before any other entity, so
-    // that its sprites are drawn on top of all other level sprites
-    enter_editing_mode(level);
-
     load_tiles(level);
     load_mailboxes(level);
     load_decorations(level);
@@ -324,6 +302,12 @@ void level_load(struct Level *level,
 
     // add player
     level_add_player(level);
+
+    // initialize editor
+    editor_init(level);
+
+    if(!level->editing)
+        MUSIC_PLAY(music_game);
 }
 
 IWRAM_SECTION

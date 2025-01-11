@@ -288,7 +288,7 @@ static void player_tick(struct Level *level, struct entity_Data *data) {
     }
 
     // if the level is still in editing mode, do nothing
-    if(level->editor.active)
+    if(level->editing)
         return;
 
     // process player input

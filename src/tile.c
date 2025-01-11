@@ -17,6 +17,7 @@
 
 #include "screen.h"
 #include "level.h"
+#include "editor.h"
 
 #define DRAW_FUNC(name)\
     IWRAM_SECTION\
@@ -78,9 +79,9 @@ static void draw_outer_borders(struct Level *level, i32 xt, i32 yt) {
 }
 
 static INLINE bool editor_on_top(struct Level *level, i32 xt, i32 yt) {
-    return level->editor.active   &&
-           level->editor.xt == xt &&
-           level->editor.yt == yt;
+    return level->editing  &&
+           editor_xt == xt &&
+           editor_yt == yt;
 }
 
 DRAW_FUNC(ground_draw) {

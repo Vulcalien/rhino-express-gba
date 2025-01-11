@@ -49,15 +49,8 @@ struct Level {
 
     const struct level_Metadata *metadata;
 
+    bool editing;
     u8 letters_to_deliver;
-
-    struct {
-        bool active;
-        u8 obstacles[LEVEL_OBSTACLE_TYPES];
-
-        i32 xt;
-        i32 yt;
-    } editor;
 
     // visual properties
     struct {
