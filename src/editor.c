@@ -215,23 +215,25 @@ static inline void animate_sidebar(struct Level *level) {
 
 IWRAM_SECTION
 void editor_tick(struct Level *level) {
-    if(input_pressed(KEY_SELECT))
-        level->editing = false;
+    if(level->editing) {
+        if(input_pressed(KEY_SELECT))
+            level->editing = false;
 
-    // change selected obstacle if L or R pressed
-    i32 switch_step = 0;
-    switch_step -= input_pressed(KEY_L);
-    switch_step += input_pressed(KEY_R);
-    if(switch_step != 0)
-        switch_item(switch_step);
+        // change selected obstacle if L or R pressed
+        i32 switch_step = 0;
+        switch_step -= input_pressed(KEY_L);
+        switch_step += input_pressed(KEY_R);
+        if(switch_step != 0)
+            switch_item(switch_step);
 
-    if(input_pressed(KEY_A))
-        try_to_place(level);
+        if(input_pressed(KEY_A))
+            try_to_place(level);
 
-    if(input_pressed(KEY_B))
-        remove_placed_obstacles(level);
+        if(input_pressed(KEY_B))
+            remove_placed_obstacles(level);
 
-    move_cursor(level);
+        move_cursor(level);
+    }
 
     if(sidebar.present)
         animate_sidebar(level);
