@@ -62,8 +62,8 @@ static inline void remove_solid_entity(struct Level *level,
 static inline void update_offset(struct Level *level) {
     const struct level_Metadata *metadata = level->metadata;
 
-    const u32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
-    const u32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
+    const i32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
+    const i32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
 
     level->offset.x = -(DISPLAY_W - width_pixels) / 2;
     level->offset.y = -(DISPLAY_H - height_pixels) / 2;
@@ -157,6 +157,11 @@ static inline void draw_entities(struct Level *level, u32 *used_sprites) {
 
         const i32 draw_x = data->x - level->offset.x;
         const i32 draw_y = data->y - level->offset.y;
+
+        // check if entity is out of display bounds
+        if(draw_x < -32 || draw_x >= DISPLAY_W + 32 ||
+           draw_y < -32 || draw_y >= DISPLAY_H + 32)
+            continue;
 
         *used_sprites += type->draw(
             level, data, draw_x, draw_y, *used_sprites
