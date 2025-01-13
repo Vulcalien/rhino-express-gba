@@ -87,7 +87,7 @@ static inline void handle_animation(struct Level *level,
     switch(player_data->animation) {
         case ANIMATION_SPAWN: {
             const struct level_Metadata *metadata = level->metadata;
-            u32 target_y = (metadata->spawn.y << LEVEL_TILE_SIZE) + 8;
+            i32 target_y = (metadata->spawn.y << LEVEL_TILE_SIZE) + 8;
 
             if(data->y < target_y) {
                 data->y += 4;
@@ -496,7 +496,7 @@ bool level_add_player(struct Level *level) {
 
     struct entity_Data *data = &level->entities[id];
     data->x = (level->metadata->spawn.x << LEVEL_TILE_SIZE) + 8;
-    data->y = 0; // TODO make it -8
+    data->y = (level->metadata->spawn.y << LEVEL_TILE_SIZE) + 8 - 64;
 
     set_animation(data, ANIMATION_SPAWN);
 
