@@ -110,11 +110,8 @@ static inline void handle_animation(struct Level *level,
 
         case ANIMATION_FALL:
             player_data->animation_stage++;
-            if(player_data->animation_stage > FALL_ANIMATION_TIME) {
-                // TODO find a way to keep obstacles and other things
-                // from changing orientation
+            if(player_data->animation_stage > FALL_ANIMATION_TIME)
                 level_load(level, level->metadata);
-            }
             break;
 
         case ANIMATION_WIN:

@@ -289,6 +289,11 @@ static inline void load_decorations(struct Level *level) {
 IWRAM_SECTION
 void level_load(struct Level *level,
                 const struct level_Metadata *metadata) {
+    // use a fixed pseudo-random seed, so that every time the level is
+    // reloaded (e.g. after the player falls) the random details do not
+    // change.
+    u32 old_seed = random_seed(256);
+
     level_init(level, metadata);
     update_offset(level);
 
@@ -313,6 +318,9 @@ void level_load(struct Level *level,
 
     if(!level->editing)
         MUSIC_PLAY(music_game);
+
+    // restore pseudo-random seed
+    random_seed(old_seed);
 }
 
 IWRAM_SECTION
