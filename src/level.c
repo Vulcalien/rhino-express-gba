@@ -318,9 +318,6 @@ void level_load(struct Level *level,
     // initialize editor
     editor_init(level);
 
-    if(!level->editing)
-        MUSIC_PLAY(music_game);
-
     // restore pseudo-random seed
     random_seed(old_seed);
 }
