@@ -178,7 +178,7 @@ void level_draw(struct Level *level) {
     memory_clear_32(BG3_TILEMAP, 32 * 32 * 2);
 
     // toggle tutorial text's background
-    background_toggle(BG1, level->metadata->tutorial);
+    background_toggle(BG1, level->metadata->tutorial_text > 0);
 
     draw_tiles(level);
 
@@ -302,10 +302,12 @@ void level_load(struct Level *level,
     load_decorations(level);
 
     // load tutorial text
-    if(metadata->tutorial) {
+    if(metadata->tutorial_text > 0) {
+        i32 text_image = metadata->tutorial_text - 1;
+
         memory_copy_32(
             (vu8 *) display_charblock(1) + 1 * 32,
-            (vu8 *) tutorial_text + metadata->tutorial_text * 48 * 32,
+            (vu8 *) tutorial_text + text_image * 48 * 32,
             48 * 32
         );
     }

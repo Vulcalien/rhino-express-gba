@@ -32,8 +32,7 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 5, 1 }
         },
 
-        .tutorial = true,
-        .tutorial_text = 0
+        .tutorial_text = 1
     },
 
     // Level 2
@@ -158,8 +157,7 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 1 }
         },
 
-        .tutorial = true,
-        .tutorial_text = 1
+        .tutorial_text = 2
     },
 
     // Level 8
@@ -265,9 +263,8 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 1, 1 }
         },
 
-        .tutorial = true,
-        .tutorial_bubbles = true,
-        .tutorial_text = 2
+        .tutorial_text = 3,
+        .tutorial_bubbles = true
     },
 
     // Level 13
@@ -309,8 +306,7 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 4, 1 }
         },
 
-        .tutorial = true,
-        .tutorial_text = 3
+        .tutorial_text = 4
     },
 
     // Level 15

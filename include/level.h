@@ -97,9 +97,8 @@ struct level_Metadata {
         bool lower;
     } houses[9];
 
-    bool tutorial;
+    u8   tutorial_text;
     bool tutorial_bubbles;
-    u8 tutorial_text;
 };
 
 extern void level_tick(struct Level *level);
