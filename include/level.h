@@ -52,6 +52,8 @@ struct Level {
     bool editing;
     u8 letters_to_deliver;
 
+    u32 attemps;
+
     // visual properties
     struct {
         i32 x;

@@ -22,7 +22,6 @@
 
 #include "level.h"
 #include "screen.h"
-#include "music.h"
 
 static struct Level level;
 
@@ -40,10 +39,7 @@ static inline void setup_tutorial_text(void) {
 }
 
 static void game_init(u32 selected_level) {
-    // note: if the level has editing, 'level_load' will instantly
-    // change the music to 'editing'
-    MUSIC_PLAY(music_game);
-
+    level.attemps = 0;
     level_load(&level, &level_metadata[selected_level]);
 
     background_toggle(BG2, true); // level's higher tiles
