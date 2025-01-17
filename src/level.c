@@ -173,12 +173,23 @@ static inline void draw_entities(struct Level *level, u32 *used_sprites) {
 
 IWRAM_SECTION
 void level_draw(struct Level *level) {
+    const struct level_Metadata *metadata = level->metadata;
+
     // clear the tilemap before redrawing
     memory_clear_32(BG2_TILEMAP, 32 * 32 * 2);
     memory_clear_32(BG3_TILEMAP, 32 * 32 * 2);
 
     // toggle tutorial text's background
-    background_toggle(BG1, level->metadata->tutorial_text > 0);
+    {
+        bool show_tutorial_text = metadata->tutorial_text > 0;
+
+        // if editing tutorial is delayed, do not show tutorial text on
+        // the first attempt
+        if(metadata->delay_editing_tutorial && level->attempts == 0)
+            show_tutorial_text = false;
+
+        background_toggle(BG1, show_tutorial_text);
+    }
 
     draw_tiles(level);
 

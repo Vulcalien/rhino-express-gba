@@ -157,7 +157,8 @@ const struct level_Metadata level_metadata[LEVEL_COUNT] = {
             { 3, 1 }
         },
 
-        .tutorial_text = 2
+        .tutorial_text = 2,
+        .delay_editing_tutorial = true
     },
 
     // Level 8

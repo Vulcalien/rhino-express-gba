@@ -81,12 +81,18 @@ static void switch_item(i32 step) {
 }
 
 void editor_init(struct Level *level) {
-    reset_obstacles(level->metadata->obstacles);
+    const struct level_Metadata *metadata = level->metadata;
+
+    reset_obstacles(metadata->obstacles);
     level->editing = any_obstacle_left();
 
+    // if editing tutorial is delayed, do not edit on the first attempt
+    if(metadata->delay_editing_tutorial && level->attempts == 0)
+        level->editing = false;
+
     // set cursor position to the level's center
-    editor_xt = level->metadata->size.w / 2;
-    editor_yt = level->metadata->size.h / 2;
+    editor_xt = metadata->size.w / 2;
+    editor_yt = metadata->size.h / 2;
 
     // select the first available obstacle
     selected = LEVEL_OBSTACLE_TYPES - 1;

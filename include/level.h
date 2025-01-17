@@ -101,6 +101,8 @@ struct level_Metadata {
 
     u8   tutorial_text;
     bool tutorial_bubbles;
+
+    bool delay_editing_tutorial;
 };
 
 extern void level_tick(struct Level *level);
