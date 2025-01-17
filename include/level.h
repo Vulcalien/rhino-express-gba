@@ -52,7 +52,7 @@ struct Level {
     bool editing;
     u8 letters_to_deliver;
 
-    u32 attemps;
+    u32 attempts;
 
     // visual properties
     struct {

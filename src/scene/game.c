@@ -39,7 +39,7 @@ static inline void setup_tutorial_text(void) {
 }
 
 static void game_init(u32 selected_level) {
-    level.attemps = 0;
+    level.attempts = 0;
     level_load(&level, &level_metadata[selected_level]);
 
     background_toggle(BG2, true); // level's higher tiles
