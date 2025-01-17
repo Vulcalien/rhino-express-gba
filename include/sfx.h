@@ -21,7 +21,7 @@
 
 extern u32 _sfx_playing_priority;
 
-INLINE void _sfx_play(const u8 *sound, u32 length, u32 priority) {
+INLINE void _sfx_play(const i8 *sound, u32 length, u32 priority) {
     // This is a hack that works only if these assumptions are true:
     // - the audio driver only has two channels
     // - channel 1 is always busy (i.e. playing music)
@@ -41,7 +41,7 @@ INLINE void _sfx_play(const u8 *sound, u32 length, u32 priority) {
 }
 
 #define SFX_PLAY(sound, priority) \
-    _sfx_play(sound, sizeof(sound), priority)
+    _sfx_play((i8 *) sound, sizeof(sound), priority)
 
 extern const u8 sfx_delivery[4686];
 extern const u8 sfx_player_step[1004];
