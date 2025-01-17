@@ -66,7 +66,7 @@ static u32 bubble_draw(struct Level *level, struct entity_Data *data,
     // calculate scale factor based on bubble age
     u32 scale_y;
     if(bubble_data->age < EXPAND_TIME) {
-        scale_y = 0x4000 * bubble_data->age / EXPAND_TIME;
+        scale_y = 0x4000 * (1 + bubble_data->age) / EXPAND_TIME;
     } else if(bubble_data->age < EXPAND_TIME + REMAIN_TIME) {
         scale_y = 0x4000;
     } else {
