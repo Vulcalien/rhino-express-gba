@@ -1,0 +1,14 @@
+<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+  <rect fill="#2e222f" width="100%" height="100%" />
+  <image href="img/island.png" image-rendering="optimizeSpeed"
+         x="435" y="580" width="410" height="295" />
+  <image href="img/deliver.png"
+         transform="rotate(20)" transform-origin="center"
+         x="400" y="780" width="430" height="60"/>
+  <image href="img/logo.png" image-rendering="optimizeSpeed"
+         x="280" y="100" width="712" height="416" />
+  <image href="img/bottom-text.png" image-rendering="optimizeSpeed"
+         x="474" y="942" width="534" height="66" />
+  <image href="img/gba-label.png"
+         x="0" y="0" width="288" height="1024" />
+</svg>
