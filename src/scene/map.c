@@ -150,10 +150,7 @@ static void map_tick(void) {
         level += (input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN));
     }
 
-    if(level < 0)
-        level = 0;
-    if(level > levels_cleared)
-        level = levels_cleared;
+    level = math_clip(level, 0, levels_cleared);
 
     // adjust the selected page
     page -= (level < first_level_in_pages[page]);

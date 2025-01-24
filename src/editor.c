@@ -185,17 +185,8 @@ static inline void move_cursor(struct Level *level) {
     if(input_pressed(KEY_UP   )) yt--;
     if(input_pressed(KEY_DOWN )) yt++;
 
-    // check if 'xt' is out of bounds
-    if(xt < 0)
-        xt = 0;
-    if(xt >= level->metadata->size.w)
-        xt = level->metadata->size.w - 1;
-
-    // check if 'yt' is out of bounds
-    if(yt < 0)
-        yt = 0;
-    if(yt >= level->metadata->size.h)
-        yt = level->metadata->size.h - 1;
+    xt = math_clip(xt, 0, level->metadata->size.w - 1);
+    yt = math_clip(yt, 0, level->metadata->size.h - 1);
 
     editor_xt = xt;
     editor_yt = yt;
