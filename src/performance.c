@@ -19,7 +19,7 @@
 #include <gba/input.h>
 #include <debug/mgba.h>
 
-#define PRINT_TO_MGBA
+//#define PRINT_TO_MGBA
 
 static u16 tick_vcount;
 static u16 draw_vcount;
