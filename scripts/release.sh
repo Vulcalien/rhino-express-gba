@@ -23,6 +23,9 @@ cp "$ROM_PATH" COPYING README.md "$RELEASE_DIR"
 
 cd "$RELEASE_DIR"
 
+# add padding to the ROM
+truncate -s %512K "$ROM_NAME"
+
 # clone repository into 'source'
 git clone $(git remote get-url origin) source
 git -C source gc --aggressive --prune=now
