@@ -53,6 +53,7 @@ struct Level {
     u8 letters_to_deliver;
 
     u32 attempts;
+    bool should_reload;
 
     // visual properties
     struct {

@@ -127,6 +127,9 @@ void level_tick(struct Level *level) {
         level->shake_time = 15;
         level->shake = false;
     }
+
+    if(level->should_reload)
+        level_load(level, level->metadata);
 }
 
 static inline void draw_tiles(struct Level *level) {
@@ -215,6 +218,8 @@ static inline void level_init(struct Level *level,
     for(u32 t = 0; t < LEVEL_SIZE; t++)
         for(u32 i = 0; i < LEVEL_SOLID_ENTITIES_IN_TILE; i++)
             level->solid_entities[t][i] = LEVEL_NO_ENTITY;
+
+    level->should_reload = false;
 }
 
 static inline void load_tiles(struct Level *level) {

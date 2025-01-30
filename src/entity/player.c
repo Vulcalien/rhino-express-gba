@@ -112,7 +112,7 @@ static inline void handle_animation(struct Level *level,
             player_data->animation_stage++;
             if(player_data->animation_stage > FALL_ANIMATION_TIME) {
                 level->attempts++;
-                level_load(level, level->metadata);
+                level->should_reload = true;
             }
             break;
 
