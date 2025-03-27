@@ -16,6 +16,7 @@
 #include "main.h"
 
 #include <gba/interrupt.h>
+#include <gba/backup.h>
 #include <gba/audio.h>
 #include <gba/input.h>
 
@@ -30,6 +31,7 @@ u32 tick_count = 0;
 u32 levels_cleared = 0;
 
 static inline void tick(void) {
+    audio_update();
     input_update();
     scene->tick();
 
@@ -54,7 +56,8 @@ int AgbMain(void) {
     interrupt_toggle(IRQ_VBLANK, true);
     interrupt_set_isr(IRQ_VBLANK, vblank);
 
-    audio_init();
+    backup_init(BACKUP_SRAM);
+    audio_init(AUDIO_MIXER);
     screen_init();
 
     scene_set(&scene_start, 0);

@@ -19,9 +19,9 @@
 
 #include <gba/audio.h>
 
-#define MUSIC_PLAY(sound) do {                  \
-    audio_play(1, (i8 *) sound, sizeof(sound)); \
-    audio_loop(1, sizeof(sound));               \
+#define MUSIC_PLAY(sound) do {           \
+    audio_play(7, sound, sizeof(sound)); \
+    audio_loop(7, sizeof(sound));        \
 } while(0)
 
 extern const u8 music_game[260624];

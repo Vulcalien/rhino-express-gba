@@ -25,5 +25,3 @@
 #include "res/sfx/obstacle-hit.c"
 #include "res/sfx/obstacle-broken.c"
 #include "res/sfx/water.c"
-
-u32 _sfx_playing_priority = 0;

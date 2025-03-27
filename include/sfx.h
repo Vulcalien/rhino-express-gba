@@ -19,29 +19,7 @@
 
 #include <gba/audio.h>
 
-extern u32 _sfx_playing_priority;
-
-INLINE void _sfx_play(const i8 *sound, u32 length, u32 priority) {
-    // This is a hack that works only if these assumptions are true:
-    // - the audio driver only has two channels
-    // - channel 1 is always busy (i.e. playing music)
-
-    if(priority >= _sfx_playing_priority) {
-        audio_play(0, sound, length);
-        _sfx_playing_priority = priority;
-    } else {
-        // try to play only if the channel is free
-        bool could_play = (audio_play(-1, sound, length) == 0);
-
-        // If the previous, higher priority sound had already stopped,
-        // then '_sfx_playing_priority' should be updated.
-        if(could_play)
-            _sfx_playing_priority = priority;
-    }
-}
-
-#define SFX_PLAY(sound, priority) \
-    _sfx_play((i8 *) sound, sizeof(sound), priority)
+#define SFX_PLAY(sound) audio_play(-1, sound, sizeof(sound));
 
 extern const u8 sfx_delivery[4686];
 extern const u8 sfx_player_step[1004];

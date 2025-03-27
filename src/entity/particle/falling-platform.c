@@ -100,7 +100,7 @@ bool level_add_particle_platform(struct Level *level, u32 xt, u32 yt) {
     platform_data->affine_parameter = 2 + last_affine_parameter;
     last_affine_parameter = (last_affine_parameter + 1) % 8;
 
-    SFX_PLAY(sfx_falling_platform, 1);
+    SFX_PLAY(sfx_falling_platform);
 
     level_add_entity(level, ENTITY_PARTICLE_FALLING_PLATFORM, id);
     return true;
