@@ -134,8 +134,8 @@ clean-deps:
 
 .PHONY: res
 res: $(RES_OUT_DIRS) gen-levels-json
-	scripts/convert-resources "$(RES_DIR)/resources.json"
-	scripts/convert-resources "$(RES_DIR)/levels.json"
+	scripts/res2gba "$(RES_DIR)/resources.json"
+	scripts/res2gba "$(RES_DIR)/levels.json"
 
 .PHONY: gen-levels-json
 gen-levels-json:
