@@ -22,6 +22,7 @@
 #define MUSIC_PLAY(sound) do {           \
     audio_play(7, sound, sizeof(sound)); \
     audio_loop(7, sizeof(sound));        \
+    audio_pitch(7, 0x1000);              \
 } while(0)
 
 extern const u8 music_game[260624];

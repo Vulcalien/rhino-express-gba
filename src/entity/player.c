@@ -98,7 +98,7 @@ static inline void handle_animation(struct Level *level,
                     level_add_particle_step(level, xt, yt);
 
                     level->shake = true;
-                    SFX_PLAY(sfx_player_spawn);
+                    SFX_PLAY(sfx_player_spawn, 1);
                 }
             } else {
                 player_data->animation_stage++;
@@ -121,7 +121,7 @@ static inline void handle_animation(struct Level *level,
 
             // play the victory sound effect
             if(player_data->animation_stage == 60)
-                SFX_PLAY(sfx_player_win);
+                SFX_PLAY(sfx_player_win, 0);
 
             // move the player up
             if(player_data->animation_stage > 60 && data->y > -64)
@@ -183,13 +183,13 @@ static inline void enter_tile(struct Level *level,
         case TILE_VOID:
         case TILE_HOLE:
             set_animation(data, ANIMATION_FALL);
-            SFX_PLAY(sfx_player_fall);
+            SFX_PLAY(sfx_player_fall, 0);
             break;
 
         case TILE_WOOD:
             if(distance >= BREAK_WOOD_DISTANCE) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
-                SFX_PLAY(sfx_obstacle_broken);
+                SFX_PLAY(sfx_obstacle_broken, 1);
             } else {
                 player_data->hit_obstacle = true;
             }
@@ -200,7 +200,7 @@ static inline void enter_tile(struct Level *level,
         case TILE_ROCK:
             if(distance >= BREAK_ROCK_DISTANCE) {
                 level_set_tile(level, xt, yt, TILE_PLATFORM);
-                SFX_PLAY(sfx_obstacle_broken);
+                SFX_PLAY(sfx_obstacle_broken, 1);
             } else {
                 player_data->hit_obstacle = true;
             }
@@ -213,7 +213,7 @@ static inline void enter_tile(struct Level *level,
             player_data->stored_xm = player_data->stored_ym = 0;
 
             level_add_particle_block(level, xt, yt, TILE_WATER);
-            SFX_PLAY(sfx_water);
+            SFX_PLAY(sfx_water, 2);
             break;
 
         default:
@@ -250,7 +250,7 @@ static inline bool move_full_pixels(struct Level *level,
             i32 yt = data->y >> LEVEL_TILE_SIZE;
             level_add_particle_step(level, xt, yt);
 
-            SFX_PLAY(sfx_player_step);
+            SFX_PLAY(sfx_player_step, 2);
         }
 
         if(is_tile_center(data->x, data->y)) {
@@ -274,7 +274,7 @@ static inline bool move_full_pixels(struct Level *level,
                 player_data->xm = -math_sign(player_data->xm);
                 player_data->ym = -math_sign(player_data->ym);
 
-                SFX_PLAY(sfx_obstacle_hit);
+                SFX_PLAY(sfx_obstacle_hit, 2);
                 break;
             }
         }

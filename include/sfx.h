@@ -18,8 +18,14 @@
 #include "main.h"
 
 #include <gba/audio.h>
+#include <random.h>
 
-#define SFX_PLAY(sound) audio_play(-1, sound, sizeof(sound));
+#define SFX_PLAY(sound, pitch_variation) do {           \
+    i32 c = audio_play(-1, (sound), sizeof(sound));     \
+    i32 p_range = 0x100 * (pitch_variation);            \
+    i32 p = 0x1000 - p_range + random(2 * p_range + 1); \
+    if(c >= 0) audio_pitch(c, p);                       \
+} while(0)
 
 extern const u8 sfx_delivery[4686];
 extern const u8 sfx_player_step[1004];
