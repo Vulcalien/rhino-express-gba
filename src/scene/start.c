@@ -115,8 +115,8 @@ static void start_tick(void) {
         scene_transition_to(&scene_map, BIT(2));
 
     if(transparency.element == FADING_NONE) {
-        if(input_pressed(KEY_A) || input_pressed(KEY_B) ||
-           input_pressed(KEY_START)) {
+        if(input_press(KEY_A) || input_press(KEY_B) ||
+           input_press(KEY_START)) {
             transparency.element = FADING_TEXT;
             transparency.dir = -1;
             transparency.val = 16;

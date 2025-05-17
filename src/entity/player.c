@@ -139,16 +139,16 @@ static inline void handle_animation(struct Level *level,
 }
 
 static inline void read_input(i8 *xm, i8 *ym) {
-    if(input_pressed(KEY_UP)) {
+    if(input_press(KEY_UP)) {
         *xm = 0;
         *ym = -1;
-    } else if(input_pressed(KEY_LEFT)) {
+    } else if(input_press(KEY_LEFT)) {
         *xm = -1;
         *ym = 0;
-    } else if(input_pressed(KEY_DOWN)) {
+    } else if(input_press(KEY_DOWN)) {
         *xm = 0;
         *ym = +1;
-    } else if(input_pressed(KEY_RIGHT)) {
+    } else if(input_press(KEY_RIGHT)) {
         *xm = +1;
         *ym = 0;
     }

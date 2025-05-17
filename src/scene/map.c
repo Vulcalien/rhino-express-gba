@@ -124,7 +124,7 @@ THUMB
 static void map_tick(void) {
     if(!block_movement) {
         // move left/right by one page
-        if(input_pressed(KEY_L)) {
+        if(input_repeat(KEY_L)) {
             page--;
 
             if(page < 0) {
@@ -134,7 +134,7 @@ static void map_tick(void) {
                 level = first_level_in_pages[page + 1] - 1;
             }
         }
-        if(input_pressed(KEY_R)) {
+        if(input_repeat(KEY_R)) {
             page++;
 
             if(page > PAGE_COUNT - 1) {
@@ -146,8 +146,8 @@ static void map_tick(void) {
         }
 
         // move left/right by one level
-        level -= (input_pressed(KEY_LEFT) || input_pressed(KEY_UP));
-        level += (input_pressed(KEY_RIGHT) || input_pressed(KEY_DOWN));
+        level -= (input_repeat(KEY_LEFT) || input_repeat(KEY_UP));
+        level += (input_repeat(KEY_RIGHT) || input_repeat(KEY_DOWN));
     }
 
     level = math_clip(level, 0, levels_cleared);
@@ -159,7 +159,7 @@ static void map_tick(void) {
     update_draw_offset();
 
     // check if the player has chosen a level
-    if(input_pressed(KEY_A) || input_pressed(KEY_START)) {
+    if(input_press(KEY_A) || input_press(KEY_START)) {
         if(level < LEVEL_COUNT) {
             scene_transition_to(&scene_game, level);
             block_movement = true;

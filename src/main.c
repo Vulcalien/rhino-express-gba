@@ -58,6 +58,7 @@ int AgbMain(void) {
 
     backup_init(BACKUP_SRAM);
     audio_init(AUDIO_MIXER);
+    input_init(22, 4);
     screen_init();
 
     scene_set(&scene_start, 0);

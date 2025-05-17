@@ -180,10 +180,10 @@ static inline void move_cursor(struct Level *level) {
     i32 xt = editor_xt;
     i32 yt = editor_yt;
 
-    if(input_pressed(KEY_LEFT )) xt--;
-    if(input_pressed(KEY_RIGHT)) xt++;
-    if(input_pressed(KEY_UP   )) yt--;
-    if(input_pressed(KEY_DOWN )) yt++;
+    if(input_repeat(KEY_LEFT )) xt--;
+    if(input_repeat(KEY_RIGHT)) xt++;
+    if(input_repeat(KEY_UP   )) yt--;
+    if(input_repeat(KEY_DOWN )) yt++;
 
     xt = math_clip(xt, 0, level->metadata->size.w - 1);
     yt = math_clip(yt, 0, level->metadata->size.h - 1);
@@ -213,20 +213,20 @@ static inline void animate_sidebar(struct Level *level) {
 IWRAM_SECTION
 void editor_tick(struct Level *level) {
     if(level->editing) {
-        if(input_pressed(KEY_SELECT))
+        if(input_press(KEY_SELECT))
             level->editing = false;
 
         // change selected obstacle if L or R pressed
         i32 switch_step = 0;
-        switch_step -= input_pressed(KEY_L);
-        switch_step += input_pressed(KEY_R);
+        switch_step -= input_repeat(KEY_L);
+        switch_step += input_repeat(KEY_R);
         if(switch_step != 0)
             switch_item(switch_step);
 
-        if(input_pressed(KEY_A))
+        if(input_press(KEY_A))
             try_to_place(level);
 
-        if(input_pressed(KEY_B))
+        if(input_press(KEY_B))
             remove_placed_obstacles(level);
 
         move_cursor(level);

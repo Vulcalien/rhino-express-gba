@@ -53,7 +53,7 @@ static void game_init(u32 selected_level) {
 
 static void game_tick(void) {
     // if START is pressed, transition to map without clearing level
-    if(input_pressed(KEY_START))
+    if(input_press(KEY_START))
         scene_transition_to(&scene_map, BIT(1));
 
     level_tick(&level);
