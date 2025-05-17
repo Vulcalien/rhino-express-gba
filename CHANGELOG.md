@@ -3,9 +3,10 @@
 ## [Unreleased]
 ### Added
 - Pitch variation of sound effects.
+- Repeated input for some actions after holding down buttons.
 
 ### Changed
-- Switched to a more powerful audio driver: multiple sounds effects can
+- Switch to a more powerful audio driver: multiple sounds effects can
   now be played at once.
 
 ## [1.0] - 2025-01-30
