@@ -56,7 +56,7 @@ static inline void init_fog_particles(void) {
 
 void screen_init(void) {
     display_config(0);
-    sprite_hide_all();
+    sprite_hide(-1);
 
     // tutorial text and map
     background_config(BG1, &(struct Background) {
