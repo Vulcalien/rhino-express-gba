@@ -17,8 +17,6 @@
 
 #include "main.h"
 
-#include <gba/audio.h>
-
 #define MUSIC_PLAY(sound) do {           \
     audio_play(7, sound, sizeof(sound)); \
     audio_loop(7, sizeof(sound));        \

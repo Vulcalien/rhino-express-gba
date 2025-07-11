@@ -15,13 +15,6 @@
  */
 #include "screen.h"
 
-#include <gba/display.h>
-#include <gba/background.h>
-#include <gba/sprite.h>
-#include <memory.h>
-#include <random.h>
-#include <math.h>
-
 #include "res/img/tileset.c"
 #include "res/img/sprites.c"
 #include "res/img/palette.c"

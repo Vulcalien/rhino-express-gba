@@ -15,9 +15,6 @@
  */
 #include "entity.h"
 
-#include <random.h>
-#include <gba/sprite.h>
-
 #include "level.h"
 
 struct grass_Data {

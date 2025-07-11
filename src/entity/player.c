@@ -15,11 +15,6 @@
  */
 #include "entity.h"
 
-#include <gba/input.h>
-#include <gba/sprite.h>
-#include <random.h>
-#include <math.h>
-
 #include "level.h"
 #include "scene.h"
 #include "sfx.h"

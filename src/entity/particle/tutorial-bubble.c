@@ -15,8 +15,6 @@
  */
 #include "entity.h"
 
-#include <gba/sprite.h>
-
 #include "level.h"
 #include "tile.h"
 

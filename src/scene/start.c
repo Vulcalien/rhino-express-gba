@@ -15,12 +15,6 @@
  */
 #include "scene.h"
 
-#include <gba/display.h>
-#include <gba/sprite.h>
-#include <gba/input.h>
-#include <gba/dma.h>
-#include <memory.h>
-
 #include "screen.h"
 #include "music.h"
 

@@ -15,10 +15,6 @@
  */
 #include "entity.h"
 
-#include <gba/sprite.h>
-#include <random.h>
-#include <math.h>
-
 #include "level.h"
 #include "sfx.h"
 

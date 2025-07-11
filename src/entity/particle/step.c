@@ -15,9 +15,6 @@
  */
 #include "entity.h"
 
-#include <gba/sprite.h>
-#include <random.h>
-
 #include "level.h"
 
 #define SIZES 3

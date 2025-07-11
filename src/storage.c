@@ -15,9 +15,6 @@
  */
 #include "storage.h"
 
-#include <math.h>
-#include <gba/backup.h>
-
 #include "level.h"
 
 bool storage_load(void) {

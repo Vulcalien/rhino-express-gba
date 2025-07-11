@@ -15,13 +15,6 @@
  */
 #include "editor.h"
 
-#include <gba/display.h>
-#include <gba/sprite.h>
-#include <gba/input.h>
-#include <random.h>
-#include <memory.h>
-#include <math.h>
-
 #include "level.h"
 #include "tile.h"
 #include "entity.h"

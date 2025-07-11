@@ -17,8 +17,6 @@
 
 #include "main.h"
 
-#include <gba/display.h>
-
 #define BG0_TILEMAP display_screenblock(0)
 #define BG1_TILEMAP display_screenblock(2)
 #define BG2_TILEMAP display_screenblock(4)

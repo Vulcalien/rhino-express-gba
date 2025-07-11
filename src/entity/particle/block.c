@@ -15,9 +15,6 @@
  */
 #include "entity.h"
 
-#include <gba/sprite.h>
-#include <random.h>
-
 #include "level.h"
 
 #define ANIMATION_PHASES 6

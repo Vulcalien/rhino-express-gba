@@ -17,8 +17,6 @@
 
 #include "main.h"
 
-#include <gba/sprite.h>
-
 // A mini-module for drawing a crosshair sprite
 
 // returns the sprites it drew

@@ -17,9 +17,6 @@
 
 #include "main.h"
 
-#include <gba/audio.h>
-#include <random.h>
-
 #define SFX_PLAY(sound, pitch_variation) do {           \
     i32 c = audio_play(-1, (sound), sizeof(sound));     \
     i32 p_range = 0x100 * (pitch_variation);            \
