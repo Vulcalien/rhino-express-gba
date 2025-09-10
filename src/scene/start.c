@@ -53,7 +53,7 @@ static void start_init(u32 data) {
     transparency.val = 0;
 
     // clear the display with the backdrop color
-    memory_clear_32(display_get_raster(0), DISPLAY_W * DISPLAY_H);
+    memory_clear_32(display_get_raster(0), DISPLAY_WIDTH * DISPLAY_HEIGHT);
 
     // play music
     MUSIC_PLAY(music_map);
@@ -148,11 +148,11 @@ static void start_draw(void) {
         24 * 32 / 4
     );
 
-    const u32 image_x0 = (DISPLAY_W - 64) / 2;
-    const u32 image_y0 = (DISPLAY_H - 64) / 2 - 32;
+    const u32 image_x0 = (DISPLAY_WIDTH - 64) / 2;
+    const u32 image_y0 = (DISPLAY_HEIGHT - 64) / 2 - 32;
 
-    const u32 text_x0 = (DISPLAY_W - 32 * TEXT_SPRITES) / 2;
-    const u32 text_y0 = (DISPLAY_H - 8) / 2 + 48;
+    const u32 text_x0 = (DISPLAY_WIDTH - 32 * TEXT_SPRITES) / 2;
+    const u32 text_y0 = (DISPLAY_HEIGHT - 8) / 2 + 48;
 
     const u32 first_sprite = SCREEN_FOG_PARTICLE_COUNT;
 

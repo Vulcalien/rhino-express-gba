@@ -33,8 +33,8 @@ static inline void init_fog_particles(void) {
     for(u32 i = 0; i < SCREEN_FOG_PARTICLE_COUNT; i++) {
         particles[i].tile = 0;
 
-        particles[i].x = 256 * random(DISPLAY_W);
-        particles[i].y = 256 * random(DISPLAY_H);
+        particles[i].x = 256 * random(DISPLAY_WIDTH);
+        particles[i].y = 256 * random(DISPLAY_HEIGHT);
 
         particles[i].xm = random(17) - 8;
         particles[i].ym = random(17) - 8;

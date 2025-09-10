@@ -251,7 +251,7 @@ static inline void draw_sidebar(struct Level *level, u32 *used_sprites) {
     i32 t = sidebar.time * math_brad(120) / SIDEBAR_TIME_MAX;
 
     const i32 x = -32 + math_sin(t) * 48 / 0x4000;
-    const i32 y = (DISPLAY_H - 64) / 2;
+    const i32 y = (DISPLAY_HEIGHT - 64) / 2;
 
     // draw resources
     for(u32 i = 0; i < LEVEL_OBSTACLE_TYPES; i++) {

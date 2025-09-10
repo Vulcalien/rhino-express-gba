@@ -59,8 +59,8 @@ static inline void update_offset(struct Level *level) {
     const i32 width_pixels  = metadata->size.w << LEVEL_TILE_SIZE;
     const i32 height_pixels = metadata->size.h << LEVEL_TILE_SIZE;
 
-    level->offset.x = -(DISPLAY_W - width_pixels) / 2;
-    level->offset.y = -(DISPLAY_H - height_pixels) / 2;
+    level->offset.x = -(DISPLAY_WIDTH - width_pixels) / 2;
+    level->offset.y = -(DISPLAY_HEIGHT - height_pixels) / 2;
 
     // apply shaking effect
     if(level->shake_time > 0) {
@@ -156,8 +156,8 @@ static inline void draw_entities(struct Level *level, u32 *used_sprites) {
         const i32 draw_y = data->y - level->offset.y;
 
         // check if entity is out of display bounds
-        if(draw_x < -32 || draw_x >= DISPLAY_W + 32 ||
-           draw_y < -32 || draw_y >= DISPLAY_H + 32)
+        if(draw_x < -32 || draw_x >= DISPLAY_WIDTH + 32 ||
+           draw_y < -32 || draw_y >= DISPLAY_HEIGHT + 32)
             continue;
 
         *used_sprites += type->draw(
