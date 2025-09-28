@@ -52,9 +52,6 @@ static void start_init(u32 data) {
     transparency.dir = +1;
     transparency.val = 0;
 
-    // clear the display with the backdrop color
-    memory_clear_32(display_get_raster(0), DISPLAY_WIDTH * DISPLAY_HEIGHT);
-
     // play music
     MUSIC_PLAY(music_map);
 }
