@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.1] - 2025-09-29
 ### Added
 - Pitch variation of sound effects.
 - Repeated input for some actions after holding down buttons.
