@@ -1,4 +1,4 @@
-/* Copyright 2023 Vulcalien
+/* Copyright 2023-2025 Vulcalien
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ THUMB
 static void start_init(u32 data) {
     page = 0;
 
-    // DEBUG
+    // initial fading sequence
     transparency.element = FADING_IMAGE;
     transparency.dir = +1;
     transparency.val = 0;
