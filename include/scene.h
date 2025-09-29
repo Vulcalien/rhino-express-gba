@@ -32,6 +32,7 @@ extern void scene_transition_to(const struct Scene *next, u32 data);
 
 // Scenes
 extern const struct Scene
+    scene_prestart,
     scene_start,
     scene_map,
     scene_game;

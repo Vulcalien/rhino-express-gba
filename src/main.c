@@ -56,7 +56,7 @@ void AgbMain(void) {
     input_init(22, 4);
     screen_init();
 
-    scene_set(&scene_start, 0);
+    scene_set(&scene_prestart, 0);
 
     storage_load();
 
