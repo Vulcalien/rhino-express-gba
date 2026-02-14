@@ -49,7 +49,7 @@ static void vblank(void) {
 
 void AgbMain(void) {
     interrupt_toggle(IRQ_VBLANK, true);
-    interrupt_set_isr(IRQ_VBLANK, vblank);
+    interrupt_isr(IRQ_VBLANK, vblank);
 
     backup_init(BACKUP_SRAM);
     audio_init(AUDIO_MIXER);
